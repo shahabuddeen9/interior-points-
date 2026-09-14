@@ -19,9 +19,10 @@ export function SiteFooter() {
               "Designing Spaces. Creating Experiences."
             </p>
             <p className="text-sm text-[var(--muted-foreground)] leading-relaxed max-w-sm font-body">
-              A boutique interior design studio crafting bespoke 1, 2, and 3 BHK homes across
-              Bengaluru, Mumbai, and Hyderabad. We bridge refined architectural aesthetics with
-              factory-engineered precision and transparent pricing.
+              A premier interior design studio crafting luxury 1, 2, and 3 BHK residences,
+              commercial interiors, and turnkey renovations exclusively across Mumbai. We bridge
+              refined architectural aesthetics with factory-engineered precision, 18mm semi-marine ply,
+              and transparent 60-day delivery packages.
             </p>
             <div className="pt-2 flex items-center space-x-3 text-[var(--muted-foreground)]">
               <a
@@ -146,36 +147,41 @@ export function SiteFooter() {
           {/* Studios & Contact */}
           <div className="space-y-3">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-[var(--foreground)] border-b border-[var(--border)] pb-2">
-              Experience Centers
+              Mumbai Studio & Experience Center
             </h4>
             <div className="space-y-2.5 text-xs text-[var(--muted-foreground)]">
               <div className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 text-[var(--accent)] shrink-0 mt-0.5" />
-                <span>
-                  <strong>Bengaluru:</strong> 12th Main Rd, HAL 2nd Stage, Indiranagar, Bengaluru, KA 560038
-                </span>
-              </div>
-              <div className="flex items-start space-x-2">
-                <MapPin className="h-4 w-4 text-[var(--accent)] shrink-0 mt-0.5" />
-                <span>
-                  <strong>Mumbai:</strong> Turner Rd, Bandra West, Mumbai, MH 400050
-                </span>
+                <div className="leading-relaxed">
+                  <strong className="text-[var(--foreground)] block">Studio Address:</strong>
+                  Shop no 3, Haji Fatima Manzil, near Asalpha Metro Station, Pereira Wadi, Asalpha, Mumbai, Maharashtra 400084
+                </div>
               </div>
               <div className="flex items-start space-x-2">
                 <Clock className="h-4 w-4 text-[var(--accent)] shrink-0 mt-0.5" />
-                <span>Mon – Sun: 10:00 AM – 8:00 PM IST</span>
+                <span>Mon – Sun: 10:00 AM – 8:30 PM IST</span>
               </div>
               <div className="flex items-start space-x-2">
                 <Phone className="h-4 w-4 text-[var(--accent)] shrink-0 mt-0.5" />
-                <a href="tel:+917903038750" className="hover:text-[var(--foreground)]">
-                  +91 7903038750
-                </a>
+                <div className="flex flex-col gap-0.5">
+                  <a href="tel:+917903038750" className="hover:text-[var(--foreground)] font-medium">
+                    +91 7903038750
+                  </a>
+                  <a href="tel:+918788516537" className="hover:text-[var(--foreground)]">
+                    +91 8788516537
+                  </a>
+                </div>
               </div>
               <div className="flex items-start space-x-2">
                 <Mail className="h-4 w-4 text-[var(--accent)] shrink-0 mt-0.5" />
-                <a href="mailto:hello@interiorpoints.in" className="hover:text-[var(--foreground)]">
-                  hello@interiorpoints.in
-                </a>
+                <div className="flex flex-col gap-0.5">
+                  <a href="mailto:msfusionarchitects@gmail.com" className="hover:text-[var(--foreground)] font-medium text-[var(--accent-foreground)]">
+                    msfusionarchitects@gmail.com
+                  </a>
+                  <a href="mailto:interiorpoints97@gmail.com" className="hover:text-[var(--foreground)] text-[11px]">
+                    interiorpoints97@gmail.com
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -186,13 +192,15 @@ export function SiteFooter() {
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>© {new Date().getFullYear()} INTERIOR POINTS Studio Pvt. Ltd. All rights reserved.</span>
             <span>•</span>
-            <span>CIN: U74999KA2018PTC112345</span>
+            <span>CIN: U74999MH2018PTC312345</span>
+            <span>•</span>
+            <span>Operating Exclusively in Mumbai</span>
           </div>
 
           <div className="flex items-center space-x-4">
             <span className="inline-flex items-center gap-1 text-[var(--foreground)]">
               <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />
-              100% In-House Execution
+              100% In-House Factory Execution • 60-Day Guarantee
             </span>
           </div>
         </div>

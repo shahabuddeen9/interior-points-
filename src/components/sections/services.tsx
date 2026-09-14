@@ -40,15 +40,15 @@ const disciplines = [
     title: "Complete 1, 2 & 3 BHK Turnkey Fit-Outs",
     subtitle: "End-to-End Civil, Electrical, Painting & Woodwork",
     description:
-      "The complete studio experience. We oversee plumbing adjustments, electrical re-routing, Asian Paints Royale luxury emulsion, deep cleaning, and full furniture handover within 45 days.",
-    specifications: ["Turnkey Project Management", "45-Day Delivery", "Dedicated Site Architect", "Zero Hidden Costs"],
+      "The complete studio experience. We oversee plumbing adjustments, electrical re-routing, Asian Paints Royale luxury emulsion, deep cleaning, and full furniture handover within 60 days.",
+    specifications: ["Turnkey Project Management", "60-Day Delivery", "Dedicated Site Architect", "Zero Hidden Costs"],
   },
   {
     num: "06",
     title: "Bespoke Loose Furniture & Styling",
     subtitle: "Custom Sofas • Ergonomic Home Workstations",
     description:
-      "Custom upholstered seating in stain-resistant fabrics, ergonomic dual-monitor study desks, and architectural accent pieces handcrafted by our Bengaluru and Mumbai master craftsmen.",
+      "Custom upholstered seating in stain-resistant fabrics, ergonomic dual-monitor study desks, and architectural accent pieces handcrafted by our Mumbai master craftsmen.",
     specifications: ["High-Density Foam", "Stain-Resistant Fabrics", "Teak & Oak Solids", "Ergonomic Wire Ports"],
   },
 ];

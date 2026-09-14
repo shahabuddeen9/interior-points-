@@ -46,13 +46,13 @@ export function AdminPage() {
   const [newProject, setNewProject] = useState({
     title: "",
     bhkType: "2 BHK",
-    location: "Indiranagar",
-    city: "Bengaluru",
-    budgetRange: "₹9.5L – ₹12.5L",
-    timeline: "45 Days",
+    location: "Asalpha, Ghatkopar West",
+    city: "Mumbai",
+    budgetRange: "₹10.75L",
+    timeline: "60 Days",
     coverImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
     description: "",
-    scope: "Modular kitchen, Master wardrobe, False ceiling",
+    scope: "Modular kitchen with 3 tandem drawers, Master wardrobe, False ceiling, Wall molding",
   });
 
   // Stats state
@@ -201,13 +201,13 @@ export function AdminPage() {
         setNewProject({
           title: "",
           bhkType: "2 BHK",
-          location: "Indiranagar",
-          city: "Bengaluru",
-          budgetRange: "₹9.5L – ₹12.5L",
-          timeline: "45 Days",
+          location: "Asalpha, Ghatkopar West",
+          city: "Mumbai",
+          budgetRange: "₹10.75L",
+          timeline: "60 Days",
           coverImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
           description: "",
-          scope: "Modular kitchen, Master wardrobe, False ceiling",
+          scope: "Modular kitchen with 3 tandem drawers, Master wardrobe, False ceiling, Wall molding",
         });
       }
     } catch (err) {
@@ -521,7 +521,7 @@ export function AdminPage() {
                     <label className="text-xs font-semibold text-[var(--foreground)]">Location</label>
                     <Input
                       required
-                      placeholder="e.g. Indiranagar, Bengaluru"
+                      placeholder="e.g. Asalpha, Powai, or Bandra"
                       value={newProject.location}
                       onChange={(e) => setNewProject({ ...newProject, location: e.target.value })}
                     />
@@ -540,7 +540,7 @@ export function AdminPage() {
                   <div>
                     <label className="text-xs font-semibold text-[var(--foreground)]">Timeline</label>
                     <Input
-                      placeholder="e.g. 45 Days"
+                      placeholder="e.g. 60 Days"
                       value={newProject.timeline}
                       onChange={(e) => setNewProject({ ...newProject, timeline: e.target.value })}
                     />

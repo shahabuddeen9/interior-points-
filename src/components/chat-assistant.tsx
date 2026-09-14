@@ -11,10 +11,10 @@ const initialAssistantMessage: ChatMessage = {
 };
 
 const quickSuggestions = [
-  "Ballpark cost for a 2 BHK in Bengaluru?",
-  "Acrylic vs PU finish for modular kitchens?",
-  "How does the 45-day move-in guarantee work?",
-  "What is included in the 3 BHK Luxury tier?",
+  "Cost for 2 BHK 60-day package in Mumbai?",
+  "What is included in the ₹10.75L 2 BHK package?",
+  "How does the 60-day dream home guarantee work?",
+  "Materials: 18mm semi-marine ply & Hettich hinges?",
 ];
 
 export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () => void }) {
@@ -79,7 +79,7 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
         id: `assistant-fallback-${Date.now()}`,
         role: "assistant",
         content:
-          "Our design studio provides turnkey bespoke interiors with a 45-day handover guarantee and transparent itemized pricing. Feel free to book a free design consultation via the form on this page or WhatsApp us directly!",
+          "Our Mumbai design studio provides turnkey bespoke interiors with a 60-day dream home guarantee, 18mm semi-marine ply, and authentic Hettich/Hafele hardware. Feel free to book a free design consultation via the form on this page or WhatsApp us directly at +91 7903038750!",
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
       setMessages((prev) => [...prev, fallbackMsg]);

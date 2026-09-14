@@ -6,23 +6,23 @@ import { Link } from "../../lib/router";
 const faqs = [
   {
     q: "Is the initial 3D design consultation truly free?",
-    a: "Yes, completely free with zero obligation. You can visit our Indiranagar (Bengaluru) or Bandra (Mumbai) studio with your floorplan, or meet virtually. We review your layout, show physical finish swatches, and provide an itemized ballpark BOQ at no charge.",
+    a: "Yes, completely free with zero obligation. You can visit our Mumbai studio at Asalpha (near Asalpha Metro Station) or schedule an on-site visit anywhere across Mumbai with your floorplan, or meet virtually. We review your layout, show physical finish swatches, and provide an itemized ballpark BOQ at no charge.",
   },
   {
-    q: "How does the 45-Day Move-in Guarantee work?",
-    a: "Once you approve the finalized 3D renders and complete the initial site laser survey, our clock starts. We fabricate in our automated factory and assemble on site. If we do not hand over keys by day 45, we compensate you ₹1,000 per day delayed directly deducted from your final milestone.",
+    q: "How does the 60-Day Dream Home Guarantee work?",
+    a: "Once you approve the finalized 3D renders and complete the initial site laser survey, our clock starts. We fabricate in our automated factory and assemble on site. If we do not hand over keys by day 60, we compensate you ₹1,000 per day delayed directly deducted from your final milestone.",
   },
   {
     q: "Can I choose my own laminate or acrylic brands?",
-    a: "Absolutely. While we partner closely with Merino, Greenlam, Rehau, and Fenix, you are free to pick any grade. All wet zones in kitchens are strictly built using IS 710 Boiling Water Proof (BWP) marine plywood.",
+    a: "Absolutely. We provide ₹1000–₹1300 range 1mm laminates as standard and also offer acrylic, PU, and veneer finishes. All wet zones in kitchens are strictly built using sturdy 18mm semi-marine ply.",
   },
   {
     q: "Do you handle civil work, painting, and deep cleaning?",
-    a: "Yes, Interior Points provides complete turnkey execution. That includes civil wall modifications, electrical rewiring, plumbing, gypsum false ceilings with cove lights, Asian Paints Royale luxury emulsion, and a professional HEPA deep clean before handover.",
+    a: "Yes, Interior Points provides complete turnkey execution in Mumbai. That includes civil modifications, electrical rewiring, plumbing, gypsum false ceilings with cove lights, 2 coats of Asian Paints Royale washable luxury emulsion, wall moldings, and safety door installation.",
   },
   {
     q: "What warranty coverage do you provide post-handover?",
-    a: "We provide a 10-year warranty on all Blum/Hafele hardware and a 5-year warranty on modular woodwork. Plus, our care team provides three complimentary maintenance visits at month 3, 6, and 12.",
+    a: "We provide a 10-year warranty on all Hettich & Hafele hardware and our 18mm semi-marine ply woodwork. Plus, our care team provides complimentary maintenance checks in the first 24 months.",
   },
 ];
 

@@ -1,57 +1,92 @@
 import React, { useState } from "react";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Sparkles } from "lucide-react";
 import { pricingPlans } from "../../../server/seedData";
 import { Button } from "../ui/button";
+import { motion, AnimatePresence } from "motion/react";
 
 export function Pricing({ onOpenConsultation }: { onOpenConsultation: () => void }) {
   const [selectedBhk, setSelectedBhk] = useState<"1 BHK" | "2 BHK" | "3 BHK">("2 BHK");
 
   return (
-    <section id="pricing" className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)]">
+    <section id="pricing" className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Editorial Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 pb-8 border-b border-[var(--border)]">
-          <div className="max-w-2xl">
-            <span className="text-xs uppercase tracking-[0.25em] text-[var(--accent-foreground)] font-semibold font-body">
-              Investment Guide
-            </span>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--foreground)] mt-2">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-2xl"
+          >
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--secondary)] border border-[var(--border)] text-xs uppercase tracking-[0.2em] text-[var(--accent-foreground)] font-semibold font-body mb-3">
+              <Sparkles className="h-3 w-3 text-amber-500" />
+              <span>Investment Guide • Mumbai</span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--foreground)]">
               Transparent Estimates by Home Size
             </h2>
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed">
               Every home receives an itemized, line-by-line Bill of Quantities before work begins.
-              The figures below reflect real completed project averages.
+              Our turnkey 60-day dream home package guarantees zero hidden costs.
             </p>
-          </div>
+          </motion.div>
 
-          {/* Clean BHK Selector */}
-          <div className="inline-flex p-1 rounded-full bg-[var(--secondary)]/60 border border-[var(--border)] shrink-0">
-            {(["1 BHK", "2 BHK", "3 BHK"] as const).map((bhk) => (
-              <button
-                key={bhk}
-                onClick={() => setSelectedBhk(bhk)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all ${
-                  selectedBhk === bhk
-                    ? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-xs"
-                    : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-                }`}
-              >
-                {bhk}
-              </button>
-            ))}
+          {/* Clean BHK Selector with Motion Pill */}
+          <div className="inline-flex p-1 rounded-full bg-[var(--secondary)] border border-[var(--border)] shrink-0">
+            {(["1 BHK", "2 BHK", "3 BHK"] as const).map((bhk) => {
+              const isActive = selectedBhk === bhk;
+              return (
+                <button
+                  key={bhk}
+                  onClick={() => setSelectedBhk(bhk)}
+                  className={`relative px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-colors z-10 ${
+                    isActive
+                      ? "text-[var(--primary-foreground)]"
+                      : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeBhkPill"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      className="absolute inset-0 rounded-full bg-[var(--primary)] shadow-xs -z-10"
+                    />
+                  )}
+                  <span>{bhk}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* 3 Editorial Columns (No cheesy SaaS cards or neon badges) */}
+        {/* 3 Editorial Columns with Motion Stagger */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-          {pricingPlans.map((plan) => {
+          {pricingPlans.map((plan, index) => {
             const price = plan.startingRange[selectedBhk];
+            const isFeatured = plan.name.includes("60-Day");
 
             return (
-              <div
+              <motion.div
                 key={plan.id}
-                className="flex flex-col justify-between p-8 rounded-[var(--radius)] border border-[var(--border)] bg-white hover:border-[var(--accent)] transition-colors duration-200"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -4 }}
+                className={`relative flex flex-col justify-between p-8 rounded-[var(--radius)] border transition-all duration-300 ${
+                  isFeatured
+                    ? "bg-white border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/20"
+                    : "bg-white border-[var(--border)] hover:border-[var(--accent)] shadow-xs"
+                }`}
               >
+                {isFeatured && (
+                  <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-[var(--accent)] text-white text-[11px] font-semibold uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3" />
+                    <span>Most Popular Choice</span>
+                  </div>
+                )}
+
                 <div className="space-y-6">
                   {/* Tier Title */}
                   <div className="border-b border-[var(--border)] pb-5">
@@ -59,7 +94,7 @@ export function Pricing({ onOpenConsultation }: { onOpenConsultation: () => void
                       <h3 className="font-display text-2xl font-bold text-[var(--foreground)]">
                         {plan.name}
                       </h3>
-                      <span className="text-[11px] font-mono text-[var(--accent-foreground)]">
+                      <span className="text-[11px] font-mono text-[var(--accent-foreground)] px-2 py-0.5 rounded bg-[var(--secondary)]">
                         {selectedBhk}
                       </span>
                     </div>
@@ -67,19 +102,28 @@ export function Pricing({ onOpenConsultation }: { onOpenConsultation: () => void
                       {plan.tagline}
                     </p>
                     <div className="mt-4">
-                      <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)] block">
+                      <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)] block font-medium">
                         Estimated Budget
                       </span>
-                      <div className="font-display text-3xl font-bold text-[var(--foreground)] mt-0.5">
-                        {price}
-                      </div>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={price}
+                          initial={{ opacity: 0, y: 4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -4 }}
+                          transition={{ duration: 0.2 }}
+                          className="font-display text-3xl font-bold text-[var(--foreground)] mt-0.5"
+                        >
+                          {price}
+                        </motion.div>
+                      </AnimatePresence>
                     </div>
                   </div>
 
                   {/* Highlights */}
                   <div className="space-y-3">
                     <div className="text-xs uppercase tracking-wider font-semibold text-[var(--foreground)]">
-                      Specification & Warranty
+                      Specification &amp; Warranty
                     </div>
                     <div className="space-y-2 text-xs text-[var(--muted-foreground)] font-body">
                       <div className="flex items-start gap-2">
@@ -109,16 +153,16 @@ export function Pricing({ onOpenConsultation }: { onOpenConsultation: () => void
 
                 <div className="pt-8 mt-8 border-t border-[var(--border)]">
                   <Button
-                    variant="outline"
+                    variant={isFeatured ? "primary" : "outline"}
                     size="md"
-                    className="w-full text-xs font-semibold uppercase tracking-wider hover:bg-[var(--primary)] hover:text-white transition-colors"
+                    className="w-full text-xs font-semibold uppercase tracking-wider transition-colors group"
                     onClick={onOpenConsultation}
                   >
                     <span>Request {plan.name} Spec</span>
-                    <ArrowRight className="h-3.5 w-3.5 ml-1.5 inline" />
+                    <ArrowRight className="h-3.5 w-3.5 ml-1.5 inline group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

@@ -8,7 +8,7 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
     name: "",
     phone: "",
     email: "",
-    city: "Bengaluru",
+    city: "Mumbai",
     bhkType: "2 BHK",
     message: "",
   });
@@ -69,7 +69,7 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
         name: "",
         phone: "",
         email: "",
-        city: "Bengaluru",
+        city: "Mumbai",
         bhkType: "2 BHK",
         message: "",
       });
@@ -203,18 +203,18 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
 
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)]">
-                      City / Location
+                      Location in Mumbai
                     </label>
                     <select
                       value={formData.city}
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       className="flex h-11 w-full rounded-[var(--radius)] border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--foreground)] focus:outline-none focus:border-[var(--accent)]"
                     >
-                      <option value="Bengaluru">Bengaluru</option>
-                      <option value="Mumbai">Mumbai</option>
-                      <option value="Hyderabad">Hyderabad</option>
-                      <option value="Pune">Pune</option>
-                      <option value="Other">Other Metro</option>
+                      <option value="Mumbai - Central Suburbs (Asalpha, Ghatkopar, Powai)">Central Suburbs (Asalpha, Ghatkopar, Powai)</option>
+                      <option value="Mumbai - Western Suburbs (Andheri, Bandra, Juhu, Goregaon)">Western Suburbs (Andheri, Bandra, Juhu, Goregaon)</option>
+                      <option value="Mumbai - South Mumbai (Worli, Lower Parel, Colaba)">South Mumbai (Worli, Lower Parel, Colaba)</option>
+                      <option value="Mumbai - Thane & Navi Mumbai">Thane & Navi Mumbai</option>
+                      <option value="Mumbai - Other Area">Other Mumbai Region</option>
                     </select>
                   </div>
                 </div>
@@ -329,15 +329,41 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
                 </a>
 
                 <a
-                  href="mailto:hello@interiorpoints.in"
+                  href="tel:+918788516537"
+                  className="flex items-center space-x-3.5 text-sm text-[var(--foreground)] hover:text-[var(--accent-foreground)] transition-colors group"
+                >
+                  <div className="h-9 w-9 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--accent-foreground)] shrink-0">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-sm">+91 8788516537</div>
+                    <div className="text-xs text-[var(--muted-foreground)]">Secondary Studio & Site Desk</div>
+                  </div>
+                </a>
+
+                <a
+                  href="mailto:msfusionarchitects@gmail.com"
                   className="flex items-center space-x-3.5 text-sm text-[var(--foreground)] hover:text-[var(--accent-foreground)] transition-colors group"
                 >
                   <div className="h-9 w-9 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--accent-foreground)] shrink-0">
                     <Mail className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="font-semibold text-sm">hello@interiorpoints.in</div>
-                    <div className="text-xs text-[var(--muted-foreground)]">Architectural drawings & BOQ inquiries</div>
+                    <div className="font-semibold text-sm">msfusionarchitects@gmail.com</div>
+                    <div className="text-xs text-[var(--muted-foreground)]">Architectural drawings & formal proposals</div>
+                  </div>
+                </a>
+
+                <a
+                  href="mailto:interiorpoints97@gmail.com"
+                  className="flex items-center space-x-3.5 text-sm text-[var(--foreground)] hover:text-[var(--accent-foreground)] transition-colors group"
+                >
+                  <div className="h-9 w-9 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--accent-foreground)] shrink-0">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-sm">interiorpoints97@gmail.com</div>
+                    <div className="text-xs text-[var(--muted-foreground)]">Client coordination & accounts</div>
                   </div>
                 </a>
               </div>
@@ -347,22 +373,22 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
             <div className="pt-6 border-t border-[var(--border)] space-y-2">
               <div className="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground)]">
                 <MapPin className="h-4 w-4 text-[var(--accent-foreground)]" />
-                <span>Flagship Studio & Material Library</span>
+                <span>Mumbai Studio & Workshop</span>
               </div>
-              <p className="text-xs text-[var(--muted-foreground)] leading-relaxed font-body">
-                4th Floor, 100ft Road, HAL 2nd Stage, Indiranagar, Bengaluru, Karnataka 560038
+              <p className="text-xs text-[var(--foreground)] font-medium leading-relaxed font-body">
+                Shop no 3, Haji Fatima Manzil, near Asalpha Metro Station, Pereira Wadi, Asalpha, Mumbai, Maharashtra 400084
               </p>
               <div className="flex items-center space-x-2 text-xs text-[var(--muted-foreground)] pt-1">
                 <Clock className="h-3.5 w-3.5 text-[var(--muted-foreground)]" />
-                <span>Visiting Hours: Monday – Sunday, 10:00 AM – 8:00 PM IST</span>
+                <span>Studio Timings: Monday – Sunday, 9:00 AM – 9:00 PM IST</span>
               </div>
             </div>
 
             {/* Map Frame */}
             <div className="rounded-[var(--radius)] overflow-hidden border border-[var(--border)] bg-neutral-100 relative h-44">
               <iframe
-                title="Interior Points Studio Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.0068153327663!2d77.6402!3d12.9716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU4JzE3LjgiTiA3N8KwMzgnMjQuNyJF!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin"
+                title="Interior Points Studio Mumbai Map"
+                src="https://maps.google.com/maps?q=Asalpha%20Metro%20Station,%20Pereira%20Wadi,%20Asalpha,%20Mumbai&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 className="w-full h-full border-0 grayscale contrast-125 opacity-80"
                 loading="lazy"
               />

@@ -14,7 +14,7 @@ export function ConsultationModal({ open, onOpenChange }: ConsultationModalProps
     name: "",
     phone: "",
     email: "",
-    city: "Bengaluru",
+    city: "Mumbai",
     bhkType: "2 BHK",
     message: "",
   });
@@ -65,7 +65,7 @@ export function ConsultationModal({ open, onOpenChange }: ConsultationModalProps
         name: "",
         phone: "",
         email: "",
-        city: "Bengaluru",
+        city: "Mumbai",
         bhkType: "2 BHK",
         message: "",
       });
@@ -164,18 +164,18 @@ export function ConsultationModal({ open, onOpenChange }: ConsultationModalProps
 
               <div>
                 <label className="text-xs font-semibold text-[var(--foreground)]">
-                  City <span className="text-rose-600">*</span>
+                  Mumbai Area <span className="text-rose-600">*</span>
                 </label>
                 <select
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                   className="h-11 w-full rounded-[var(--radius)] border border-[var(--border)] px-3 text-xs bg-white text-[var(--foreground)]"
                 >
-                  <option value="Bengaluru">Bengaluru</option>
-                  <option value="Mumbai">Mumbai</option>
-                  <option value="Hyderabad">Hyderabad</option>
-                  <option value="Pune">Pune</option>
-                  <option value="Other">Other</option>
+                  <option value="Mumbai - Central Suburbs (Asalpha, Ghatkopar, Powai)">Central Suburbs (Asalpha, Ghatkopar, Powai)</option>
+                  <option value="Mumbai - Western Suburbs (Andheri, Bandra, Juhu)">Western Suburbs (Andheri, Bandra, Juhu)</option>
+                  <option value="Mumbai - South Mumbai (Worli, Lower Parel)">South Mumbai (Worli, Lower Parel)</option>
+                  <option value="Mumbai - Thane & Navi Mumbai">Thane & Navi Mumbai</option>
+                  <option value="Mumbai - Other Area">Other Mumbai Region</option>
                 </select>
               </div>
             </div>

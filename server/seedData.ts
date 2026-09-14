@@ -3,12 +3,12 @@ import { Project, Testimonial, CredibilityStat, LeadSubmission, PricingPlan } fr
 export const initialProjects: Project[] = [
   {
     id: "proj-1",
-    slug: "the-oberoi-sanctuary",
-    title: "The Oberoi Sanctuary",
+    slug: "hiranandani-powai-sanctuary",
+    title: "Hiranandani Powai Sanctuary",
     bhkType: "3 BHK",
     roomTypes: ["Full Home", "Kitchen", "Wardrobe", "False Ceiling", "Living Room"],
-    location: "Indiranagar",
-    city: "Bengaluru",
+    location: "Powai",
+    city: "Mumbai",
     coverImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
     images: [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
@@ -17,29 +17,29 @@ export const initialProjects: Project[] = [
       "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80"
     ],
     scope: [
-      "Anti-scratch acrylic finish modular kitchen with Kalinga quartz countertop",
+      "18mm semi-marine ply with anti-scratch 1mm laminate modular kitchen",
       "Floor-to-ceiling master wardrobe with tinted fluted glass and sensor lighting",
-      "Seamless gypsum false ceiling with magnetic low-glare architectural track lights",
+      "Seamless gypsum false ceiling with warm architectural cove lighting",
       "Custom fluted wood acoustic panelling behind TV console",
       "Bespoke teakwood and brass prayer niche (Pooja mandir)"
     ],
-    timeline: "48 Days",
-    budgetRange: "₹14.5L - ₹16.8L",
-    description: "A refined 3 BHK residence designed with an editorial aesthetic celebrating natural light, muted oatmeal upholstery, and brushed champagne brass trims. Every square foot maximizes functional Indian storage requirements without visual bulk.",
+    timeline: "58 Days",
+    budgetRange: "₹13.75L Package",
+    description: "A refined 3 BHK residence designed with an editorial aesthetic celebrating natural light, muted oatmeal upholstery, and brushed brass trims. Every square foot maximizes functional Mumbai storage requirements without visual bulk.",
     featured: true,
     clientTestimonial: {
       clientName: "Rohan & Ananya Deshmukh",
-      quote: "Interior Points brought an architectural sensibility we didn't think was possible within our budget. The kitchen finish is impeccable, and they handed over keys exactly on day 48."
+      quote: "Interior Points brought an architectural sensibility we didn't think was possible within our budget. The kitchen finish is impeccable, and they handed over keys on day 58 within the 60-day promise."
     }
   },
   {
     id: "proj-2",
-    slug: "prestige-lavender-bough",
-    title: "Prestige Lavender Bough",
+    slug: "lokhandwala-andheri-residence",
+    title: "Lokhandwala Heights Residence",
     bhkType: "2 BHK",
     roomTypes: ["Full Home", "Kitchen", "Wardrobe", "Living Room"],
-    location: "Whitefield",
-    city: "Bengaluru",
+    location: "Andheri West",
+    city: "Mumbai",
     coverImage: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
     images: [
       "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
@@ -47,28 +47,28 @@ export const initialProjects: Project[] = [
       "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80"
     ],
     scope: [
-      "Dual-tone PU matte finish modular kitchen with tandem drawers and Blum hinges",
+      "Modular kitchen with 3 Tandem drawers, cabinet & storage in 18mm semi-marine ply",
       "His & Hers sliding wardrobe with concealed dressing mirror and loft storage",
       "Cove lit false ceiling with warm 3000K indirect ambient glow",
       "Space-saving folding dining bar unit with fluted oak panelling"
     ],
-    timeline: "40 Days",
-    budgetRange: "₹9.2L - ₹10.8L",
-    description: "Designed for a tech couple desiring calm, uncluttered elegance. We combined soft sage cabinetry with warm oak grains, transforming a standard builder flat into a tranquil urban sanctuary.",
+    timeline: "52 Days",
+    budgetRange: "₹10.75L Package",
+    description: "Designed for a young Mumbai couple desiring calm, uncluttered elegance. We combined soft sage cabinetry with warm oak grains, transforming a standard builder flat into a tranquil urban sanctuary.",
     featured: true,
     clientTestimonial: {
       clientName: "Karthik & Sneha Iyer",
-      quote: "Zero hidden charges. The 3D render match was beyond 95%. Their in-house carpentry team is remarkably skilled and punctual."
+      quote: "Zero hidden charges. The 3D render match was beyond 95%. Their in-house factory team is remarkably skilled, polite, and delivered before 60 days."
     }
   },
   {
     id: "proj-3",
-    slug: "godrej-woods-residence",
-    title: "Godrej Woods Residence",
+    slug: "godrej-the-trees-ghatkopar",
+    title: "The Eastern Crest",
     bhkType: "3 BHK",
     roomTypes: ["Full Home", "Living Room", "False Ceiling", "Kitchen"],
-    location: "HSR Layout",
-    city: "Bengaluru",
+    location: "Ghatkopar",
+    city: "Mumbai",
     coverImage: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80",
     images: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80",
@@ -81,8 +81,8 @@ export const initialProjects: Project[] = [
       "Walk-in dressing suite with glass island for accessories and velvet-lined trays",
       "Acoustic wooden slatted false ceiling with linear LED extrusions"
     ],
-    timeline: "52 Days",
-    budgetRange: "₹18.0L - ₹21.5L",
+    timeline: "56 Days",
+    budgetRange: "₹13.75L Package",
     description: "A luxurious 3 BHK apartment where bespoke smoked walnut millwork meets tactile linen textures. The floor plan was optimized to create fluid entertaining zones and intimate private quarters.",
     featured: true,
     clientTestimonial: {
@@ -110,8 +110,8 @@ export const initialProjects: Project[] = [
       "Wall-mounted floating bed with integrated floating nightstands and brass reading sconces",
       "Smart utility balcony cabinet with concealed front-load washer-dryer bay"
     ],
-    timeline: "42 Days",
-    budgetRange: "₹11.5L - ₹13.0L",
+    timeline: "48 Days",
+    budgetRange: "₹10.75L Package",
     description: "Compact living executed with bespoke grandeur. Soft curved transitions, arched doorways, and light-reflecting ivory surfaces give this sea-breeze home an expansive, breathable vibe.",
     featured: true,
     clientTestimonial: {
@@ -121,12 +121,12 @@ export const initialProjects: Project[] = [
   },
   {
     id: "proj-5",
-    slug: "shobha-serene-haven",
-    title: "Sobha Serene Haven",
+    slug: "asalpha-metro-haven",
+    title: "Asalpha Metro Haven",
     bhkType: "1 BHK",
     roomTypes: ["Full Home", "Kitchen", "Living Room"],
-    location: "Bellandur",
-    city: "Bengaluru",
+    location: "Asalpha",
+    city: "Mumbai",
     coverImage: "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
     images: [
       "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
@@ -137,25 +137,26 @@ export const initialProjects: Project[] = [
       "Straight-line modular kitchen with hydraulic lift-up frosted glass cabinets",
       "Multi-functional Murphy desk that converts seamlessly from work desk to dining",
       "Floor-to-ceiling sliding wardrobe with full-length mirror panel",
-      "Minimal perimeter false ceiling with dimmable COB spotlights"
+      "Minimal perimeter false ceiling with dimmable COB spotlights",
+      "2 coats Asian Royale washable luxury paint with wall molding"
     ],
-    timeline: "35 Days",
-    budgetRange: "₹5.5L - ₹6.8L",
-    description: "A compact 1 BHK bachelor home where smart furniture and warm minimalist tones create a sophisticated executive studio setting with zero wasted floor area.",
+    timeline: "60 Days",
+    budgetRange: "₹8.45L Package",
+    description: "A compact 1 BHK executive residence near Asalpha where smart furniture and warm minimalist tones create a sophisticated home with zero wasted floor area.",
     featured: true,
     clientTestimonial: {
       clientName: "Abhishek Varman",
-      quote: "As a young professional, I wanted quality without a 20-lakh price tag. Interior Points's Essentials package was transparent down to the last rupee."
+      quote: "As a young professional in Mumbai, I wanted quality without overpaying. Interior Points's 8.45L 1 BHK package was transparent down to the last rupee."
     }
   },
   {
     id: "proj-6",
-    slug: "jubilee-hills-regency",
-    title: "Jubilee Hills Regency",
+    slug: "worli-sea-face-residence",
+    title: "Worli Sea Face Residence",
     bhkType: "3 BHK",
     roomTypes: ["Full Home", "Kitchen", "Wardrobe", "False Ceiling", "Living Room"],
-    location: "Jubilee Hills",
-    city: "Hyderabad",
+    location: "Worli",
+    city: "Mumbai",
     coverImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
     images: [
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
@@ -168,13 +169,13 @@ export const initialProjects: Project[] = [
       "Walk-in wardrobe with bronze aluminium profiles and Italian sensor lights",
       "Custom upholstered king bed with fluted wood panelling and reading lights"
     ],
-    timeline: "55 Days",
-    budgetRange: "₹22.0L - ₹26.5L",
-    description: "An expansive 3 BHK home showcasing grand proportional scale, Italian Statuario accents, brushed gold hardware, and automated mood lighting schemes.",
+    timeline: "58 Days",
+    budgetRange: "₹13.75L Package",
+    description: "An expansive 3 BHK Mumbai home showcasing grand proportional scale, Italian Statuario accents, brushed gold hardware, and automated mood lighting schemes.",
     featured: true,
     clientTestimonial: {
       clientName: "Dr. Srinivas & Aruna Rao",
-      quote: "The quality of materials, the professionalism of the site supervisor, and the design eye of Interior Points are unmatched in the city."
+      quote: "The quality of materials, the professionalism of the site supervisor, and the design eye of Interior Points are unmatched in Mumbai."
     }
   }
 ];
@@ -183,24 +184,24 @@ export const initialTestimonials: Testimonial[] = [
   {
     id: "test-1",
     name: "Rohan & Ananya Deshmukh",
-    bhkType: "3 BHK Penthouse",
-    location: "Indiranagar, Bengaluru",
-    quote: "Interior Points brought an architectural sensibility we didn't think was possible within our budget. The modular kitchen finish is impeccable, and they handed over keys on day 48 without any price escalation.",
+    bhkType: "3 BHK Residence",
+    location: "Powai, Mumbai",
+    quote: "Interior Points brought an architectural sensibility we didn't think was possible within our budget. The modular kitchen finish is impeccable, and they handed over keys on day 58 without any price escalation.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
     date: "February 2026",
-    projectSlug: "the-oberoi-sanctuary"
+    projectSlug: "hiranandani-powai-sanctuary"
   },
   {
     id: "test-2",
     name: "Karthik & Sneha Iyer",
-    bhkType: "2 BHK Home",
-    location: "Whitefield, Bengaluru",
-    quote: "Zero hidden charges. The 3D render match was beyond 95%. Their in-house carpentry team is remarkably skilled, polite, and punctual. Best decision we made for our first flat.",
+    bhkType: "2 BHK Flat",
+    location: "Andheri West, Mumbai",
+    quote: "Zero hidden charges. The 3D render match was beyond 95%. Their in-house factory team is remarkably skilled, polite, and punctual. Best decision we made for our Mumbai flat.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
     date: "January 2026",
-    projectSlug: "prestige-lavender-bough"
+    projectSlug: "lokhandwala-andheri-residence"
   },
   {
     id: "test-3",
@@ -215,14 +216,14 @@ export const initialTestimonials: Testimonial[] = [
   },
   {
     id: "test-4",
-    name: "Dr. Srinivas & Aruna Rao",
+    name: "Dr. Alok & Radhika Sharma",
     bhkType: "3 BHK Luxury Residence",
-    location: "Jubilee Hills, Hyderabad",
-    quote: "The quality of materials, the responsiveness of our dedicated project manager, and the overall design eye of Interior Points are truly world-class. Our guests haven't stopped complimenting the living room.",
+    location: "Ghatkopar East, Mumbai",
+    quote: "The quality of 18mm semi-marine ply, the responsiveness of our dedicated project architect, and the overall design eye of Interior Points are truly premier. Our guests love the living room.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
     date: "November 2025",
-    projectSlug: "jubilee-hills-regency"
+    projectSlug: "godrej-the-trees-ghatkopar"
   }
 ];
 
@@ -231,7 +232,7 @@ export const initialStats: CredibilityStat[] = [
     id: "stat-1",
     value: "8+",
     label: "Years in Business",
-    description: "Designing bespoke Indian homes with architectural rigor"
+    description: "Designing bespoke Mumbai homes with architectural rigor"
   },
   {
     id: "stat-2",
@@ -241,15 +242,15 @@ export const initialStats: CredibilityStat[] = [
   },
   {
     id: "stat-3",
-    value: "45-Day",
-    label: "Move-in Guarantee",
-    description: "Strict project timelines with weekly visual progress audits"
+    value: "60-Day",
+    label: "Dream Home Guarantee",
+    description: "Strict 60-day project delivery with weekly visual progress audits"
   },
   {
     id: "stat-4",
     value: "10-Year",
-    label: "Hardware Warranty",
-    description: "Partnered with genuine Blum, Hafele & Hettich components"
+    label: "Comprehensive Warranty",
+    description: "Backed by authentic Hettich & Hafele hardware and sturdy 18mm ply"
   }
 ];
 
@@ -259,9 +260,9 @@ export const initialLeads: LeadSubmission[] = [
     name: "Tanvi Saxena",
     phone: "+91 7903038750",
     email: "tanvi.saxena@example.com",
-    city: "Bengaluru",
+    city: "Mumbai",
     bhkType: "3 BHK",
-    message: "Possession scheduled for next month at Sobha Dream Acres. Looking for full home interiors with modular kitchen and 3 wardrobes.",
+    message: "Possession scheduled for next month in Powai. Looking for full home interiors with modular kitchen and 3 wardrobes.",
     status: "scheduled",
     createdAt: new Date(Date.now() - 86400000 * 2).toISOString()
   },
@@ -272,7 +273,7 @@ export const initialLeads: LeadSubmission[] = [
     email: "amitav.roy@example.com",
     city: "Mumbai",
     bhkType: "2 BHK",
-    message: "Interested in the Premium package for 2 BHK in Powai. Need quote and sample material finishes.",
+    message: "Interested in the 10.75L 60-day package for 2 BHK in Ghatkopar. Need quote and sample material finishes.",
     status: "new",
     createdAt: new Date(Date.now() - 86400000).toISOString()
   }
@@ -280,58 +281,65 @@ export const initialLeads: LeadSubmission[] = [
 
 export const pricingPlans: PricingPlan[] = [
   {
-    id: "plan-essentials",
-    name: "Essentials",
-    tagline: "High-utility, clean Scandinavian-warm interiors for smart homeowners.",
+    id: "plan-standard",
+    name: "Essential Modular",
+    tagline: "Essential modular woodwork, kitchen & wardrobes for rental or budget-conscious residences.",
     startingRange: {
-      "1 BHK": "₹4.5L - ₹5.8L",
-      "2 BHK": "₹7.5L - ₹9.2L",
-      "3 BHK": "₹10.5L - ₹12.8L"
+      "1 BHK": "₹6.25 Lacs",
+      "2 BHK": "₹8.50 Lacs",
+      "3 BHK": "₹11.20 Lacs"
     },
     features: [
-      "Commercial grade BWR/MR plywood carcass with anti-bubble 1mm laminates",
+      "Sturdy 18mm MR grade ply with anti-bubble 0.8mm laminates",
       "Modular kitchen with soft-close tandem drawers & cutlery trays",
-      "2 Sliding wardrobes with internal shelves, hanging rails & locks",
-      "Minimalist gypsum perimeter false ceiling with warm LED downlights",
-      "Premium Asian Paints Royale matte interior wall painting",
+      "Wardrobes with internal shelves, hanging rails & locks",
+      "Perimeter gypsum false ceiling with warm LED downlights",
+      "Asian Paints tractor emulsion interior wall painting",
       "Electrical switchboard point adjustments & lighting fixtures",
       "Dedicated site supervisor with weekly WhatsApp photo updates"
     ],
-    materials: "MR Grade Plywood, 1mm Merino/Greenlam laminates, Ebco/Hettich fittings",
+    materials: "18mm Commercial Ply, 0.8mm Laminates, Ebco/Hettich fittings",
     warranty: "5-Year Material Warranty",
     popular: false
   },
   {
-    id: "plan-premium",
-    name: "Premium",
-    tagline: "Our most popular signature tier — premium acrylics, quartz counters & cove lighting.",
+    id: "plan-signature-60day",
+    name: "Luxury 60-Day Package",
+    tagline: "Official Instagram package with 15 turnkey services, 18mm semi-marine ply & 60-day delivery.",
     startingRange: {
-      "1 BHK": "₹6.2L - ₹7.8L",
-      "2 BHK": "₹10.2L - ₹12.5L",
-      "3 BHK": "₹14.8L - ₹17.9L"
+      "1 BHK": "₹8.45 Lacs",
+      "2 BHK": "₹10.75 Lacs",
+      "3 BHK": "₹13.75 Lacs"
     },
     features: [
-      "BWP Marine Grade Plywood (IS 710) with anti-scratch high-gloss/matte acrylics",
-      "Full modular kitchen with KalingaStone Quartz countertop & Hafele tall pantry",
-      "Floor-to-ceiling wardrobes with fluted glass doors & internal sensor LED lights",
-      "Designer cove false ceiling with architectural magnetic track lights in living room",
-      "Fluted acoustic wooden wall panelling behind TV unit & foyer console",
-      "Custom vanity counters in master washrooms with backlit vanity mirrors",
-      "Custom pooja mandir unit with CNC jali and warm backlighting",
-      "Deep cleaning & sanitization before key handover"
+      "All bedroom beds with storage & floor-to-ceiling wardrobes",
+      "Modular kitchen with 3 Tandem drawers, upper cabinets & deep storage",
+      "Designer dressing table with illuminated vanity mirror",
+      "Sleek floating TV console unit with cable raceway",
+      "2 coats of authentic Asian Paints Royale luxury washable paint",
+      "Custom devotional Mandir unit with brass accents",
+      "Dedicated shoe rack unit at entryway",
+      "Premium ₹1000–₹1300 range 1mm laminate selection",
+      "Wash basin vanity & bathroom storage cabinet",
+      "Full designer gypsum false ceiling with ambient cove lighting",
+      "Ergonomic study table / work-from-home desk",
+      "Safety door with heavy-duty locks & peephole",
+      "Complete electrical work, rewiring and modular switchboards",
+      "Architectural wall molding design for aesthetic depth",
+      "Free 1-on-1 consultation, complete 2D drawings & 3D view site visits"
     ],
-    materials: "IS 710 BWP Plywood, High-gloss Acrylic / PU, Hafele & Blum German hardware",
-    warranty: "10-Year Hardware & Board Warranty",
+    materials: "Sturdy 18mm Semi-Marine Ply, 1mm Laminate (₹1000-1300 range), Hettich / Hafele Hinges, 2-Coat Asian Royale",
+    warranty: "10-Year Warranty • 60-Day Handover Guarantee",
     popular: true
   },
   {
-    id: "plan-luxury",
-    name: "Luxury",
-    tagline: "Architectural bespoke luxury — smoked veneers, Italian marble accents & smart lighting.",
+    id: "plan-elite-bespoke",
+    name: "Elite Architectural",
+    tagline: "Ultra-luxury residences with natural Italian veneers, quartz waterfall counters & automation.",
     startingRange: {
-      "1 BHK": "₹8.5L - ₹10.5L",
-      "2 BHK": "₹14.5L - ₹18.0L",
-      "3 BHK": "₹21.0L - ₹26.5L"
+      "1 BHK": "₹11.50 Lacs",
+      "2 BHK": "₹15.80 Lacs",
+      "3 BHK": "₹19.50 Lacs"
     },
     features: [
       "Natural smoked Italian walnut/oak veneer with polyurethane (PU) matte polish",

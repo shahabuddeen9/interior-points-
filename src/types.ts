@@ -58,7 +58,7 @@ export type ConsultationLead = LeadSubmission;
 
 export interface PricingPlan {
   id: string;
-  name: "Essentials" | "Premium" | "Luxury";
+  name: string;
   tagline: string;
   startingRange: {
     "1 BHK": string;

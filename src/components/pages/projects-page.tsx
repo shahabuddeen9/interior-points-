@@ -53,9 +53,9 @@ export function ProjectsPage() {
             Completed Residences
           </h1>
           <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed font-body">
-            A curated archive of 1, 2, and 3 BHK residences delivered by our studio across Bengaluru,
-            Mumbai, and Hyderabad. Filter by configuration or room discipline to inspect cabinetry,
-            finishes, and spatial layouts.
+            A curated archive of 1, 2, and 3 BHK residences delivered by our studio exclusively across
+            Mumbai with our strict 60-day dream home delivery guarantee. Filter by configuration or room
+            discipline to inspect cabinetry, finishes, and spatial layouts.
           </p>
         </div>
 
@@ -67,7 +67,7 @@ export function ProjectsPage() {
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--muted-foreground)]" />
               <input
                 type="text"
-                placeholder="Search by society, locality or city..."
+                placeholder="Search by society or Mumbai locality..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-10 pl-10 pr-3 text-xs sm:text-sm rounded-[var(--radius)] border border-[var(--border)] bg-white focus:outline-none focus:border-[var(--accent)]"
