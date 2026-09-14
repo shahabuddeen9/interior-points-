@@ -279,12 +279,17 @@ async function startServer() {
   // Admin Auth / Verification
   app.post("/api/admin/verify", (req, res) => {
     const { passcode } = req.body;
-    // Default studio admin passcode: interiorpoints2026 (or custom ADMIN_PASSCODE env var)
-    const validPasscode = process.env.ADMIN_PASSCODE || "interiorpoints2026";
-    if (passcode === validPasscode || passcode === "nivas2026") {
+    // Primary admin password: saifi@2005
+    const validPasscodes = ["saifi@2005", process.env.ADMIN_PASSCODE, "interiorpoints2026", "nivas2026"].filter(Boolean);
+    if (validPasscodes.includes(passcode)) {
       res.json({ success: true, authenticated: true, token: "interiorpoints-admin-authenticated-session" });
     } else {
-      res.status(401).json({ success: false, authenticated: false, error: "Invalid studio passcode." });
+      res.status(401).json({
+        success: false,
+        authenticated: false,
+        error: "Incorrect password.",
+        hint: "Hint: birth year",
+      });
     }
   });
 

@@ -33,6 +33,7 @@ export function AdminPage() {
     }
   });
   const [authError, setAuthError] = useState("");
+  const [authHint, setAuthHint] = useState("");
 
   const [activeTab, setActiveTab] = useState<"leads" | "projects" | "stats" | "testimonials">("leads");
 
@@ -63,11 +64,14 @@ export function AdminPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
+    setAuthHint("");
+    const entered = passcode.trim();
+
     try {
       const res = await fetch("/api/admin/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ passcode: passcode.trim() }),
+        body: JSON.stringify({ passcode: entered }),
       });
       const data = await res.json();
       if (data.authenticated) {
@@ -76,16 +80,18 @@ export function AdminPage() {
           sessionStorage.setItem("interiorpoints_admin_auth", "true");
         } catch {}
       } else {
-        setAuthError("Invalid credentials. Access restricted to authorized studio personnel.");
+        setAuthError(data.error || "Incorrect password.");
+        setAuthHint(data.hint || "Hint: birth year");
       }
     } catch {
-      if (passcode.trim() === "interiorpoints2026" || passcode.trim() === "nivas2026") {
+      if (entered === "saifi@2005" || entered === "interiorpoints2026" || entered === "nivas2026") {
         setIsAuthenticated(true);
         try {
           sessionStorage.setItem("interiorpoints_admin_auth", "true");
         } catch {}
       } else {
-        setAuthError("Invalid credentials. Access restricted to authorized studio personnel.");
+        setAuthError("Incorrect password.");
+        setAuthHint("Hint: birth year");
       }
     }
   };
@@ -267,11 +273,11 @@ export function AdminPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold uppercase tracking-wider text-[var(--foreground)]">
-                Security Passcode
+                Admin Password
               </label>
               <Input
                 type="password"
-                placeholder="Enter passcode"
+                placeholder="Enter password"
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
                 autoFocus
@@ -279,8 +285,17 @@ export function AdminPage() {
             </div>
 
             {authError && (
-              <div className="text-xs text-rose-700 bg-rose-50 p-2.5 rounded-xs border border-rose-200">
-                {authError}
+              <div className="space-y-2">
+                <div className="text-xs text-rose-700 bg-rose-50 p-2.5 rounded-xs border border-rose-200 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+                  <span className="font-medium">{authError}</span>
+                </div>
+                {authHint && (
+                  <div className="text-xs text-amber-900 bg-amber-50 p-2.5 rounded-xs border border-amber-200 flex items-center gap-2">
+                    <span className="text-sm">💡</span>
+                    <span className="font-semibold">{authHint}</span>
+                  </div>
+                )}
               </div>
             )}
 

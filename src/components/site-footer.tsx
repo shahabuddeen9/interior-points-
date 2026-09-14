@@ -190,7 +190,17 @@ export function SiteFooter() {
         {/* Bottom Bar & SEO Seed Keywords */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between text-xs text-[var(--muted-foreground)] gap-4">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span>© {new Date().getFullYear()} INTERIOR POINTS Studio Pvt. Ltd. All rights reserved.</span>
+            <span>©</span>
+            <Link
+              href="/admin"
+              id="admin-page-bottom-link"
+              className="font-semibold text-[var(--foreground)] hover:text-[var(--accent)] hover:underline transition-colors cursor-pointer"
+              title="Click to access Admin Login Portal"
+            >
+              2026 INTERIOR POINTS Studio
+            </Link>
+            <span>•</span>
+            <span>Pvt. Ltd. All rights reserved.</span>
             <span>•</span>
             <span>CIN: U74999MH2018PTC312345</span>
             <span>•</span>
@@ -198,6 +208,13 @@ export function SiteFooter() {
           </div>
 
           <div className="flex items-center space-x-4">
+            <Link
+              href="/admin"
+              className="text-[11px] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:underline transition-colors"
+            >
+              Admin Portal
+            </Link>
+            <span>•</span>
             <span className="inline-flex items-center gap-1 text-[var(--foreground)]">
               <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />
               100% In-House Factory Execution • 60-Day Guarantee
