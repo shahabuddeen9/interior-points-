@@ -81,7 +81,19 @@ export const db = {
   deleteProject: (id: string): boolean => {
     const data = ensureDbExists();
     const initialLength = data.projects.length;
-    data.projects = data.projects.filter((p) => p.id !== id && p.slug !== id);
+    const cleanId = (id || "").trim();
+    const decoded = decodeURIComponent(cleanId);
+    data.projects = data.projects.filter(
+      (p) =>
+        p.id !== cleanId &&
+        p.slug !== cleanId &&
+        p.id !== decoded &&
+        p.slug !== decoded &&
+        p.id?.toLowerCase() !== cleanId.toLowerCase() &&
+        p.slug?.toLowerCase() !== cleanId.toLowerCase() &&
+        p.id?.toLowerCase() !== decoded.toLowerCase() &&
+        p.slug?.toLowerCase() !== decoded.toLowerCase()
+    );
     if (data.projects.length !== initialLength) {
       writeDb(data);
       return true;

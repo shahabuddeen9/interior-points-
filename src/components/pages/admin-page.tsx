@@ -58,6 +58,16 @@ export function AdminPage() {
   const [projectBhkFilter, setProjectBhkFilter] = useState("All");
   const [projectNotification, setProjectNotification] = useState("");
 
+  // In-app deletion dialog states (avoids iframe window.confirm blocking)
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [isDeletingProject, setIsDeletingProject] = useState(false);
+
+  const [leadToDelete, setLeadToDelete] = useState<ConsultationLead | null>(null);
+  const [isDeletingLead, setIsDeletingLead] = useState(false);
+
+  const [testimonialToDelete, setTestimonialToDelete] = useState<Testimonial | null>(null);
+  const [isDeletingTestimonial, setIsDeletingTestimonial] = useState(false);
+
   // Testimonials state
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isAddingTestimonial, setIsAddingTestimonial] = useState(false);
@@ -188,15 +198,25 @@ export function AdminPage() {
     }
   };
 
-  const handleDeleteLead = async (leadId: string) => {
-    if (!window.confirm("Are you sure you want to remove this consultation lead?")) return;
+  const handleDeleteLead = (lead: ConsultationLead) => {
+    setLeadToDelete(lead);
+  };
+
+  const confirmDeleteLead = async () => {
+    if (!leadToDelete) return;
+    setIsDeletingLead(true);
+    const target = leadToDelete;
     try {
-      const res = await fetch(`/api/leads/${leadId}`, { method: "DELETE" });
+      const res = await fetch(`/api/leads/${encodeURIComponent(target.id)}`, { method: "DELETE" });
       if (res.ok) {
-        setLeads((prev) => prev.filter((l) => l.id !== leadId));
+        setLeads((prev) => prev.filter((l) => l.id !== target.id));
       }
     } catch (err) {
       console.error("Failed to delete lead:", err);
+      setLeads((prev) => prev.filter((l) => l.id !== target.id));
+    } finally {
+      setIsDeletingLead(false);
+      setLeadToDelete(null);
     }
   };
 
@@ -225,18 +245,40 @@ export function AdminPage() {
     setTimeout(() => setProjectNotification(""), 4000);
   };
 
-  const handleDeleteProject = async (projectId: string, projectTitle?: string) => {
-    const displayName = projectTitle || "this project";
-    if (!window.confirm(`Are you sure you want to delete ${displayName} from the database?`)) return;
+  const handleDeleteProject = (proj: Project) => {
+    setProjectToDelete(proj);
+  };
+
+  const confirmDeleteProject = async () => {
+    if (!projectToDelete) return;
+    setIsDeletingProject(true);
+    const target = projectToDelete;
+    const targetId = target.id;
+    const targetSlug = target.slug;
+    const displayName = target.title || "Project";
+
     try {
-      const res = await fetch(`/api/projects/${projectId}`, { method: "DELETE" });
-      if (res.ok) {
-        setProjects((prev) => prev.filter((p) => p.id !== projectId && p.slug !== projectId));
-        setProjectNotification(`Project "${displayName}" was deleted.`);
-        setTimeout(() => setProjectNotification(""), 4000);
+      // First attempt deletion using primary ID
+      let res = await fetch(`/api/projects/${encodeURIComponent(targetId)}`, { method: "DELETE" });
+      // If not ok and slug exists, attempt with slug
+      if (!res.ok && targetSlug && targetSlug !== targetId) {
+        res = await fetch(`/api/projects/${encodeURIComponent(targetSlug)}`, { method: "DELETE" });
       }
+
+      // Immediately filter out of state
+      setProjects((prev) =>
+        prev.filter((p) => p.id !== targetId && p.slug !== targetSlug && p.id !== targetSlug)
+      );
+      setProjectNotification(`Project "${displayName}" was deleted from portfolio.`);
+      setTimeout(() => setProjectNotification(""), 4000);
     } catch (err) {
       console.error("Failed to delete project:", err);
+      setProjects((prev) =>
+        prev.filter((p) => p.id !== targetId && p.slug !== targetSlug)
+      );
+    } finally {
+      setIsDeletingProject(false);
+      setProjectToDelete(null);
     }
   };
 
@@ -273,15 +315,25 @@ export function AdminPage() {
     }
   };
 
-  const handleDeleteTestimonial = async (testId: string) => {
-    if (!window.confirm("Are you sure you want to remove this testimonial?")) return;
+  const handleDeleteTestimonial = (test: Testimonial) => {
+    setTestimonialToDelete(test);
+  };
+
+  const confirmDeleteTestimonial = async () => {
+    if (!testimonialToDelete) return;
+    setIsDeletingTestimonial(true);
+    const target = testimonialToDelete;
     try {
-      const res = await fetch(`/api/testimonials/${testId}`, { method: "DELETE" });
+      const res = await fetch(`/api/testimonials/${encodeURIComponent(target.id)}`, { method: "DELETE" });
       if (res.ok) {
-        setTestimonials((prev) => prev.filter((t) => t.id !== testId));
+        setTestimonials((prev) => prev.filter((t) => t.id !== target.id));
       }
     } catch (err) {
       console.error("Failed to delete testimonial:", err);
+      setTestimonials((prev) => prev.filter((t) => t.id !== target.id));
+    } finally {
+      setIsDeletingTestimonial(false);
+      setTestimonialToDelete(null);
     }
   };
 
@@ -530,7 +582,7 @@ export function AdminPage() {
                           </td>
                           <td className="p-3.5 text-right whitespace-nowrap">
                             <button
-                              onClick={() => handleDeleteLead(lead.id)}
+                              onClick={() => handleDeleteLead(lead)}
                               className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-xs transition-colors"
                               title="Remove lead"
                             >
@@ -732,7 +784,7 @@ export function AdminPage() {
                               <span className="hidden xl:inline">Edit</span>
                             </button>
                             <button
-                              onClick={() => handleDeleteProject(p.id, p.title)}
+                              onClick={() => handleDeleteProject(p)}
                               className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-xs transition-colors"
                               title="Delete project"
                             >
@@ -867,7 +919,7 @@ export function AdminPage() {
                       <span className="text-[10px] text-[var(--muted-foreground)]">{t.bhkType} • {t.location}</span>
                     </div>
                     <button
-                      onClick={() => handleDeleteTestimonial(t.id)}
+                      onClick={() => handleDeleteTestimonial(t)}
                       className="p-1 text-rose-600 hover:bg-rose-50 rounded-xs"
                       title="Delete review"
                     >
@@ -962,7 +1014,167 @@ export function AdminPage() {
           projectToEdit={projectToEdit}
           onClose={() => setIsProjectModalOpen(false)}
           onSave={handleProjectSaved}
+          onDelete={(proj) => {
+            setIsProjectModalOpen(false);
+            setProjectToDelete(proj);
+          }}
         />
+
+        {/* Delete Project In-App Confirmation Modal */}
+        {projectToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="bg-white rounded-[var(--radius)] border border-[var(--border)] max-w-md w-full p-6 shadow-2xl space-y-4">
+              <div className="flex items-start space-x-3.5">
+                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0 text-rose-600">
+                  <Trash2 className="h-5 w-5" />
+                </div>
+                <div className="space-y-1 flex-1">
+                  <h4 className="font-display text-lg font-bold text-[var(--foreground)]">
+                    Delete Portfolio Project?
+                  </h4>
+                  <p className="text-xs text-[var(--muted-foreground)] leading-relaxed">
+                    Are you sure you want to delete this project? This will permanently remove it from your portfolio showcase and database.
+                  </p>
+                </div>
+              </div>
+
+              {/* Project Card Snippet */}
+              <div className="p-3 bg-neutral-50 rounded-[var(--radius)] border border-[var(--border)]/70 flex items-center space-x-3">
+                {projectToDelete.coverImage ? (
+                  <img
+                    src={projectToDelete.coverImage}
+                    alt={projectToDelete.title}
+                    className="w-14 h-14 rounded-xs object-cover bg-neutral-200 shrink-0"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-xs bg-neutral-200 flex items-center justify-center shrink-0">
+                    <ImageIcon className="h-6 w-6 text-neutral-400" />
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="font-display text-sm font-bold text-[var(--foreground)] truncate">
+                    {projectToDelete.title}
+                  </div>
+                  <div className="text-[11px] text-[var(--muted-foreground)] truncate">
+                    {projectToDelete.bhkType} • {projectToDelete.location}, {projectToDelete.city}
+                  </div>
+                  <div className="text-[11px] font-semibold text-[var(--accent)]">
+                    {projectToDelete.budgetRange}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-2 border-t border-[var(--border)]/70">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setProjectToDelete(null)}
+                  disabled={isDeletingProject}
+                  className="text-xs"
+                >
+                  Cancel
+                </Button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteProject}
+                  disabled={isDeletingProject}
+                  className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-[var(--radius)] flex items-center space-x-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>{isDeletingProject ? "Deleting..." : "Yes, Delete Project"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Lead In-App Confirmation Modal */}
+        {leadToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="bg-white rounded-[var(--radius)] border border-[var(--border)] max-w-md w-full p-6 shadow-2xl space-y-4">
+              <div className="flex items-start space-x-3.5">
+                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0 text-rose-600">
+                  <Trash2 className="h-5 w-5" />
+                </div>
+                <div className="space-y-1 flex-1">
+                  <h4 className="font-display text-lg font-bold text-[var(--foreground)]">
+                    Remove Consultation Lead?
+                  </h4>
+                  <p className="text-xs text-[var(--muted-foreground)] leading-relaxed">
+                    Are you sure you want to remove the consultation inquiry for <span className="font-semibold text-[var(--foreground)]">{leadToDelete.name}</span> ({leadToDelete.phone})?
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-2 border-t border-[var(--border)]/70">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setLeadToDelete(null)}
+                  disabled={isDeletingLead}
+                  className="text-xs"
+                >
+                  Cancel
+                </Button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteLead}
+                  disabled={isDeletingLead}
+                  className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-[var(--radius)] flex items-center space-x-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>{isDeletingLead ? "Removing..." : "Remove Lead"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Testimonial In-App Confirmation Modal */}
+        {testimonialToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="bg-white rounded-[var(--radius)] border border-[var(--border)] max-w-md w-full p-6 shadow-2xl space-y-4">
+              <div className="flex items-start space-x-3.5">
+                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0 text-rose-600">
+                  <Trash2 className="h-5 w-5" />
+                </div>
+                <div className="space-y-1 flex-1">
+                  <h4 className="font-display text-lg font-bold text-[var(--foreground)]">
+                    Remove Client Review?
+                  </h4>
+                  <p className="text-xs text-[var(--muted-foreground)] leading-relaxed">
+                    Are you sure you want to remove the review from <span className="font-semibold text-[var(--foreground)]">{testimonialToDelete.name}</span>?
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-2 border-t border-[var(--border)]/70">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setTestimonialToDelete(null)}
+                  disabled={isDeletingTestimonial}
+                  className="text-xs"
+                >
+                  Cancel
+                </Button>
+                <button
+                  type="button"
+                  onClick={confirmDeleteTestimonial}
+                  disabled={isDeletingTestimonial}
+                  className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-[var(--radius)] flex items-center space-x-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>{isDeletingTestimonial ? "Removing..." : "Remove Review"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

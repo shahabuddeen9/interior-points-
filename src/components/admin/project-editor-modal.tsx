@@ -25,6 +25,7 @@ interface ProjectEditorModalProps {
   projectToEdit: Project | null;
   onClose: () => void;
   onSave: (project: Project) => void;
+  onDelete?: (project: Project) => void;
 }
 
 const PRESET_INTERIOR_PHOTOS = [
@@ -87,7 +88,8 @@ export function ProjectEditorModal({
   isOpen,
   projectToEdit,
   onClose,
-  onSave
+  onSave,
+  onDelete
 }: ProjectEditorModalProps) {
   const isEditing = Boolean(projectToEdit);
 
@@ -729,26 +731,46 @@ export function ProjectEditorModal({
           </div>
 
           {/* Modal Footer */}
-          <div className="pt-4 border-t border-[var(--border)] flex items-center justify-end space-x-3 sticky bottom-0 bg-white z-10 pb-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="md"
-              onClick={onClose}
-              disabled={saving}
-              className="text-xs"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              disabled={saving}
-              className="text-xs font-semibold uppercase tracking-wider min-w-[140px]"
-            >
-              {saving ? "Saving..." : isEditing ? "Save Changes" : "Create Residence"}
-            </Button>
+          <div className="pt-4 border-t border-[var(--border)] flex items-center justify-between sticky bottom-0 bg-white z-10 pb-2">
+            <div>
+              {isEditing && projectToEdit && onDelete && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="md"
+                  onClick={() => {
+                    onDelete(projectToEdit);
+                  }}
+                  disabled={saving}
+                  className="text-xs text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 flex items-center space-x-1.5"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>Delete Project</span>
+                </Button>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                onClick={onClose}
+                disabled={saving}
+                className="text-xs"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                disabled={saving}
+                className="text-xs font-semibold uppercase tracking-wider min-w-[140px]"
+              >
+                {saving ? "Saving..." : isEditing ? "Save Changes" : "Create Residence"}
+              </Button>
+            </div>
           </div>
         </form>
       </div>
