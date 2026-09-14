@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
+}
+
+:root {
+  --background: oklch(0.968 0.008 85);      /* warm off-white */
+  --foreground: oklch(0.26 0.012 60);       /* near-charcoal text */
+  --primary: oklch(0.27 0.01 60);           /* charcoal */
+  --primary-foreground: oklch(0.97 0.008 85);
+  --secondary: oklch(0.93 0.014 80);        /* warm beige */
+  --secondary-foreground: oklch(0.3 0.012 60);
+  --muted: oklch(0.93 0.012 82);
+  --muted-foreground: oklch(0.52 0.014 65);
+  --accent: oklch(0.74 0.09 75);            /* gold */
+  --accent-foreground: oklch(0.26 0.012 60);
+  --border: oklch(0.88 0.012 80);
+  --ring: oklch(0.74 0.09 75);
+  --radius: 0.25rem;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .font-display, .font-serif {
+  font-family: var(--font-display);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.82 0.015 80);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.74 0.09 75);
+}

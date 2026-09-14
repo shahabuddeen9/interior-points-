@@ -1,0 +1,354 @@
+{
+  "projects": [
+    {
+      "title": "shahbudden home",
+      "bhkType": "2 BHK",
+      "location": "Indiranagar",
+      "city": "Bengaluru",
+      "budgetRange": "₹9.5L – ₹90L",
+      "timeline": "45 Days",
+      "coverImage": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
+      "description": "a nice and trendy home",
+      "scope": [
+        "Modular kitchen",
+        "Master wardrobe",
+        "False ceiling"
+      ],
+      "roomTypes": [
+        "Living Room",
+        "Modular Kitchen",
+        "Master Bedroom"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "featured": true,
+      "id": "proj-1789364143000",
+      "slug": "shahbudden-home"
+    },
+    {
+      "id": "proj-1",
+      "slug": "the-oberoi-sanctuary",
+      "title": "The Oberoi Sanctuary",
+      "bhkType": "3 BHK",
+      "roomTypes": [
+        "Full Home",
+        "Kitchen",
+        "Wardrobe",
+        "False Ceiling",
+        "Living Room"
+      ],
+      "location": "Indiranagar",
+      "city": "Bengaluru",
+      "coverImage": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
+        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "scope": [
+        "Anti-scratch acrylic finish modular kitchen with Kalinga quartz countertop",
+        "Floor-to-ceiling master wardrobe with tinted fluted glass and sensor lighting",
+        "Seamless gypsum false ceiling with magnetic low-glare architectural track lights",
+        "Custom fluted wood acoustic panelling behind TV console",
+        "Bespoke teakwood and brass prayer niche (Pooja mandir)"
+      ],
+      "timeline": "48 Days",
+      "budgetRange": "₹14.5L - ₹16.8L",
+      "description": "A refined 3 BHK residence designed with an editorial aesthetic celebrating natural light, muted oatmeal upholstery, and brushed champagne brass trims. Every square foot maximizes functional Indian storage requirements without visual bulk.",
+      "featured": true,
+      "clientTestimonial": {
+        "clientName": "Rohan & Ananya Deshmukh",
+        "quote": "Nivās Interiors brought an architectural sensibility we didn't think was possible within our budget. The kitchen finish is impeccable, and they handed over keys exactly on day 48."
+      }
+    },
+    {
+      "id": "proj-2",
+      "slug": "prestige-lavender-bough",
+      "title": "Prestige Lavender Bough",
+      "bhkType": "2 BHK",
+      "roomTypes": [
+        "Full Home",
+        "Kitchen",
+        "Wardrobe",
+        "Living Room"
+      ],
+      "location": "Whitefield",
+      "city": "Bengaluru",
+      "coverImage": "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
+        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "scope": [
+        "Dual-tone PU matte finish modular kitchen with tandem drawers and Blum hinges",
+        "His & Hers sliding wardrobe with concealed dressing mirror and loft storage",
+        "Cove lit false ceiling with warm 3000K indirect ambient glow",
+        "Space-saving folding dining bar unit with fluted oak panelling"
+      ],
+      "timeline": "40 Days",
+      "budgetRange": "₹9.2L - ₹10.8L",
+      "description": "Designed for a tech couple desiring calm, uncluttered elegance. We combined soft sage cabinetry with warm oak grains, transforming a standard builder flat into a tranquil urban sanctuary.",
+      "featured": true,
+      "clientTestimonial": {
+        "clientName": "Karthik & Sneha Iyer",
+        "quote": "Zero hidden charges. The 3D render match was beyond 95%. Their in-house carpentry team is remarkably skilled and punctual."
+      }
+    },
+    {
+      "id": "proj-3",
+      "slug": "godrej-woods-residence",
+      "title": "Godrej Woods Residence",
+      "bhkType": "3 BHK",
+      "roomTypes": [
+        "Full Home",
+        "Living Room",
+        "False Ceiling",
+        "Kitchen"
+      ],
+      "location": "HSR Layout",
+      "city": "Bengaluru",
+      "coverImage": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80",
+        "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "scope": [
+        "Smoked walnut veneer wall feature with hidden master bedroom door",
+        "Parallel chef's kitchen with Hafele pull-out pantry and wicker vegetable baskets",
+        "Walk-in dressing suite with glass island for accessories and velvet-lined trays",
+        "Acoustic wooden slatted false ceiling with linear LED extrusions"
+      ],
+      "timeline": "52 Days",
+      "budgetRange": "₹18.0L - ₹21.5L",
+      "description": "A luxurious 3 BHK apartment where bespoke smoked walnut millwork meets tactile linen textures. The floor plan was optimized to create fluid entertaining zones and intimate private quarters.",
+      "featured": true,
+      "clientTestimonial": {
+        "clientName": "Vikram & Radhika Nair",
+        "quote": "Their team took care of everything from civil modifications and electrical rewiring to the finest brass cabinet knobs. Complete peace of mind."
+      }
+    },
+    {
+      "id": "proj-4",
+      "slug": "the-marina-crest",
+      "title": "The Marina Crest",
+      "bhkType": "2 BHK",
+      "roomTypes": [
+        "Full Home",
+        "Living Room",
+        "Wardrobe"
+      ],
+      "location": "Bandra West",
+      "city": "Mumbai",
+      "coverImage": "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=80",
+        "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "scope": [
+        "Curved fluted plaster finish divider with fluted glass arched doorway",
+        "Compact L-shaped kitchen with quartz backsplash and concealed chimney",
+        "Wall-mounted floating bed with integrated floating nightstands and brass reading sconces",
+        "Smart utility balcony cabinet with concealed front-load washer-dryer bay"
+      ],
+      "timeline": "42 Days",
+      "budgetRange": "₹11.5L - ₹13.0L",
+      "description": "Compact living executed with bespoke grandeur. Soft curved transitions, arched doorways, and light-reflecting ivory surfaces give this sea-breeze home an expansive, breathable vibe.",
+      "featured": true,
+      "clientTestimonial": {
+        "clientName": "Meera & Siddharth Sen",
+        "quote": "Every inch in Mumbai counts. Nivās designed concealed storage spots we didn't even realize were possible. Truly editorial and functional."
+      }
+    },
+    {
+      "id": "proj-5",
+      "slug": "shobha-serene-haven",
+      "title": "Sobha Serene Haven",
+      "bhkType": "1 BHK",
+      "roomTypes": [
+        "Full Home",
+        "Kitchen",
+        "Living Room"
+      ],
+      "location": "Bellandur",
+      "city": "Bengaluru",
+      "coverImage": "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
+        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1540518614846-7ede433c4b72?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "scope": [
+        "Straight-line modular kitchen with hydraulic lift-up frosted glass cabinets",
+        "Multi-functional Murphy desk that converts seamlessly from work desk to dining",
+        "Floor-to-ceiling sliding wardrobe with full-length mirror panel",
+        "Minimal perimeter false ceiling with dimmable COB spotlights"
+      ],
+      "timeline": "35 Days",
+      "budgetRange": "₹5.5L - ₹6.8L",
+      "description": "A compact 1 BHK bachelor home where smart furniture and warm minimalist tones create a sophisticated executive studio setting with zero wasted floor area.",
+      "featured": true,
+      "clientTestimonial": {
+        "clientName": "Abhishek Varman",
+        "quote": "As a young professional, I wanted quality without a 20-lakh price tag. Nivās's Essentials package was transparent down to the last rupee."
+      }
+    },
+    {
+      "id": "proj-6",
+      "slug": "jubilee-hills-regency",
+      "title": "Jubilee Hills Regency",
+      "bhkType": "3 BHK",
+      "roomTypes": [
+        "Full Home",
+        "Kitchen",
+        "Wardrobe",
+        "False Ceiling",
+        "Living Room"
+      ],
+      "location": "Jubilee Hills",
+      "city": "Hyderabad",
+      "coverImage": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "scope": [
+        "Island kitchen with quartz waterfall edge and integrated breakfast counter",
+        "Backlit onyx marble cladding in living foyer",
+        "Walk-in wardrobe with bronze aluminium profiles and Italian sensor lights",
+        "Custom upholstered king bed with fluted wood panelling and reading lights"
+      ],
+      "timeline": "55 Days",
+      "budgetRange": "₹22.0L - ₹26.5L",
+      "description": "An expansive 3 BHK home showcasing grand proportional scale, Italian Statuario accents, brushed gold hardware, and automated mood lighting schemes.",
+      "featured": true,
+      "clientTestimonial": {
+        "clientName": "Dr. Srinivas & Aruna Rao",
+        "quote": "The quality of materials, the professionalism of the site supervisor, and the design eye of Nivās are unmatched in the city."
+      }
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "test-1",
+      "name": "Rohan & Ananya Deshmukh",
+      "bhkType": "3 BHK Penthouse",
+      "location": "Indiranagar, Bengaluru",
+      "quote": "Nivās Interiors brought an architectural sensibility we didn't think was possible within our budget. The modular kitchen finish is impeccable, and they handed over keys on day 48 without any price escalation.",
+      "rating": 5,
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "date": "February 2026",
+      "projectSlug": "the-oberoi-sanctuary"
+    },
+    {
+      "id": "test-2",
+      "name": "Karthik & Sneha Iyer",
+      "bhkType": "2 BHK Home",
+      "location": "Whitefield, Bengaluru",
+      "quote": "Zero hidden charges. The 3D render match was beyond 95%. Their in-house carpentry team is remarkably skilled, polite, and punctual. Best decision we made for our first flat.",
+      "rating": 5,
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+      "date": "January 2026",
+      "projectSlug": "prestige-lavender-bough"
+    },
+    {
+      "id": "test-3",
+      "name": "Meera & Siddharth Sen",
+      "bhkType": "2 BHK Sea-view Flat",
+      "location": "Bandra West, Mumbai",
+      "quote": "Every inch in Mumbai counts. Nivās designed concealed storage spots we didn't even realize were possible. From the fluted glass partition to the acoustic ceiling, the craftsmanship is flawless.",
+      "rating": 5,
+      "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+      "date": "December 2025",
+      "projectSlug": "the-marina-crest"
+    },
+    {
+      "id": "test-4",
+      "name": "Dr. Srinivas & Aruna Rao",
+      "bhkType": "3 BHK Luxury Residence",
+      "location": "Jubilee Hills, Hyderabad",
+      "quote": "The quality of materials, the responsiveness of our dedicated project manager, and the overall design eye of Nivās Interiors are truly world-class. Our guests haven't stopped complimenting the living room.",
+      "rating": 5,
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+      "date": "November 2025",
+      "projectSlug": "jubilee-hills-regency"
+    }
+  ],
+  "stats": [
+    {
+      "id": "stat-1",
+      "value": "8+",
+      "label": "Years in Business",
+      "description": "Designing bespoke Indian homes with architectural rigor"
+    },
+    {
+      "id": "stat-2",
+      "value": "350+",
+      "label": "Homes Completed",
+      "description": "1, 2 & 3 BHK flats delivered across premier societies"
+    },
+    {
+      "id": "stat-3",
+      "value": "45-Day",
+      "label": "Move-in Guarantee",
+      "description": "Strict project timelines with weekly visual progress audits"
+    },
+    {
+      "id": "stat-4",
+      "value": "10-Year",
+      "label": "Hardware Warranty",
+      "description": "Partnered with genuine Blum, Hafele & Hettich components"
+    }
+  ],
+  "leads": [
+    {
+      "name": "Priya Nair",
+      "phone": "+91 9876543210",
+      "email": "priya@example.com",
+      "city": "Bengaluru",
+      "bhkType": "2 BHK",
+      "message": "Need modular kitchen and wardrobes",
+      "id": "lead-1789365076677-1yirjh",
+      "status": "new",
+      "createdAt": "2026-09-14T05:51:16.677Z"
+    },
+    {
+      "name": "Aarav Mehta",
+      "phone": "+919876543210",
+      "email": "aarav@example.com",
+      "city": "Bengaluru",
+      "bhkType": "3 BHK",
+      "message": "Need acrylic modular kitchen and master wardrobe quote",
+      "id": "lead-1789363944913-2vi1ly",
+      "status": "new",
+      "createdAt": "2026-09-14T05:32:24.913Z"
+    },
+    {
+      "id": "lead-1",
+      "name": "Tanvi Saxena",
+      "phone": "+91 98450 12345",
+      "email": "tanvi.saxena@example.com",
+      "city": "Bengaluru",
+      "bhkType": "3 BHK",
+      "message": "Possession scheduled for next month at Sobha Dream Acres. Looking for full home interiors with modular kitchen and 3 wardrobes.",
+      "status": "scheduled",
+      "createdAt": "2026-09-12T05:32:16.637Z"
+    },
+    {
+      "id": "lead-2",
+      "name": "Amitav Roy",
+      "phone": "+91 99201 54321",
+      "email": "amitav.roy@example.com",
+      "city": "Mumbai",
+      "bhkType": "2 BHK",
+      "message": "Interested in the Premium package for 2 BHK in Powai. Need quote and sample material finishes.",
+      "status": "new",
+      "createdAt": "2026-09-13T05:32:16.637Z"
+    }
+  ]
+}

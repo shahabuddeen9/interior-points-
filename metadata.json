@@ -1,0 +1,6 @@
+{
+  "name": "Interior Points",
+  "description": "Interior Points — Bespoke 1, 2, and 3 BHK home interiors, modular kitchens, wardrobes, and luxury false ceilings. Handover in 45 days with 10-year warranty.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
