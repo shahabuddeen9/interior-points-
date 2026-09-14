@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ConsultationLead, Project, Testimonial, CredibilityStat } from "../../types";
+import { ConsultationLead, Project, Testimonial, CredibilityStat, BHKType } from "../../types";
 import { Link } from "../../lib/router";
 import {
   Users,
@@ -15,10 +15,19 @@ import {
   Clock,
   MapPin,
   Eye,
-  AlertCircle
+  AlertCircle,
+  Edit3,
+  ExternalLink,
+  Search,
+  Image as ImageIcon,
+  Star,
+  Layers,
+  Sparkles,
+  Filter
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input, Textarea } from "../ui/input";
+import { ProjectEditorModal } from "../admin/project-editor-modal";
 
 export function AdminPage() {
   const [passcode, setPasscode] = useState("");
@@ -43,17 +52,21 @@ export function AdminPage() {
 
   // Projects state
   const [projects, setProjects] = useState<Project[]>([]);
-  const [isAddingProject, setIsAddingProject] = useState(false);
-  const [newProject, setNewProject] = useState({
-    title: "",
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
+  const [projectSearchQuery, setProjectSearchQuery] = useState("");
+  const [projectBhkFilter, setProjectBhkFilter] = useState("All");
+  const [projectNotification, setProjectNotification] = useState("");
+
+  // Testimonials state
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [isAddingTestimonial, setIsAddingTestimonial] = useState(false);
+  const [newTestimonial, setNewTestimonial] = useState({
+    name: "",
     bhkType: "2 BHK",
-    location: "Asalpha, Ghatkopar West",
-    city: "Mumbai",
-    budgetRange: "₹10.75L",
-    timeline: "60 Days",
-    coverImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
-    description: "",
-    scope: "Modular kitchen with 3 tandem drawers, Master wardrobe, False ceiling, Wall molding",
+    location: "Asalpha, Mumbai",
+    quote: "",
+    rating: 5,
   });
 
   // Stats state
@@ -113,6 +126,7 @@ export function AdminPage() {
     loadLeads();
     loadProjects();
     loadStats();
+    loadTestimonials();
   }, [isAuthenticated]);
 
   const loadLeads = async () => {
@@ -148,6 +162,16 @@ export function AdminPage() {
     }
   };
 
+  const loadTestimonials = async () => {
+    try {
+      const res = await fetch("/api/testimonials");
+      const json = await res.json();
+      if (json.success) setTestimonials(json.data);
+    } catch (err) {
+      console.error("Failed to load testimonials:", err);
+    }
+  };
+
   const handleLeadStatusChange = async (leadId: string, newStatus: string) => {
     try {
       const res = await fetch(`/api/leads/${leadId}`, {
@@ -176,60 +200,88 @@ export function AdminPage() {
     }
   };
 
-  const handleCreateProject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const payload = {
-        title: newProject.title,
-        bhkType: newProject.bhkType,
-        location: newProject.location,
-        city: newProject.city,
-        budgetRange: newProject.budgetRange,
-        timeline: newProject.timeline,
-        coverImage: newProject.coverImage,
-        description: newProject.description,
-        scope: newProject.scope.split(",").map((s) => s.trim()),
-        roomTypes: ["Living Room", "Modular Kitchen", "Master Bedroom"],
-        images: [newProject.coverImage],
-        featured: true,
-      };
-
-      const res = await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const json = await res.json();
-      if (json.success) {
-        setProjects((prev) => [json.data, ...prev]);
-        setIsAddingProject(false);
-        setNewProject({
-          title: "",
-          bhkType: "2 BHK",
-          location: "Asalpha, Ghatkopar West",
-          city: "Mumbai",
-          budgetRange: "₹10.75L",
-          timeline: "60 Days",
-          coverImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
-          description: "",
-          scope: "Modular kitchen with 3 tandem drawers, Master wardrobe, False ceiling, Wall molding",
-        });
-      }
-    } catch (err) {
-      console.error("Failed to create project:", err);
-    }
+  // Projects Management
+  const handleOpenAddProject = () => {
+    setProjectToEdit(null);
+    setIsProjectModalOpen(true);
   };
 
-  const handleDeleteProject = async (projectId: string) => {
-    if (!window.confirm("Are you sure you want to delete this project from the database?")) return;
+  const handleOpenEditProject = (proj: Project) => {
+    setProjectToEdit(proj);
+    setIsProjectModalOpen(true);
+  };
+
+  const handleProjectSaved = (saved: Project) => {
+    setProjects((prev) => {
+      const idx = prev.findIndex((p) => p.id === saved.id || p.slug === saved.slug);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = saved;
+        return copy;
+      }
+      return [saved, ...prev];
+    });
+    setProjectNotification(`Project "${saved.title}" was saved successfully.`);
+    setTimeout(() => setProjectNotification(""), 4000);
+  };
+
+  const handleDeleteProject = async (projectId: string, projectTitle?: string) => {
+    const displayName = projectTitle || "this project";
+    if (!window.confirm(`Are you sure you want to delete ${displayName} from the database?`)) return;
     try {
       const res = await fetch(`/api/projects/${projectId}`, { method: "DELETE" });
       if (res.ok) {
-        setProjects((prev) => prev.filter((p) => p.id !== projectId));
+        setProjects((prev) => prev.filter((p) => p.id !== projectId && p.slug !== projectId));
+        setProjectNotification(`Project "${displayName}" was deleted.`);
+        setTimeout(() => setProjectNotification(""), 4000);
       }
     } catch (err) {
       console.error("Failed to delete project:", err);
+    }
+  };
+
+  // Testimonials Management
+  const handleCreateTestimonial = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTestimonial.name.trim() || !newTestimonial.quote.trim()) return;
+    try {
+      const res = await fetch("/api/testimonials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newTestimonial.name.trim(),
+          bhkType: newTestimonial.bhkType,
+          location: newTestimonial.location.trim(),
+          quote: newTestimonial.quote.trim(),
+          rating: Number(newTestimonial.rating) || 5,
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setTestimonials((prev) => [data.data, ...prev]);
+        setIsAddingTestimonial(false);
+        setNewTestimonial({
+          name: "",
+          bhkType: "2 BHK",
+          location: "Asalpha, Mumbai",
+          quote: "",
+          rating: 5,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to create testimonial:", err);
+    }
+  };
+
+  const handleDeleteTestimonial = async (testId: string) => {
+    if (!window.confirm("Are you sure you want to remove this testimonial?")) return;
+    try {
+      const res = await fetch(`/api/testimonials/${testId}`, { method: "DELETE" });
+      if (res.ok) {
+        setTestimonials((prev) => prev.filter((t) => t.id !== testId));
+      }
+    } catch (err) {
+      console.error("Failed to delete testimonial:", err);
     }
   };
 
@@ -332,6 +384,7 @@ export function AdminPage() {
                 loadLeads();
                 loadProjects();
                 loadStats();
+                loadTestimonials();
               }}
               className="text-xs"
             >
@@ -353,7 +406,7 @@ export function AdminPage() {
         <div className="flex space-x-2 border-b border-[var(--border)] pb-1 overflow-x-auto">
           <button
             onClick={() => setActiveTab("leads")}
-            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all ${
+            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all shrink-0 ${
               activeTab === "leads"
                 ? "bg-white border-t border-x border-[var(--border)] text-[var(--foreground)] shadow-xs -mb-[1px]"
                 : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
@@ -365,7 +418,7 @@ export function AdminPage() {
 
           <button
             onClick={() => setActiveTab("projects")}
-            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all ${
+            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all shrink-0 ${
               activeTab === "projects"
                 ? "bg-white border-t border-x border-[var(--border)] text-[var(--foreground)] shadow-xs -mb-[1px]"
                 : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
@@ -376,8 +429,20 @@ export function AdminPage() {
           </button>
 
           <button
+            onClick={() => setActiveTab("testimonials")}
+            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all shrink-0 ${
+              activeTab === "testimonials"
+                ? "bg-white border-t border-x border-[var(--border)] text-[var(--foreground)] shadow-xs -mb-[1px]"
+                : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            }`}
+          >
+            <Quote className="h-4 w-4 text-[var(--accent)]" />
+            <span>Client Reviews ({testimonials.length})</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab("stats")}
-            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all ${
+            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all shrink-0 ${
               activeTab === "stats"
                 ? "bg-white border-t border-x border-[var(--border)] text-[var(--foreground)] shadow-xs -mb-[1px]"
                 : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
@@ -485,143 +550,326 @@ export function AdminPage() {
         {/* Tab 2: Projects */}
         {activeTab === "projects" && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            {/* Notification Banner */}
+            {projectNotification && (
+              <div className="flex items-center space-x-2 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-[var(--radius)]">
+                <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" />
+                <span>{projectNotification}</span>
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="font-display text-xl font-bold text-[var(--foreground)]">
                   Portfolio Projects Management
                 </h3>
                 <p className="text-xs text-[var(--muted-foreground)]">
-                  Add new real-estate transformations or manage existing showcase items.
+                  Add new portfolio transformations, edit existing projects, scopes, and manage full image galleries.
                 </p>
               </div>
               <Button
-                variant={isAddingProject ? "outline" : "primary"}
+                variant="gold"
                 size="sm"
-                onClick={() => setIsAddingProject(!isAddingProject)}
-                className="text-xs"
+                onClick={handleOpenAddProject}
+                className="text-xs shrink-0 flex items-center space-x-1.5"
               >
-                {isAddingProject ? "Cancel" : "Add New Project"}
+                <Plus className="h-4 w-4" />
+                <span>Add New Project</span>
               </Button>
             </div>
 
-            {/* Add Project Form */}
-            {isAddingProject && (
-              <form onSubmit={handleCreateProject} className="p-6 bg-white rounded-[var(--radius)] border border-[var(--border)] shadow-xs space-y-4">
-                <h4 className="font-display text-lg font-bold text-[var(--foreground)]">
-                  Add New Portfolio Item
+            {/* Filter & Search Controls */}
+            <div className="p-4 bg-white rounded-[var(--radius)] border border-[var(--border)] shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+              <div className="relative flex-1">
+                <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" />
+                <input
+                  type="text"
+                  placeholder="Search projects by title, location, or scope..."
+                  value={projectSearchQuery}
+                  onChange={(e) => setProjectSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 text-xs border border-[var(--border)] rounded-[var(--radius)] focus:outline-none focus:border-[var(--accent)]"
+                />
+              </div>
+
+              <div className="flex items-center space-x-2 overflow-x-auto pb-1 md:pb-0">
+                <Filter className="h-3.5 w-3.5 text-[var(--muted-foreground)] shrink-0" />
+                {["All", "1 BHK", "2 BHK", "3 BHK", "Penthouse", "Villa"].map((bhk) => (
+                  <button
+                    key={bhk}
+                    onClick={() => setProjectBhkFilter(bhk)}
+                    className={`px-2.5 py-1 text-xs rounded-full border transition-all shrink-0 ${
+                      projectBhkFilter === bhk
+                        ? "bg-[var(--accent)] text-white border-[var(--accent)] font-semibold"
+                        : "border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-neutral-50"
+                    }`}
+                  >
+                    {bhk}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Filtered Project List */}
+            {(() => {
+              const filteredProjects = projects.filter((p) => {
+                const matchesQuery =
+                  !projectSearchQuery.trim() ||
+                  p.title.toLowerCase().includes(projectSearchQuery.toLowerCase()) ||
+                  p.location.toLowerCase().includes(projectSearchQuery.toLowerCase()) ||
+                  p.description.toLowerCase().includes(projectSearchQuery.toLowerCase());
+                const matchesBhk =
+                  projectBhkFilter === "All" || p.bhkType === projectBhkFilter;
+                return matchesQuery && matchesBhk;
+              });
+
+              if (filteredProjects.length === 0) {
+                return (
+                  <div className="p-12 text-center bg-white rounded-[var(--radius)] border border-[var(--border)]">
+                    <p className="text-sm text-[var(--muted-foreground)]">
+                      No portfolio projects match your search criteria.
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setProjectSearchQuery("");
+                        setProjectBhkFilter("All");
+                      }}
+                      className="mt-3 text-xs"
+                    >
+                      Clear Filters
+                    </Button>
+                  </div>
+                );
+              }
+
+              return (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredProjects.map((p) => {
+                    const totalImages = (p.images && p.images.length > 0) ? p.images.length : (p.coverImage ? 1 : 0);
+                    return (
+                      <div
+                        key={p.id}
+                        className="bg-white rounded-[var(--radius)] border border-[var(--border)] overflow-hidden shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow group"
+                      >
+                        <div className="aspect-[16/10] overflow-hidden bg-neutral-100 relative">
+                          <img
+                            src={p.coverImage}
+                            alt={p.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute top-2 left-2 flex items-center space-x-1.5">
+                            <span className="px-2 py-0.5 rounded-xs bg-black/80 text-white text-[10px] font-semibold uppercase tracking-wider backdrop-blur-xs">
+                              {p.bhkType}
+                            </span>
+                            {p.featured && (
+                              <span className="px-2 py-0.5 rounded-xs bg-amber-500/90 text-white text-[10px] font-semibold uppercase flex items-center space-x-0.5 shadow-xs">
+                                <Star className="h-2.5 w-2.5 fill-current" />
+                                <span>Featured</span>
+                              </span>
+                            )}
+                          </div>
+                          <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-xs bg-black/70 text-white text-[10px] font-medium flex items-center space-x-1 backdrop-blur-xs">
+                            <ImageIcon className="h-3 w-3" />
+                            <span>{totalImages} {totalImages === 1 ? 'photo' : 'photos'}</span>
+                          </div>
+                        </div>
+
+                        <div className="p-4 space-y-2 flex-1">
+                          <div className="flex items-center text-xs text-[var(--muted-foreground)]">
+                            <MapPin className="h-3 w-3 mr-1 text-[var(--accent)] shrink-0" />
+                            <span className="truncate">{p.location}, {p.city}</span>
+                          </div>
+                          <h4 className="font-display text-base font-bold text-[var(--foreground)] line-clamp-1">
+                            {p.title}
+                          </h4>
+                          <p className="text-xs text-[var(--muted-foreground)] line-clamp-2">
+                            {p.description}
+                          </p>
+                          {p.scope && p.scope.length > 0 && (
+                            <div className="flex flex-wrap gap-1 pt-1">
+                              {p.scope.slice(0, 2).map((item, i) => (
+                                <span
+                                  key={i}
+                                  className="text-[10px] px-2 py-0.5 bg-neutral-100 text-[var(--muted-foreground)] rounded-xs truncate max-w-[150px]"
+                                >
+                                  {item}
+                                </span>
+                              ))}
+                              {p.scope.length > 2 && (
+                                <span className="text-[10px] px-1.5 py-0.5 bg-neutral-100 text-[var(--muted-foreground)] rounded-xs">
+                                  +{p.scope.length - 2}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="p-4 pt-2 border-t border-[var(--border)]/70 flex items-center justify-between bg-neutral-50/50">
+                          <div className="text-xs font-semibold text-[var(--foreground)]">
+                            {p.budgetRange}
+                            <span className="text-[10px] text-[var(--muted-foreground)] block font-normal">
+                              {p.timeline}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center space-x-1">
+                            <Link
+                              href={`/projects/${p.slug}`}
+                              target="_blank"
+                              className="p-1.5 text-neutral-600 hover:text-[var(--accent)] hover:bg-neutral-100 rounded-xs transition-colors"
+                              title="View live project page"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Link>
+                            <button
+                              onClick={() => handleOpenEditProject(p)}
+                              className="p-1.5 text-neutral-700 hover:text-[var(--accent)] hover:bg-neutral-100 rounded-xs transition-colors flex items-center space-x-1 text-xs font-medium"
+                              title="Edit project content and images"
+                            >
+                              <Edit3 className="h-4 w-4 text-[var(--accent)]" />
+                              <span className="hidden xl:inline">Edit</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteProject(p.id, p.title)}
+                              className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-xs transition-colors"
+                              title="Delete project"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* Tab 3: Testimonials */}
+        {activeTab === "testimonials" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-display text-xl font-bold text-[var(--foreground)]">
+                  Client Reviews & Testimonials
+                </h3>
+                <p className="text-xs text-[var(--muted-foreground)]">
+                  Manage verified customer testimonials appearing across the homepage and portfolio.
+                </p>
+              </div>
+              <Button
+                variant={isAddingTestimonial ? "outline" : "gold"}
+                size="sm"
+                onClick={() => setIsAddingTestimonial(!isAddingTestimonial)}
+                className="text-xs"
+              >
+                {isAddingTestimonial ? "Cancel" : "Add Testimonial"}
+              </Button>
+            </div>
+
+            {/* Add Testimonial Form */}
+            {isAddingTestimonial && (
+              <form onSubmit={handleCreateTestimonial} className="p-6 bg-white rounded-[var(--radius)] border border-[var(--border)] shadow-xs space-y-4">
+                <h4 className="font-display text-base font-bold text-[var(--foreground)]">
+                  Add Verified Client Review
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-[var(--foreground)]">Project Title</label>
+                    <label className="text-xs font-semibold text-[var(--foreground)]">Client Name</label>
                     <Input
                       required
-                      placeholder="e.g. Prestige Lake Ridge"
-                      value={newProject.title}
-                      onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
+                      placeholder="e.g. Vikram & Sneha Nair"
+                      value={newTestimonial.name}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-[var(--foreground)]">BHK Type</label>
+                    <label className="text-xs font-semibold text-[var(--foreground)]">BHK Configuration</label>
                     <select
-                      value={newProject.bhkType}
-                      onChange={(e) => setNewProject({ ...newProject, bhkType: e.target.value })}
-                      className="h-11 w-full rounded-[var(--radius)] border border-[var(--border)] px-3 text-xs"
+                      value={newTestimonial.bhkType}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, bhkType: e.target.value })}
+                      className="h-11 w-full rounded-[var(--radius)] border border-[var(--border)] px-3 text-xs bg-white"
                     >
                       <option value="1 BHK">1 BHK</option>
                       <option value="2 BHK">2 BHK</option>
                       <option value="3 BHK">3 BHK</option>
+                      <option value="Penthouse">Penthouse</option>
+                      <option value="Villa">Villa</option>
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-[var(--foreground)]">Location</label>
+                    <label className="text-xs font-semibold text-[var(--foreground)]">Location / Society</label>
                     <Input
                       required
-                      placeholder="e.g. Asalpha, Powai, or Bandra"
-                      value={newProject.location}
-                      onChange={(e) => setNewProject({ ...newProject, location: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="text-xs font-semibold text-[var(--foreground)]">Budget Range</label>
-                    <Input
-                      placeholder="e.g. ₹9.5L – ₹12.5L"
-                      value={newProject.budgetRange}
-                      onChange={(e) => setNewProject({ ...newProject, budgetRange: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-[var(--foreground)]">Timeline</label>
-                    <Input
-                      placeholder="e.g. 60 Days"
-                      value={newProject.timeline}
-                      onChange={(e) => setNewProject({ ...newProject, timeline: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-[var(--foreground)]">Cover Image URL</label>
-                    <Input
-                      placeholder="https://images.unsplash.com/..."
-                      value={newProject.coverImage}
-                      onChange={(e) => setNewProject({ ...newProject, coverImage: e.target.value })}
+                      placeholder="e.g. Asalpha, Ghatkopar West"
+                      value={newTestimonial.location}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, location: e.target.value })}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-[var(--foreground)]">Scope (comma separated)</label>
-                  <Input
-                    placeholder="Modular kitchen with quartz, Floor to ceiling wardrobes, Gypsum false ceiling"
-                    value={newProject.scope}
-                    onChange={(e) => setNewProject({ ...newProject, scope: e.target.value })}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-[var(--foreground)]">Architectural Description</label>
+                  <label className="text-xs font-semibold text-[var(--foreground)]">Client Review Quote</label>
                   <Textarea
                     required
-                    placeholder="Describe the aesthetic direction, layout optimizations, and client requirements..."
-                    value={newProject.description}
-                    onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                    rows={3}
+                    placeholder="Describe their experience with Interior Points Studio..."
+                    value={newTestimonial.quote}
+                    onChange={(e) => setNewTestimonial({ ...newTestimonial, quote: e.target.value })}
                   />
                 </div>
 
-                <Button type="submit" variant="gold" size="md" className="text-xs font-semibold uppercase tracking-wider">
-                  Save Project to Database
-                </Button>
+                <div className="flex items-center space-x-4">
+                  <div>
+                    <label className="text-xs font-semibold text-[var(--foreground)] mr-2">Star Rating:</label>
+                    <select
+                      value={newTestimonial.rating}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, rating: Number(e.target.value) })}
+                      className="h-9 rounded-[var(--radius)] border border-[var(--border)] px-2 text-xs"
+                    >
+                      <option value={5}>⭐⭐⭐⭐⭐ 5 Stars</option>
+                      <option value={4}>⭐⭐⭐⭐ 4 Stars</option>
+                      <option value={3}>⭐⭐⭐ 3 Stars</option>
+                    </select>
+                  </div>
+                  <Button type="submit" variant="gold" size="sm" className="text-xs font-semibold uppercase">
+                    Publish Testimonial
+                  </Button>
+                </div>
               </form>
             )}
 
-            {/* List of projects */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {projects.map((p) => (
-                <div key={p.id} className="bg-white rounded-[var(--radius)] border border-[var(--border)] overflow-hidden shadow-xs flex flex-col justify-between">
-                  <div className="aspect-[16/10] overflow-hidden bg-neutral-100 relative">
-                    <img src={p.coverImage} alt={p.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-xs bg-black/75 text-white text-[10px] font-semibold uppercase">
-                      {p.bhkType}
-                    </span>
-                  </div>
-                  <div className="p-4 space-y-2">
-                    <div className="text-xs text-[var(--muted-foreground)]">
-                      {p.location}, {p.city}
+            {/* Testimonials Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {testimonials.map((t) => (
+                <div key={t.id} className="bg-white p-5 rounded-[var(--radius)] border border-[var(--border)] shadow-xs flex flex-col justify-between space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center text-amber-500">
+                        {Array.from({ length: t.rating || 5 }).map((_, idx) => (
+                          <Star key={idx} className="h-3.5 w-3.5 fill-current" />
+                        ))}
+                      </div>
+                      <span className="text-[10px] text-[var(--muted-foreground)]">{t.date || "Verified Client"}</span>
                     </div>
-                    <h4 className="font-display text-base font-bold text-[var(--foreground)]">
-                      {p.title}
-                    </h4>
-                    <p className="text-xs text-[var(--muted-foreground)] line-clamp-2">
-                      {p.description}
+                    <p className="text-xs text-[var(--foreground)] italic line-clamp-4">
+                      "{t.quote}"
                     </p>
                   </div>
-                  <div className="p-4 pt-0 border-t border-[var(--border)]/70 flex items-center justify-between mt-2">
-                    <span className="text-xs font-semibold text-[var(--foreground)]">{p.budgetRange}</span>
+
+                  <div className="pt-3 border-t border-[var(--border)]/70 flex items-center justify-between">
+                    <div>
+                      <h5 className="text-xs font-bold text-[var(--foreground)]">{t.name}</h5>
+                      <span className="text-[10px] text-[var(--muted-foreground)]">{t.bhkType} • {t.location}</span>
+                    </div>
                     <button
-                      onClick={() => handleDeleteProject(p.id)}
+                      onClick={() => handleDeleteTestimonial(t.id)}
                       className="p-1 text-rose-600 hover:bg-rose-50 rounded-xs"
-                      title="Delete project"
+                      title="Delete review"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -707,6 +955,14 @@ export function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* Project Editor Modal (Add/Edit Project & Gallery) */}
+        <ProjectEditorModal
+          isOpen={isProjectModalOpen}
+          projectToEdit={projectToEdit}
+          onClose={() => setIsProjectModalOpen(false)}
+          onSave={handleProjectSaved}
+        />
       </div>
     </div>
   );

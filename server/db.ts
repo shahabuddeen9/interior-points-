@@ -69,7 +69,7 @@ export const db = {
   },
   saveProject: (project: Project): Project => {
     const data = ensureDbExists();
-    const existingIndex = data.projects.findIndex((p) => p.id === project.id);
+    const existingIndex = data.projects.findIndex((p) => p.id === project.id || p.slug === project.slug);
     if (existingIndex >= 0) {
       data.projects[existingIndex] = project;
     } else {

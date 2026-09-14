@@ -11,8 +11,9 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // JSON Body Parser
-  app.use(express.json());
+  // JSON Body Parser with 50mb limit for image uploads
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
   // Baseline Security Headers
   app.use((req, res, next) => {
@@ -63,16 +64,26 @@ async function startServer() {
       res.status(400).json({ success: false, error: "Title, BHK type, and location are required" });
       return;
     }
-    const slug = body.slug || body.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const cleanTitle = body.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = body.slug || `${cleanTitle}-${Date.now().toString().slice(-4)}`;
+    const coverImage = body.coverImage || (Array.isArray(body.images) && body.images.length > 0 ? body.images[0] : "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80");
+    const images = Array.isArray(body.images) && body.images.length > 0 ? body.images : [coverImage];
+    const scope = Array.isArray(body.scope)
+      ? body.scope
+      : typeof body.scope === "string"
+      ? body.scope.split(",").map((s: string) => s.trim()).filter(Boolean)
+      : ["Modular Kitchen", "Wardrobes", "False Ceiling"];
+
     const newProject = {
       ...body,
       id: body.id || `proj-${Date.now()}`,
       slug,
+      coverImage,
+      images,
+      scope,
       roomTypes: body.roomTypes || ["Full Home"],
-      images: body.images && body.images.length > 0 ? body.images : [body.coverImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"],
-      scope: body.scope || ["Modular Kitchen", "Wardrobes", "False Ceiling"],
-      timeline: body.timeline || "45 Days",
-      budgetRange: body.budgetRange || "₹8.0L - ₹12.0L",
+      timeline: body.timeline || "60 Days",
+      budgetRange: body.budgetRange || "₹10.75L",
       description: body.description || "Bespoke home interior designed and executed by Interior Points.",
       featured: body.featured ?? true,
     };
@@ -81,15 +92,31 @@ async function startServer() {
   });
 
   app.put("/api/projects/:id", (req, res) => {
-    const existing = db.getProjectBySlug(req.params.id);
+    const existing = db.getProjectBySlug(req.params.id) || db.getProjects().find((p) => p.id === req.params.id);
     if (!existing) {
       res.status(404).json({ success: false, error: "Project not found" });
       return;
     }
+    const body = req.body;
+    const coverImage = body.coverImage || existing.coverImage;
+    let images = Array.isArray(body.images) ? body.images : existing.images;
+    if ((!images || images.length === 0) && coverImage) {
+      images = [coverImage];
+    }
+    const scope = Array.isArray(body.scope)
+      ? body.scope
+      : typeof body.scope === "string"
+      ? body.scope.split(",").map((s: string) => s.trim()).filter(Boolean)
+      : existing.scope;
+
     const updated = db.saveProject({
       ...existing,
-      ...req.body,
+      ...body,
+      coverImage,
+      images,
+      scope,
       id: existing.id,
+      slug: existing.slug,
     });
     res.json({ success: true, data: updated });
   });
