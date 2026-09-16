@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Project } from "../../types";
 import { Link } from "../../lib/router";
-import { initialProjects } from "../../../server/seedData";
+import { getStoredProjects, fetchProjects, subscribeToProjects } from "../../lib/project-service";
 import { Search, ArrowUpRight } from "lucide-react";
 import { Button } from "../ui/button";
 
 export function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<Project[]>(() => getStoredProjects());
+  const [loading, setLoading] = useState(false);
   const [bhkFilter, setBhkFilter] = useState<string>("All");
   const [roomFilter, setRoomFilter] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
+    fetchProjects()
       .then((data) => {
-        if (data.success && Array.isArray(data.data)) {
-          setProjects(data.data);
+        if (Array.isArray(data) && data.length > 0) {
+          setProjects(data);
         }
       })
-      .catch((err) => console.error("Error fetching projects:", err))
       .finally(() => setLoading(false));
+
+    const unsubscribe = subscribeToProjects((updatedList) => {
+      setProjects(updatedList);
+    });
+
+    return unsubscribe;
   }, []);
 
   const filteredProjects = projects.filter((project) => {

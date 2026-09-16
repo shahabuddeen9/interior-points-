@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input, Textarea } from "../ui/input";
+import { saveProject } from "../../lib/project-service";
 
 interface ProjectEditorModalProps {
   isOpen: boolean;
@@ -288,31 +289,8 @@ export function ProjectEditorModal({
     };
 
     try {
-      if (isEditing && projectToEdit?.id) {
-        // Update existing project
-        const res = await fetch(`/api/projects/${projectToEdit.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (!res.ok || !data.success) {
-          throw new Error(data.error || "Failed to update project");
-        }
-        onSave(data.data);
-      } else {
-        // Create new project
-        const res = await fetch("/api/projects", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (!res.ok || !data.success) {
-          throw new Error(data.error || "Failed to create project");
-        }
-        onSave(data.data);
-      }
+      const saved = await saveProject(payload, isEditing, projectToEdit?.id);
+      onSave(saved);
       onClose();
     } catch (err: any) {
       console.error("Save project error:", err);

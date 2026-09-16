@@ -28,6 +28,7 @@ import {
 import { Button } from "../ui/button";
 import { Input, Textarea } from "../ui/input";
 import { ProjectEditorModal } from "../admin/project-editor-modal";
+import { getStoredProjects, fetchProjects, deleteProject, subscribeToProjects } from "../../lib/project-service";
 
 export function AdminPage() {
   const [passcode, setPasscode] = useState("");
@@ -51,7 +52,7 @@ export function AdminPage() {
   const [leadsLoading, setLeadsLoading] = useState(false);
 
   // Projects state
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>(() => getStoredProjects());
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
@@ -137,6 +138,11 @@ export function AdminPage() {
     loadProjects();
     loadStats();
     loadTestimonials();
+
+    const unsubscribe = subscribeToProjects((updatedList) => {
+      setProjects(updatedList);
+    });
+    return unsubscribe;
   }, [isAuthenticated]);
 
   const loadLeads = async () => {
@@ -154,9 +160,10 @@ export function AdminPage() {
 
   const loadProjects = async () => {
     try {
-      const res = await fetch("/api/projects");
-      const json = await res.json();
-      if (json.success) setProjects(json.data);
+      const data = await fetchProjects();
+      if (Array.isArray(data) && data.length > 0) {
+        setProjects(data);
+      }
     } catch (err) {
       console.error("Failed to load projects:", err);
     }
@@ -258,14 +265,7 @@ export function AdminPage() {
     const displayName = target.title || "Project";
 
     try {
-      // First attempt deletion using primary ID
-      let res = await fetch(`/api/projects/${encodeURIComponent(targetId)}`, { method: "DELETE" });
-      // If not ok and slug exists, attempt with slug
-      if (!res.ok && targetSlug && targetSlug !== targetId) {
-        res = await fetch(`/api/projects/${encodeURIComponent(targetSlug)}`, { method: "DELETE" });
-      }
-
-      // Immediately filter out of state
+      await deleteProject(targetId || targetSlug);
       setProjects((prev) =>
         prev.filter((p) => p.id !== targetId && p.slug !== targetSlug && p.id !== targetSlug)
       );

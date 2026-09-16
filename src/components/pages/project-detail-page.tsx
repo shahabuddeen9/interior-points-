@@ -3,29 +3,46 @@ import { Project } from "../../types";
 import { Link, useRouter } from "../../lib/router";
 import { MapPin, Clock, ArrowLeft, ShieldCheck, Check, Star, Quote, ChevronRight, Share2, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
-import { initialProjects } from "../../../server/seedData";
+import { getProjectBySlugOrId, subscribeToProjects, fetchProjects } from "../../lib/project-service";
 
 export function ProjectDetailPage({ onOpenConsultation }: { onOpenConsultation: () => void }) {
   const { params, navigate } = useRouter();
   const slug = params.slug;
 
   const [project, setProject] = useState<Project | null>(() => {
-    return initialProjects.find((p) => p.slug === slug || p.id === slug) || null;
+    return slug ? getProjectBySlugOrId(slug) || null : null;
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!project);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
     if (!slug) return;
-    fetch(`/api/projects/${slug}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && data.data) {
-          setProject(data.data);
-        }
-      })
-      .catch((err) => console.error("Error loading project detail:", err))
-      .finally(() => setLoading(false));
+
+    // 1. Immediately check local store
+    const local = getProjectBySlugOrId(slug);
+    if (local) {
+      setProject(local);
+      setLoading(false);
+    }
+
+    // 2. Fetch latest projects from API to keep state updated
+    fetchProjects().then(() => {
+      const refreshed = getProjectBySlugOrId(slug);
+      if (refreshed) {
+        setProject(refreshed);
+      }
+      setLoading(false);
+    });
+
+    // 3. Subscribe to real-time project edits/updates from Admin
+    const unsubscribe = subscribeToProjects(() => {
+      const updated = getProjectBySlugOrId(slug);
+      if (updated) {
+        setProject(updated);
+      }
+    });
+
+    return unsubscribe;
   }, [slug]);
 
   if (!project) {

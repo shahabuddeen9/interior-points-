@@ -92,33 +92,70 @@ async function startServer() {
   });
 
   app.put("/api/projects/:id", (req, res) => {
-    const existing = db.getProjectBySlug(req.params.id) || db.getProjects().find((p) => p.id === req.params.id);
-    if (!existing) {
-      res.status(404).json({ success: false, error: "Project not found" });
-      return;
-    }
-    const body = req.body;
-    const coverImage = body.coverImage || existing.coverImage;
-    let images = Array.isArray(body.images) ? body.images : existing.images;
-    if ((!images || images.length === 0) && coverImage) {
-      images = [coverImage];
-    }
-    const scope = Array.isArray(body.scope)
-      ? body.scope
-      : typeof body.scope === "string"
-      ? body.scope.split(",").map((s: string) => s.trim()).filter(Boolean)
-      : existing.scope;
+    try {
+      const rawParam = req.params.id || "";
+      const decodedParam = decodeURIComponent(rawParam);
+      const body = req.body || {};
 
-    const updated = db.saveProject({
-      ...existing,
-      ...body,
-      coverImage,
-      images,
-      scope,
-      id: existing.id,
-      slug: existing.slug,
-    });
-    res.json({ success: true, data: updated });
+      // Match existing project by param, decoded param, body.id, or body.slug
+      const allProjects = db.getProjects();
+      let existing = allProjects.find(
+        (p) =>
+          p.id === rawParam ||
+          p.slug === rawParam ||
+          p.id === decodedParam ||
+          p.slug === decodedParam ||
+          p.id?.toLowerCase() === rawParam.toLowerCase() ||
+          p.slug?.toLowerCase() === rawParam.toLowerCase() ||
+          p.id?.toLowerCase() === decodedParam.toLowerCase() ||
+          p.slug?.toLowerCase() === decodedParam.toLowerCase()
+      );
+
+      if (!existing && body.id) {
+        existing = allProjects.find((p) => p.id === body.id || p.id?.toLowerCase() === body.id.toLowerCase());
+      }
+      if (!existing && body.slug) {
+        existing = allProjects.find((p) => p.slug === body.slug || p.slug?.toLowerCase() === body.slug.toLowerCase());
+      }
+
+      const coverImage = body.coverImage || existing?.coverImage || (Array.isArray(body.images) && body.images[0]) || "";
+      let images = Array.isArray(body.images) && body.images.length > 0 ? body.images : (existing?.images || [coverImage]);
+      if ((!images || images.length === 0) && coverImage) {
+        images = [coverImage];
+      }
+      const scope = Array.isArray(body.scope)
+        ? body.scope
+        : typeof body.scope === "string"
+        ? body.scope.split(",").map((s: string) => s.trim()).filter(Boolean)
+        : existing?.scope || ["Full Home Modular Carpentry"];
+
+      const targetId = existing?.id || body.id || (rawParam.startsWith("proj-") ? rawParam : `proj-${Date.now()}`);
+      const targetSlug = body.slug || existing?.slug || (body.title ? body.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") : rawParam);
+
+      const updated = db.saveProject({
+        title: body.title || existing?.title || "Custom Residence",
+        bhkType: body.bhkType || existing?.bhkType || "2 BHK",
+        location: body.location || existing?.location || "Mumbai",
+        city: body.city || existing?.city || "Mumbai",
+        roomTypes: body.roomTypes || existing?.roomTypes || ["Full Home"],
+        timeline: body.timeline || existing?.timeline || "50-60 Days",
+        budgetRange: body.budgetRange || existing?.budgetRange || "₹10L - ₹15L",
+        description: body.description || existing?.description || "",
+        featured: body.featured !== undefined ? body.featured : (existing?.featured ?? true),
+        ...(existing || {}),
+        ...body,
+        id: targetId,
+        slug: targetSlug,
+        coverImage,
+        images,
+        scope,
+      });
+
+      res.json({ success: true, data: updated });
+    } catch (err: any) {
+      console.error("Error in PUT /api/projects/:id:", err);
+      res.status(500).json({ success: false, error: err.message || "Failed to update project" });
+    }
   });
 
   app.delete("/api/projects/:id", (req, res) => {

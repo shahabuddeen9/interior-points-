@@ -2,22 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Project } from "../../types";
 import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
 import { Link } from "../../lib/router";
-import { initialProjects } from "../../../server/seedData";
+import { getStoredProjects, fetchProjects, subscribeToProjects } from "../../lib/project-service";
 import { motion, AnimatePresence } from "motion/react";
 
 export function ProjectsPreview() {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const [projects, setProjects] = useState<Project[]>(() => getStoredProjects());
   const [activeFilter, setActiveFilter] = useState<string>("All");
 
   useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-          setProjects(data.data);
-        }
-      })
-      .catch((err) => console.error("Error fetching projects:", err));
+    // 1. Fetch latest from API and reconcile
+    fetchProjects().then((data) => {
+      if (Array.isArray(data) && data.length > 0) {
+        setProjects(data);
+      }
+    });
+
+    // 2. Subscribe to real-time project edits/additions/deletions from Admin
+    const unsubscribe = subscribeToProjects((updatedList) => {
+      setProjects(updatedList);
+    });
+
+    return unsubscribe;
   }, []);
 
   const filterOptions = ["All", "1 BHK", "2 BHK", "3 BHK"];

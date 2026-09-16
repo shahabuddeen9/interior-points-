@@ -10,52 +10,92 @@ interface DatabaseSchema {
   leads: LeadSubmission[];
 }
 
+let memoryDb: DatabaseSchema | null = null;
+
 const DATA_DIR = path.join(process.cwd(), "data");
 const DB_FILE = path.join(DATA_DIR, "db.json");
+const TMP_DIR = path.join(process.platform === "win32" ? process.env.TEMP || "C:\\temp" : "/tmp", "interior-points-data");
+const TMP_DB_FILE = path.join(TMP_DIR, "db.json");
+
+function getInitialData(): DatabaseSchema {
+  return {
+    projects: [...initialProjects],
+    testimonials: [...initialTestimonials],
+    stats: [...initialStats],
+    leads: [...initialLeads],
+  };
+}
 
 function ensureDbExists(): DatabaseSchema {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (memoryDb) {
+    return memoryDb;
   }
 
-  if (!fs.existsSync(DB_FILE)) {
-    const initialData: DatabaseSchema = {
-      projects: initialProjects,
-      testimonials: initialTestimonials,
-      stats: initialStats,
-      leads: initialLeads,
-    };
-    fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), "utf-8");
-    return initialData;
-  }
-
+  // 1. Try reading from DATA_DIR/db.json
   try {
-    const raw = fs.readFileSync(DB_FILE, "utf-8");
-    const parsed = JSON.parse(raw);
-    return {
-      projects: parsed.projects || initialProjects,
-      testimonials: parsed.testimonials || initialTestimonials,
-      stats: parsed.stats || initialStats,
-      leads: parsed.leads || initialLeads,
-    };
+    if (fs.existsSync(DB_FILE)) {
+      const raw = fs.readFileSync(DB_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      memoryDb = {
+        projects: parsed.projects || [...initialProjects],
+        testimonials: parsed.testimonials || [...initialTestimonials],
+        stats: parsed.stats || [...initialStats],
+        leads: parsed.leads || [...initialLeads],
+      };
+      return memoryDb;
+    }
   } catch (err) {
-    console.error("Error reading db.json, re-initializing:", err);
-    const initialData: DatabaseSchema = {
-      projects: initialProjects,
-      testimonials: initialTestimonials,
-      stats: initialStats,
-      leads: initialLeads,
-    };
-    fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), "utf-8");
-    return initialData;
+    console.warn("Could not read from data/db.json:", err);
   }
+
+  // 2. Try reading from temporary directory (serverless fallback)
+  try {
+    if (fs.existsSync(TMP_DB_FILE)) {
+      const raw = fs.readFileSync(TMP_DB_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      memoryDb = {
+        projects: parsed.projects || [...initialProjects],
+        testimonials: parsed.testimonials || [...initialTestimonials],
+        stats: parsed.stats || [...initialStats],
+        leads: parsed.leads || [...initialLeads],
+      };
+      return memoryDb;
+    }
+  } catch (err) {
+    // Ignore fallback read error
+  }
+
+  // 3. Initialize fresh memory copy
+  memoryDb = getInitialData();
+  writeDb(memoryDb);
+  return memoryDb;
 }
 
 function writeDb(data: DatabaseSchema) {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  memoryDb = data;
+
+  // 1. Try to write to project data directory
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+    return;
+  } catch (err) {
+    // Read-only filesystem in serverless / production container
   }
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+
+  // 2. Try writing to /tmp directory (writable in Vercel and Cloud Run)
+  try {
+    if (!fs.existsSync(TMP_DIR)) {
+      fs.mkdirSync(TMP_DIR, { recursive: true });
+    }
+    fs.writeFileSync(TMP_DB_FILE, JSON.stringify(data, null, 2), "utf-8");
+    return;
+  } catch (err) {
+    // Safe in-memory retention if all disk writes are restricted
+    console.warn("Filesystem write restricted; database state preserved safely in server memory.");
+  }
 }
 
 export const db = {
@@ -65,18 +105,39 @@ export const db = {
   },
   getProjectBySlug: (slug: string): Project | undefined => {
     const data = ensureDbExists();
-    return data.projects.find((p) => p.slug === slug || p.id === slug);
+    const clean = (slug || "").trim().toLowerCase();
+    const decoded = decodeURIComponent(clean);
+    return data.projects.find(
+      (p) =>
+        p.slug?.toLowerCase() === clean ||
+        p.id?.toLowerCase() === clean ||
+        p.slug?.toLowerCase() === decoded ||
+        p.id?.toLowerCase() === decoded
+    );
   },
   saveProject: (project: Project): Project => {
     const data = ensureDbExists();
-    const existingIndex = data.projects.findIndex((p) => p.id === project.id || p.slug === project.slug);
+    const projId = (project.id || "").trim();
+    const projSlug = (project.slug || "").trim();
+
+    const existingIndex = data.projects.findIndex(
+      (p) =>
+        (projId && (p.id === projId || p.id?.toLowerCase() === projId.toLowerCase())) ||
+        (projSlug && (p.slug === projSlug || p.slug?.toLowerCase() === projSlug.toLowerCase()))
+    );
+
     if (existingIndex >= 0) {
-      data.projects[existingIndex] = project;
+      data.projects[existingIndex] = {
+        ...data.projects[existingIndex],
+        ...project,
+      };
+      writeDb(data);
+      return data.projects[existingIndex];
     } else {
       data.projects.unshift(project);
+      writeDb(data);
+      return project;
     }
-    writeDb(data);
-    return project;
   },
   deleteProject: (id: string): boolean => {
     const data = ensureDbExists();
