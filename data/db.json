@@ -4,7 +4,7 @@
       "title": "shahbudden home",
       "bhkType": "2 BHK",
       "location": "Indiranagar",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "budgetRange": "₹9.5L – ₹90L",
       "timeline": "45 Days",
       "coverImage": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
@@ -39,7 +39,7 @@
         "Living Room"
       ],
       "location": "Indiranagar",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "coverImage": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
       "images": [
         "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
@@ -60,7 +60,7 @@
       "featured": true,
       "clientTestimonial": {
         "clientName": "Rohan & Ananya Deshmukh",
-        "quote": "Nivās Interiors brought an architectural sensibility we didn't think was possible within our budget. The kitchen finish is impeccable, and they handed over keys exactly on day 48."
+        "quote": "Interior Points brought an architectural sensibility we didn't think was possible within our budget. The kitchen finish is impeccable, and they handed over keys exactly on day 48."
       }
     },
     {
@@ -75,7 +75,7 @@
         "Living Room"
       ],
       "location": "Whitefield",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "coverImage": "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
       "images": [
         "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
@@ -109,7 +109,7 @@
         "Kitchen"
       ],
       "location": "HSR Layout",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "coverImage": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80",
       "images": [
         "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80",
@@ -161,7 +161,7 @@
       "featured": true,
       "clientTestimonial": {
         "clientName": "Meera & Siddharth Sen",
-        "quote": "Every inch in Mumbai counts. Nivās designed concealed storage spots we didn't even realize were possible. Truly editorial and functional."
+        "quote": "Every inch in Mumbai counts. Interior Points designed concealed storage spots we didn't even realize were possible. Truly editorial and functional."
       }
     },
     {
@@ -175,7 +175,7 @@
         "Living Room"
       ],
       "location": "Bellandur",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "coverImage": "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
       "images": [
         "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
@@ -194,7 +194,7 @@
       "featured": true,
       "clientTestimonial": {
         "clientName": "Abhishek Varman",
-        "quote": "As a young professional, I wanted quality without a 20-lakh price tag. Nivās's Essentials package was transparent down to the last rupee."
+        "quote": "As a young professional, I wanted quality without a 20-lakh price tag. Interior Points's Essentials package was transparent down to the last rupee."
       }
     },
     {
@@ -210,7 +210,7 @@
         "Living Room"
       ],
       "location": "Jubilee Hills",
-      "city": "Hyderabad",
+      "city": "Mumbai",
       "coverImage": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
       "images": [
         "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
@@ -229,7 +229,7 @@
       "featured": true,
       "clientTestimonial": {
         "clientName": "Dr. Srinivas & Aruna Rao",
-        "quote": "The quality of materials, the professionalism of the site supervisor, and the design eye of Nivās are unmatched in the city."
+        "quote": "The quality of materials, the professionalism of the site supervisor, and the design eye of Interior Points are unmatched in the city."
       }
     }
   ],
@@ -238,8 +238,8 @@
       "id": "test-1",
       "name": "Rohan & Ananya Deshmukh",
       "bhkType": "3 BHK Penthouse",
-      "location": "Indiranagar, Bengaluru",
-      "quote": "Nivās Interiors brought an architectural sensibility we didn't think was possible within our budget. The modular kitchen finish is impeccable, and they handed over keys on day 48 without any price escalation.",
+      "location": "Indiranagar, Mumbai",
+      "quote": "Interior Points brought an architectural sensibility we didn't think was possible within our budget. The modular kitchen finish is impeccable, and they handed over keys on day 48 without any price escalation.",
       "rating": 5,
       "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
       "date": "February 2026",
@@ -249,7 +249,7 @@
       "id": "test-2",
       "name": "Karthik & Sneha Iyer",
       "bhkType": "2 BHK Home",
-      "location": "Whitefield, Bengaluru",
+      "location": "Whitefield, Mumbai",
       "quote": "Zero hidden charges. The 3D render match was beyond 95%. Their in-house carpentry team is remarkably skilled, polite, and punctual. Best decision we made for our first flat.",
       "rating": 5,
       "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
@@ -261,7 +261,7 @@
       "name": "Meera & Siddharth Sen",
       "bhkType": "2 BHK Sea-view Flat",
       "location": "Bandra West, Mumbai",
-      "quote": "Every inch in Mumbai counts. Nivās designed concealed storage spots we didn't even realize were possible. From the fluted glass partition to the acoustic ceiling, the craftsmanship is flawless.",
+      "quote": "Every inch in Mumbai counts. Interior Points designed concealed storage spots we didn't even realize were possible. From the fluted glass partition to the acoustic ceiling, the craftsmanship is flawless.",
       "rating": 5,
       "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
       "date": "December 2025",
@@ -271,8 +271,8 @@
       "id": "test-4",
       "name": "Dr. Srinivas & Aruna Rao",
       "bhkType": "3 BHK Luxury Residence",
-      "location": "Jubilee Hills, Hyderabad",
-      "quote": "The quality of materials, the responsiveness of our dedicated project manager, and the overall design eye of Nivās Interiors are truly world-class. Our guests haven't stopped complimenting the living room.",
+      "location": "Jubilee Hills, Mumbai",
+      "quote": "The quality of materials, the responsiveness of our dedicated project manager, and the overall design eye of Interior Points are truly world-class. Our guests haven't stopped complimenting the living room.",
       "rating": 5,
       "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
       "date": "November 2025",
@@ -332,7 +332,7 @@
       "name": "Priya Nair",
       "phone": "+91 9876543210",
       "email": "priya@example.com",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "bhkType": "2 BHK",
       "message": "Need modular kitchen and wardrobes",
       "id": "lead-1789365076677-1yirjh",
@@ -343,7 +343,7 @@
       "name": "Aarav Mehta",
       "phone": "+919876543210",
       "email": "aarav@example.com",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "bhkType": "3 BHK",
       "message": "Need acrylic modular kitchen and master wardrobe quote",
       "id": "lead-1789363944913-2vi1ly",
@@ -355,7 +355,7 @@
       "name": "Tanvi Saxena",
       "phone": "+91 98450 12345",
       "email": "tanvi.saxena@example.com",
-      "city": "Bengaluru",
+      "city": "Mumbai",
       "bhkType": "3 BHK",
       "message": "Possession scheduled for next month at Sobha Dream Acres. Looking for full home interiors with modular kitchen and 3 wardrobes.",
       "status": "scheduled",

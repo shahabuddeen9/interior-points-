@@ -183,7 +183,7 @@ async function startServer() {
       id: body.id || `test-${Date.now()}`,
       name: body.name,
       bhkType: body.bhkType || "3 BHK Home",
-      location: body.location || "Bengaluru",
+      location: body.location || "Mumbai",
       quote: body.quote,
       rating: Number(body.rating) || 5,
       avatar: body.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
@@ -234,7 +234,7 @@ async function startServer() {
       `• *Full Name:* ${data.name || "Customer"}`,
       `• *Phone Number:* ${data.phone || "Not provided"}`,
       `• *Email Address:* ${data.email || "Not provided"}`,
-      `• *City / Location:* ${data.city || "Bengaluru"}`,
+      `• *City / Location:* ${data.city || "Mumbai"}`,
       `• *Home Configuration:* ${data.bhkType || "Residential"}`,
     ];
     if (data.message && data.message.trim()) {
@@ -270,7 +270,7 @@ async function startServer() {
       name: name.trim(),
       phone: phone.trim(),
       email: email.trim(),
-      city: city?.trim() || "Bengaluru",
+      city: city?.trim() || "Mumbai",
       bhkType: bhkType,
       message: message?.trim() || "",
     });
@@ -344,7 +344,7 @@ async function startServer() {
   app.post("/api/admin/verify", (req, res) => {
     const { passcode } = req.body;
     // Primary admin password: saifi@2005
-    const validPasscodes = ["saifi@2005", process.env.ADMIN_PASSCODE, "interiorpoints2026", "nivas2026"].filter(Boolean);
+    const validPasscodes = ["saifi@2005", process.env.ADMIN_PASSCODE, "interiorpoints2026"].filter(Boolean);
     if (validPasscodes.includes(passcode)) {
       res.json({ success: true, authenticated: true, token: "interiorpoints-admin-authenticated-session" });
     } else {

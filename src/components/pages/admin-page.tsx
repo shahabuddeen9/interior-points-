@@ -35,8 +35,7 @@ export function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     try {
       return (
-        sessionStorage.getItem("interiorpoints_admin_auth") === "true" ||
-        sessionStorage.getItem("nivas_admin_auth") === "true"
+        sessionStorage.getItem("interiorpoints_admin_auth") === "true"
       );
     } catch {
       return false;
@@ -108,7 +107,7 @@ export function AdminPage() {
         setAuthHint(data.hint || "Hint: birth year");
       }
     } catch {
-      if (entered === "saifi@2005" || entered === "interiorpoints2026" || entered === "nivas2026") {
+      if (entered === "saifi@2005" || entered === "interiorpoints2026") {
         setIsAuthenticated(true);
         try {
           sessionStorage.setItem("interiorpoints_admin_auth", "true");
@@ -125,7 +124,6 @@ export function AdminPage() {
     setPasscode("");
     try {
       sessionStorage.removeItem("interiorpoints_admin_auth");
-      sessionStorage.removeItem("nivas_admin_auth");
     } catch {
       // Ignore
     }
