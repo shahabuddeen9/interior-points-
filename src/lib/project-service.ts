@@ -50,7 +50,20 @@ export function persistProjectsLocally(projects: Project[]): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
     window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: projects }));
   } catch (err) {
-    console.warn("Failed to write projects to localStorage:", err);
+    console.warn("Failed to write projects to localStorage, sanitizing large strings:", err);
+    try {
+      // Strip any huge raw base64 strings if quota was exceeded
+      const sanitized = projects.map((p) => ({
+        ...p,
+        coverImage: p.coverImage?.startsWith("data:") ? "" : p.coverImage,
+        images: (p.images || []).map((img) => (img.startsWith("data:") ? "" : img)).filter(Boolean),
+      }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+      window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: projects }));
+    } catch (e2) {
+      console.warn("Storage quota completely full, dispatching memory state:", e2);
+      window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: projects }));
+    }
   }
 }
 
@@ -67,11 +80,24 @@ export async function fetchProjects(): Promise<Project[]> {
       if (contentType.includes("application/json")) {
         const data = await res.json();
         if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-          // Merge server data with any locally saved projects
           const serverProjects: Project[] = data.data;
-          
-          // Check if server is missing any locally created/edited projects
-          const merged = [...serverProjects];
+
+          // Reconcile: Preserve any locally uploaded photos that may be newer
+          const merged = serverProjects.map((serverProj) => {
+            const local = localProjects.find(
+              (lp) => lp.id === serverProj.id || lp.slug === serverProj.slug
+            );
+            if (local && Array.isArray(local.images) && local.images.length > (serverProj.images || []).length) {
+              return {
+                ...serverProj,
+                images: local.images,
+                coverImage: local.coverImage || serverProj.coverImage,
+              };
+            }
+            return serverProj;
+          });
+
+          // Append any purely local project records
           for (const local of localProjects) {
             const exists = merged.some((p) => p.id === local.id || p.slug === local.slug);
             if (!exists) {
@@ -292,3 +318,59 @@ export function subscribeToProjects(callback: (projects: Project[]) => void): ()
     window.removeEventListener("storage", handleStorageEvent);
   };
 }
+
+/**
+ * Instantly synchronizes project photography changes directly to both client and server,
+ * ensuring photos are immediately saved without losing work when closing a modal.
+ */
+export async function updateProjectPhotos(
+  identifier: string,
+  images: string[],
+  coverImage?: string
+): Promise<Project | null> {
+  const currentProjects = getStoredProjects();
+  const cleanId = (identifier || "").trim().toLowerCase();
+
+  const idx = currentProjects.findIndex(
+    (p) =>
+      p.id?.toLowerCase() === cleanId ||
+      p.slug?.toLowerCase() === cleanId ||
+      p.id === identifier ||
+      p.slug === identifier
+  );
+
+  if (idx < 0) return null;
+
+  const existing = currentProjects[idx];
+  const newCover = coverImage || images[0] || existing.coverImage;
+  const updated: Project = {
+    ...existing,
+    images: images.length > 0 ? images : [newCover],
+    coverImage: newCover,
+  };
+
+  currentProjects[idx] = updated;
+  persistProjectsLocally(currentProjects);
+
+  // Sync with server
+  try {
+    const res = await fetch(`/api/projects/${encodeURIComponent(existing.id)}/photos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ images: updated.images, coverImage: updated.coverImage }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.data) {
+        currentProjects[idx] = data.data;
+        persistProjectsLocally(currentProjects);
+        return data.data;
+      }
+    }
+  } catch (err) {
+    console.warn("Server photo sync failed; local state safely retained:", err);
+  }
+
+  return updated;
+}
+

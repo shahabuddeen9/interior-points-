@@ -37,6 +37,17 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
 
     setLoading(true);
 
+    const fallbackWhatsappUrl = `https://wa.me/917903038750?text=${encodeURIComponent(
+      `*New Free Consultation Query — Interior Points*\n` +
+      `• *Full Name:* ${formData.name.trim()}\n` +
+      `• *Phone Number:* ${formData.phone.trim()}\n` +
+      `• *Email Address:* ${formData.email.trim()}\n` +
+      `• *City / Location:* ${formData.city || "Mumbai"}\n` +
+      `• *Home Configuration:* ${formData.bhkType || "2 BHK"}\n` +
+      (formData.message.trim() ? `• *Apartment / Requirements:* ${formData.message.trim()}\n` : "") +
+      `\n_Forwarded automatically from Interior Points Web Studio_`
+    )}`;
+
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
@@ -44,17 +55,30 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
         body: JSON.stringify(formData),
       });
 
-      const result = await res.json();
-      if (!res.ok || !result.success) {
-        throw new Error(result.error || "Failed to submit consultation request");
+      let result: any = null;
+      try {
+        const text = await res.text();
+        result = text ? JSON.parse(text) : null;
+      } catch (parseErr) {
+        console.warn("Could not parse response as JSON:", parseErr);
       }
 
-      const whatsappRedirectUrl =
-        result.whatsappUrl ||
-        `/api/whatsapp-redirect?name=${encodeURIComponent(formData.name)}&phone=${encodeURIComponent(formData.phone)}&email=${encodeURIComponent(formData.email)}&city=${encodeURIComponent(formData.city)}&bhkType=${encodeURIComponent(formData.bhkType)}&message=${encodeURIComponent(formData.message)}`;
+      if (!res.ok && result?.error) {
+        throw new Error(result.error);
+      }
+
+      const whatsappRedirectUrl = result?.whatsappUrl || fallbackWhatsappUrl;
+      const submittedRecord = result?.data || {
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        city: formData.city,
+        bhkType: formData.bhkType,
+        message: formData.message,
+      };
 
       setSubmittedLead({
-        ...result.data,
+        ...submittedRecord,
         whatsappUrl: whatsappRedirectUrl,
       });
 
@@ -74,8 +98,23 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
         message: "",
       });
     } catch (err: any) {
-      console.error("Submission error:", err);
-      setError(err.message || "Something went wrong. Please try again or reach out on WhatsApp.");
+      console.warn("Submission notice:", err);
+      if (err.message && !err.message.includes("JSON") && !err.message.includes("execute 'json'")) {
+        setError(err.message);
+      } else {
+        setSubmittedLead({
+          name: formData.name.trim(),
+          phone: formData.phone.trim(),
+          email: formData.email.trim(),
+          city: formData.city,
+          bhkType: formData.bhkType,
+          message: formData.message,
+          whatsappUrl: fallbackWhatsappUrl,
+        });
+        try {
+          window.open(fallbackWhatsappUrl, "_blank");
+        } catch (e) {}
+      }
     } finally {
       setLoading(false);
     }

@@ -60,10 +60,18 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
         }),
       });
 
-      const json = await res.json();
-      const replyContent =
-        json.reply ||
-        "Our design team is on standby to help you plan your home. Please feel free to book a complimentary 3D consultation or reach out directly on WhatsApp!";
+      let replyContent = "";
+      try {
+        const text = await res.text();
+        const json = text ? JSON.parse(text) : null;
+        replyContent = json?.reply || "";
+      } catch (parseErr) {
+        console.warn("Could not parse /api/chat response:", parseErr);
+      }
+
+      if (!replyContent) {
+        replyContent = "Our design team is on standby to help you plan your home. Please feel free to book a complimentary 3D consultation or reach out directly on WhatsApp (+91 7903038750)!";
+      }
 
       const assistantMsg: ChatMessage = {
         id: `assistant-${Date.now()}`,

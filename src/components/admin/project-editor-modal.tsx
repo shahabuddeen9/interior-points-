@@ -15,11 +15,15 @@ import {
   IndianRupee,
   MapPin,
   Building2,
-  Tag
+  Tag,
+  Loader2,
+  AlertTriangle,
+  CheckCircle2
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input, Textarea } from "../ui/input";
-import { saveProject } from "../../lib/project-service";
+import { saveProject, updateProjectPhotos } from "../../lib/project-service";
+import { compressAndUploadImage } from "../../lib/image-upload";
 
 interface ProjectEditorModalProps {
   isOpen: boolean;
@@ -118,6 +122,11 @@ export function ProjectEditorModal({
   const [clientQuote, setClientQuote] = useState("");
 
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+  const [saveSuccessNotification, setSaveSuccessNotification] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -179,6 +188,9 @@ export function ProjectEditorModal({
     }
     setErrorMessage("");
     setNewImageUrl("");
+    setHasUnsavedChanges(false);
+    setShowCloseConfirm(false);
+    setSaveSuccessNotification("");
   }, [projectToEdit, isOpen]);
 
   if (!isOpen) return null;
@@ -188,6 +200,7 @@ export function ProjectEditorModal({
     setSelectedRooms((prev) =>
       prev.includes(room) ? prev.filter((r) => r !== room) : [...prev, room]
     );
+    setHasUnsavedChanges(true);
   };
 
   // Add image by URL
@@ -196,61 +209,122 @@ export function ProjectEditorModal({
     if (!url) return;
     if (!images.includes(url)) {
       const updated = [...images, url];
+      const newCover = coverImage || url;
       setImages(updated);
       if (!coverImage) setCoverImage(url);
+      setHasUnsavedChanges(true);
+
+      // If editing existing project, auto-sync
+      if (isEditing && projectToEdit?.id) {
+        updateProjectPhotos(projectToEdit.id, updated, newCover).then((res) => {
+          if (res) onSave(res);
+        });
+      }
     }
     setNewImageUrl("");
   };
 
-  // Handle local file uploads (supports multi-file selection)
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, isCover = false) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+  // Handle local file uploads (supports multi-file selection, compression, and permanent storage)
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, isCover = false) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+    const files: File[] = Array.from(fileList);
 
-    Array.from(files).forEach((file: File) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          if (isCover) {
-            setCoverImage(result);
-            if (!images.includes(result)) {
-              setImages((prev) => [result, ...prev]);
-            }
-          } else {
-            setImages((prev) => {
-              if (prev.includes(result)) return prev;
-              const next = [...prev, result];
-              if (!coverImage) setCoverImage(result);
-              return next;
-            });
-          }
+    setUploading(true);
+    setErrorMessage("");
+    setSaveSuccessNotification("");
+
+    try {
+      const uploadedUrls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        setUploadMessage(`Optimizing & uploading photo ${i + 1} of ${files.length}...`);
+        const { url } = await compressAndUploadImage(files[i]);
+        if (url) {
+          uploadedUrls.push(url);
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      }
 
-    // Reset input
-    e.target.value = "";
+      if (uploadedUrls.length > 0) {
+        let nextImages = [...images];
+        let nextCover = coverImage;
+
+        if (isCover) {
+          nextCover = uploadedUrls[0];
+          nextImages = [uploadedUrls[0], ...nextImages.filter((img) => img !== uploadedUrls[0])];
+        } else {
+          uploadedUrls.forEach((u) => {
+            if (!nextImages.includes(u)) nextImages.push(u);
+          });
+          if (!nextCover) nextCover = uploadedUrls[0];
+        }
+
+        setImages(nextImages);
+        setCoverImage(nextCover);
+        setHasUnsavedChanges(true);
+
+        // If editing an existing project, auto-save the photos immediately to server
+        if (isEditing && projectToEdit?.id) {
+          setUploadMessage("Permanently saving photos to residence...");
+          const updated = await updateProjectPhotos(projectToEdit.id, nextImages, nextCover);
+          if (updated) {
+            onSave(updated);
+            setSaveSuccessNotification("Photos uploaded and saved directly to this residence!");
+            setTimeout(() => setSaveSuccessNotification(""), 4000);
+          }
+        } else {
+          setSaveSuccessNotification(`${uploadedUrls.length} photo(s) uploaded successfully! Click Save to finish.`);
+          setTimeout(() => setSaveSuccessNotification(""), 4000);
+        }
+      }
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      setErrorMessage(err.message || "Failed to process photo upload.");
+    } finally {
+      setUploading(false);
+      setUploadMessage("");
+      e.target.value = "";
+    }
   };
 
   // Set an existing image as the cover
   const handleSetCover = (imgUrl: string) => {
     setCoverImage(imgUrl);
+    setHasUnsavedChanges(true);
+    if (isEditing && projectToEdit?.id) {
+      updateProjectPhotos(projectToEdit.id, images, imgUrl).then((updated) => {
+        if (updated) onSave(updated);
+      });
+    }
   };
 
   // Remove an image from gallery
   const handleRemoveImage = (imgUrl: string) => {
     const remaining = images.filter((img) => img !== imgUrl);
     setImages(remaining);
+    const nextCover = coverImage === imgUrl ? remaining[0] || "" : coverImage;
     if (coverImage === imgUrl) {
-      setCoverImage(remaining[0] || "");
+      setCoverImage(nextCover);
+    }
+    setHasUnsavedChanges(true);
+    if (isEditing && projectToEdit?.id) {
+      updateProjectPhotos(projectToEdit.id, remaining, nextCover).then((updated) => {
+        if (updated) onSave(updated);
+      });
+    }
+  };
+
+  // Safe close handler that prevents accidental loss of uploaded photos
+  const handleRequestClose = () => {
+    if (hasUnsavedChanges) {
+      setShowCloseConfirm(true);
+    } else {
+      onClose();
     }
   };
 
   // Submit form
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e && e.preventDefault) e.preventDefault();
     if (!title.trim() || !location.trim()) {
       setErrorMessage("Please fill in Project Title and Location.");
       return;
@@ -290,6 +364,7 @@ export function ProjectEditorModal({
 
     try {
       const saved = await saveProject(payload, isEditing, projectToEdit?.id);
+      setHasUnsavedChanges(false);
       onSave(saved);
       onClose();
     } catch (err: any) {
@@ -304,34 +379,84 @@ export function ProjectEditorModal({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs overflow-y-auto"
       id="project-editor-modal"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) handleRequestClose();
+      }}
     >
       <div className="relative w-full max-w-4xl bg-white rounded-lg shadow-2xl border border-[var(--border)] overflow-hidden my-auto max-h-[92vh] flex flex-col">
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between bg-neutral-50/80 sticky top-0 z-10">
+        <div className="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between bg-neutral-50/90 backdrop-blur-xs sticky top-0 z-20">
           <div className="flex items-center space-x-3">
             <div className="h-9 w-9 rounded-md bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center">
               <Building2 className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-display text-lg font-bold text-[var(--foreground)]">
-                {isEditing ? `Edit Residence: ${projectToEdit?.title}` : "Add New Portfolio Residence"}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-display text-lg font-bold text-[var(--foreground)]">
+                  {isEditing ? `Edit Residence: ${projectToEdit?.title}` : "Add New Portfolio Residence"}
+                </h3>
+                {hasUnsavedChanges && (
+                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                    Unsaved Photos / Edits
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-[var(--muted-foreground)]">
-                Updates save instantly to backend database and reflect live across the entire website.
+                Updates save permanently to backend database and reflect live across the entire website.
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-md text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-neutral-200/60 transition-colors"
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
+
+          <div className="flex items-center space-x-2">
+            <Button
+              type="button"
+              onClick={() => handleSubmit()}
+              variant="primary"
+              size="sm"
+              disabled={saving || uploading}
+              className="text-xs font-semibold px-4 bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Check className="h-3.5 w-3.5" />
+                  <span>{isEditing ? "Save Changes" : "Save Residence"}</span>
+                </>
+              )}
+            </Button>
+            <button
+              type="button"
+              onClick={handleRequestClose}
+              className="p-1.5 rounded-md text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-neutral-200/60 transition-colors cursor-pointer"
+              aria-label="Close"
+              title="Close modal"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Body */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+          {saveSuccessNotification && (
+            <div className="p-3 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>{saveSuccessNotification}</span>
+            </div>
+          )}
+
+          {uploadMessage && (
+            <div className="p-3 rounded-md bg-blue-50 border border-blue-200 text-blue-800 text-xs font-medium flex items-center gap-2">
+              <Loader2 className="h-4 w-4 text-blue-600 animate-spin shrink-0" />
+              <span>{uploadMessage}</span>
+            </div>
+          )}
+
           {errorMessage && (
             <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-rose-800 font-medium">
               {errorMessage}
@@ -538,11 +663,21 @@ export function ProjectEditorModal({
                   type="button"
                   variant="primary"
                   size="sm"
+                  disabled={uploading}
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center justify-center gap-1.5 text-xs whitespace-nowrap"
+                  className="flex items-center justify-center gap-1.5 text-xs whitespace-nowrap bg-[var(--accent)] hover:bg-[#b0883d] text-white cursor-pointer"
                 >
-                  <Upload className="h-3.5 w-3.5" />
-                  <span>Upload Images from Device</span>
+                  {uploading ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>Uploading & Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-3.5 w-3.5" />
+                      <span>Upload Images from Device</span>
+                    </>
+                  )}
                 </Button>
 
                 <div className="flex-1 flex items-center gap-2">
@@ -563,12 +698,18 @@ export function ProjectEditorModal({
                     variant="outline"
                     size="sm"
                     onClick={() => handleAddImageUrl()}
-                    className="text-xs shrink-0"
+                    className="text-xs shrink-0 cursor-pointer"
                   >
                     <Plus className="h-3.5 w-3.5 mr-1" />
                     Add URL
                   </Button>
                 </div>
+              </div>
+
+              {/* Instant Permanent Storage Notice */}
+              <div className="flex items-center gap-1.5 text-[10px] text-emerald-700 bg-emerald-50/80 px-2.5 py-1.5 rounded border border-emerald-200">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                <span>Uploaded images are permanently stored and auto-saved to this residence without quota loss.</span>
               </div>
 
               {/* Quick Architectural Presets */}
@@ -733,9 +874,9 @@ export function ProjectEditorModal({
                 type="button"
                 variant="outline"
                 size="md"
-                onClick={onClose}
-                disabled={saving}
-                className="text-xs"
+                onClick={handleRequestClose}
+                disabled={saving || uploading}
+                className="text-xs cursor-pointer"
               >
                 Cancel
               </Button>
@@ -743,14 +884,71 @@ export function ProjectEditorModal({
                 type="submit"
                 variant="primary"
                 size="md"
-                disabled={saving}
-                className="text-xs font-semibold uppercase tracking-wider min-w-[140px]"
+                disabled={saving || uploading}
+                className="text-xs font-semibold uppercase tracking-wider min-w-[140px] cursor-pointer"
               >
                 {saving ? "Saving..." : isEditing ? "Save Changes" : "Create Residence"}
               </Button>
             </div>
           </div>
         </form>
+
+        {/* Unsaved Changes Confirmation Dialog */}
+        {showCloseConfirm && (
+          <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg p-5 max-w-md w-full shadow-2xl border border-[var(--border)] space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-full bg-amber-100 text-amber-700 shrink-0">
+                  <AlertTriangle className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-neutral-900">Save residence changes before closing?</h4>
+                  <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
+                    You have attached photos or edited details that haven't been saved yet. Would you like to save them now so they stay on your website?
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border)]">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowCloseConfirm(false)}
+                  className="text-xs cursor-pointer"
+                >
+                  Keep Editing
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setShowCloseConfirm(false);
+                    setHasUnsavedChanges(false);
+                    onClose();
+                  }}
+                  className="text-xs text-rose-600 border-rose-200 hover:bg-rose-50 cursor-pointer"
+                >
+                  Discard
+                </Button>
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    setShowCloseConfirm(false);
+                    handleSubmit();
+                  }}
+                  disabled={saving}
+                  className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold flex items-center gap-1.5 cursor-pointer"
+                >
+                  {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                  <span>Save & Close</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

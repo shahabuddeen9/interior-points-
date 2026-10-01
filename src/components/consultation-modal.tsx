@@ -27,30 +27,67 @@ export function ConsultationModal({ open, onOpenChange }: ConsultationModalProps
     e.preventDefault();
     setError(null);
 
-    if (!formData.name.trim() || !formData.phone.trim() || !formData.email.trim()) {
+    const name = formData.name.trim();
+    const phone = formData.phone.trim();
+    const email = formData.email.trim();
+
+    if (!name || !phone || !email) {
       setError("Please fill in your name, phone number, and email.");
       return;
     }
 
     setLoading(true);
+
+    const fallbackWhatsappUrl = `https://wa.me/917903038750?text=${encodeURIComponent(
+      `*New Free Consultation Query — Interior Points*\n` +
+      `• *Full Name:* ${name}\n` +
+      `• *Phone Number:* ${phone}\n` +
+      `• *Email Address:* ${email}\n` +
+      `• *City / Location:* ${formData.city || "Mumbai"}\n` +
+      `• *Home Configuration:* ${formData.bhkType || "2 BHK"}\n` +
+      (formData.message.trim() ? `• *Apartment / Requirements:* ${formData.message.trim()}\n` : "") +
+      `\n_Forwarded automatically from Interior Points Web Studio_`
+    )}`;
+
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name,
+          phone,
+          email,
+          city: formData.city,
+          bhkType: formData.bhkType,
+          message: formData.message,
+        }),
       });
 
-      const result = await res.json();
-      if (!res.ok || !result.success) {
-        throw new Error(result.error || "Submission failed");
+      // Safely parse response body avoiding 'Unexpected end of JSON input'
+      let result: any = null;
+      try {
+        const text = await res.text();
+        result = text ? JSON.parse(text) : null;
+      } catch (parseErr) {
+        console.warn("Could not parse response as JSON:", parseErr);
       }
 
-      const whatsappRedirectUrl =
-        result.whatsappUrl ||
-        `/api/whatsapp-redirect?name=${encodeURIComponent(formData.name)}&phone=${encodeURIComponent(formData.phone)}&email=${encodeURIComponent(formData.email)}&city=${encodeURIComponent(formData.city)}&bhkType=${encodeURIComponent(formData.bhkType)}&message=${encodeURIComponent(formData.message)}`;
+      if (!res.ok && result?.error) {
+        throw new Error(result.error);
+      }
+
+      const whatsappRedirectUrl = result?.whatsappUrl || fallbackWhatsappUrl;
+      const submittedRecord = result?.data || {
+        name,
+        phone,
+        email,
+        city: formData.city,
+        bhkType: formData.bhkType,
+        message: formData.message,
+      };
 
       setSubmittedData({
-        ...result.data,
+        ...submittedRecord,
         whatsappUrl: whatsappRedirectUrl,
       });
 
@@ -58,19 +95,36 @@ export function ConsultationModal({ open, onOpenChange }: ConsultationModalProps
       try {
         window.open(whatsappRedirectUrl, "_blank");
       } catch (e) {
-        console.warn("Popup blocked, redirecting on screen:", e);
+        console.warn("Popup blocked, user can click WhatsApp button:", e);
       }
 
       setFormData({
         name: "",
         phone: "",
         email: "",
-        city: "Mumbai",
+        city: "Mumbai - Central Suburbs (Asalpha, Ghatkopar, Powai)",
         bhkType: "2 BHK",
         message: "",
       });
     } catch (err: any) {
-      setError(err.message || "Something went wrong.");
+      console.warn("Consultation submission notice:", err);
+      // If server is temporarily unreachable or returned non-JSON, still connect the customer to WhatsApp smoothly
+      if (err.message && !err.message.includes("JSON") && !err.message.includes("execute 'json'")) {
+        setError(err.message);
+      } else {
+        setSubmittedData({
+          name,
+          phone,
+          email,
+          city: formData.city,
+          bhkType: formData.bhkType,
+          message: formData.message,
+          whatsappUrl: fallbackWhatsappUrl,
+        });
+        try {
+          window.open(fallbackWhatsappUrl, "_blank");
+        } catch (e) {}
+      }
     } finally {
       setLoading(false);
     }
