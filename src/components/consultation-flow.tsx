@@ -496,7 +496,9 @@ export function ConsultationFlow({
       selectedWorksSummary.map((s, idx) => `  ${idx + 1}. ✅ ${s}`).join("\n") +
       (notes.trim() ? `\n\n💬 *Customer Notes:* ${notes.trim()}` : "") +
       `\n══════════════════════════════\n` +
-      `_Sent via Interior Points Free Consultation & Cost Estimator Desk_`
+      `_60-Day Dream Home Guarantee • 18mm Semi-Marin Ply • 10-Year Warranty_\n` +
+      `_Studio: +91 7903038750 / +91 8788516537 • interiorpoints97@gmail.com_\n` +
+      `_Shop no 3, Haji Fatima Manzil, Near Asalpha Metro Station, Mumbai 400084_`
     )}`;
 
     try {
@@ -1088,8 +1090,8 @@ export function ConsultationFlow({
                 <span>Zero obligation</span>
               </div>
               <div>
-                <span className="font-bold text-[var(--foreground)] block">45-Day Handover</span>
-                <span>On-time penalty clause</span>
+                <span className="font-bold text-[var(--foreground)] block">60-Day Handover</span>
+                <span>Dream Home Guarantee</span>
               </div>
               <div>
                 <span className="font-bold text-[var(--foreground)] block">10-Yr Warranty</span>
@@ -1188,34 +1190,42 @@ export function ConsultationFlow({
               <ExternalLink className="h-4 w-4" />
             </a>
 
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <a
                 href="tel:+917903038750"
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)] text-xs font-semibold shadow-2xs transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)] text-xs font-semibold shadow-2xs transition-colors"
               >
                 <Phone className="h-3.5 w-3.5 text-rose-600" />
-                <span>Call Studio Direct</span>
+                <span>Call 7903038750</span>
               </a>
 
-              <button
-                type="button"
-                onClick={() => {
-                  const summary =
-                    `Interior Points Consultation — ${finalResult.bhk}\n` +
-                    `Estimate: ${finalResult.totalRange}\n` +
-                    `Client: ${finalResult.name} (${finalResult.phone})\n` +
-                    `Location: ${finalResult.area}\n` +
-                    `Works:\n` +
-                    finalResult.selectedWorks.map((w) => `• ${w}`).join("\n");
-                  navigator.clipboard.writeText(summary);
-                  alert("Estimate summary copied to clipboard!");
-                }}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)] text-xs font-semibold shadow-2xs transition-colors"
+              <a
+                href="tel:+918788516537"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)] text-xs font-semibold shadow-2xs transition-colors"
               >
-                <Copy className="h-3.5 w-3.5 text-neutral-500" />
-                <span>Copy Summary</span>
-              </button>
+                <Phone className="h-3.5 w-3.5 text-emerald-600" />
+                <span>Call 8788516537</span>
+              </a>
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                const summary =
+                  `Interior Points Consultation — ${finalResult.bhk}\n` +
+                  `Estimate: ${finalResult.totalRange}\n` +
+                  `Client: ${finalResult.name} (${finalResult.phone})\n` +
+                  `Location: ${finalResult.area}\n` +
+                  `Works:\n` +
+                  finalResult.selectedWorks.map((w) => `• ${w}`).join("\n");
+                navigator.clipboard.writeText(summary);
+                alert("Estimate summary copied to clipboard!");
+              }}
+              className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)] text-xs font-semibold shadow-2xs transition-colors"
+            >
+              <Copy className="h-3.5 w-3.5 text-neutral-500" />
+              <span>Copy Full Quotation Summary</span>
+            </button>
 
             {onSuccessClose && (
               <Button

@@ -56,8 +56,8 @@ export function BookConsultationPage() {
               10-Year Hardware Warranty
             </span>
             <span className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-rose-600" />
-              45–60 Day Move-in Guarantee
+              <Clock className="h-4 w-4 text-amber-600" />
+              60-Day Dream Home Guarantee
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-4 w-4 text-[var(--accent)]" />
@@ -65,7 +65,7 @@ export function BookConsultationPage() {
             </span>
             <span className="flex items-center gap-1.5">
               <Phone className="h-4 w-4 text-emerald-600" />
-              Direct WhatsApp Desk (+91 7903038750)
+              Direct WhatsApp Desk (+91 7903038750 / +91 8788516537)
             </span>
           </div>
         </div>
@@ -118,7 +118,7 @@ export function BookConsultationPage() {
               How does the WhatsApp consultation work?
             </h4>
             <p className="text-xs text-[var(--muted-foreground)] leading-relaxed pl-6">
-              As soon as you submit your requirements, the formatted quote with your chosen floor plan and selected works opens automatically in WhatsApp with our design desk (+91 7903038750). Our architect will review your floor plan, share matching project photos, and schedule an on-site visit.
+              As soon as you submit your requirements, the formatted quote with your chosen floor plan and selected works opens automatically in WhatsApp with our design desk (+91 7903038750 / +91 8788516537). Our architect will review your floor plan, share matching project photos, and schedule an on-site visit.
             </p>
           </div>
         </div>
@@ -128,15 +128,21 @@ export function BookConsultationPage() {
           <div>
             <div className="text-sm font-bold">Prefer a direct call with our Mumbai Studio?</div>
             <p className="text-xs text-neutral-400 mt-0.5">
-              Call our Senior Principal Architect directly at +91 7903038750.
+              Call our Senior Principal Architect directly at +91 7903038750 or +91 8788516537 • Email: interiorpoints97@gmail.com
             </p>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
             <a
               href="tel:+917903038750"
               className="px-4 py-2 rounded-full bg-white text-neutral-900 text-xs font-bold hover:bg-neutral-100 transition-colors"
             >
               Call +91 7903038750
+            </a>
+            <a
+              href="tel:+918788516537"
+              className="px-4 py-2 rounded-full bg-neutral-800 text-white text-xs font-bold hover:bg-neutral-700 transition-colors border border-neutral-700"
+            >
+              Call +91 8788516537
             </a>
             <a
               href="https://wa.me/917903038750?text=Hi%20Interior%20Points%2C%20I%20am%20looking%20for%20a%20home%20interior%20consultation."

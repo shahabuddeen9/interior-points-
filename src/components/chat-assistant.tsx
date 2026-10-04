@@ -70,7 +70,7 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
       }
 
       if (!replyContent) {
-        replyContent = "Our design team is on standby to help you plan your home. Please feel free to book a complimentary 3D consultation or reach out directly on WhatsApp (+91 7903038750)!";
+        replyContent = "Our design desk is on standby to help you plan your home. Please feel free to book a complimentary 3D consultation or reach out directly on WhatsApp (+91 7903038750) or call +91 8788516537!";
       }
 
       const assistantMsg: ChatMessage = {
@@ -87,7 +87,7 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
         id: `assistant-fallback-${Date.now()}`,
         role: "assistant",
         content:
-          "Our Mumbai design studio provides turnkey bespoke interiors with a 60-day dream home guarantee, 18mm semi-marine ply, and authentic Hettich/Hafele hardware. Feel free to book a free design consultation via the form on this page or WhatsApp us directly at +91 7903038750!",
+          "Welcome to Interior Points! We guarantee to get your dream home interior done in 60 days. Our official turnkey packages include 1 BHK @ ₹8.45L, 2 BHK @ ₹10.75L, and 3 BHK @ ₹13.75L with 18mm semi-marine ply, 1mm laminates, 2 coats Asian Royal paint, and Hettich/Hafele hardware with a 10-year warranty. Feel free to book a free 3D design consultation or WhatsApp us at +91 7903038750 / +91 8788516537!",
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
       setMessages((prev) => [...prev, fallbackMsg]);
@@ -154,13 +154,22 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
               <MessageCircle className="h-3.5 w-3.5 text-[#25D366]" />
               <span className="font-medium text-[11px]">WhatsApp</span>
             </a>
-            <a
-              href="tel:+917903038750"
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-[var(--border)] hover:text-[var(--foreground)] transition-colors"
-            >
-              <Phone className="h-3 w-3 text-[var(--accent)]" />
-              <span className="font-medium text-[11px]">+91 7903038750</span>
-            </a>
+            <div className="flex items-center gap-1.5">
+              <a
+                href="tel:+917903038750"
+                className="flex items-center gap-1 px-2 py-1 rounded-full bg-white border border-[var(--border)] hover:text-[var(--foreground)] transition-colors text-[11px] font-medium"
+              >
+                <Phone className="h-3 w-3 text-[var(--accent)]" />
+                <span>7903038750</span>
+              </a>
+              <a
+                href="tel:+918788516537"
+                className="flex items-center gap-1 px-2 py-1 rounded-full bg-white border border-[var(--border)] hover:text-[var(--foreground)] transition-colors text-[11px] font-medium"
+              >
+                <Phone className="h-3 w-3 text-emerald-600" />
+                <span>8788516537</span>
+              </a>
+            </div>
             <button
               onClick={() => {
                 setIsOpen(false);

@@ -45,19 +45,19 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
               <span className="font-medium text-[var(--foreground)]">Operating Exclusively in Mumbai</span>
               <span className="text-[var(--muted-foreground)]">• Near Asalpha Metro Station, Mumbai 400084</span>
             </span>
-            <span className="hidden xl:inline-flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />
-              60-Day Dream Home Guarantee &amp; 10-Year Warranty
+            <span className="hidden xl:inline-flex items-center gap-1 font-semibold text-amber-700">
+              <ShieldCheck className="h-3.5 w-3.5 text-amber-600" />
+              60-Day Dream Home Guarantee • 10-Year Warranty
             </span>
           </div>
-          <div className="flex items-center space-x-5">
+          <div className="flex items-center space-x-4">
             <a
-              href="mailto:msfusionarchitects@gmail.com"
+              href="mailto:interiorpoints97@gmail.com"
               className="flex items-center gap-1 hover:text-[var(--foreground)] transition-colors"
               title="Official Studio Email"
             >
               <Mail className="h-3 w-3 text-[var(--accent)]" />
-              msfusionarchitects@gmail.com
+              interiorpoints97@gmail.com
             </a>
             <span className="text-[var(--border)]">|</span>
             <a
@@ -70,13 +70,22 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
               <span className="font-semibold text-[var(--accent-foreground)]">@interior_points</span>
             </a>
             <span className="text-[var(--border)]">|</span>
-            <a
-              href="tel:+917903038750"
-              className="flex items-center gap-1 hover:text-[var(--foreground)] transition-colors"
-            >
+            <div className="flex items-center gap-1">
               <Phone className="h-3 w-3 text-[var(--accent)]" />
-              +91 7903038750
-            </a>
+              <a
+                href="tel:+917903038750"
+                className="hover:text-[var(--foreground)] transition-colors font-semibold"
+              >
+                +91 7903038750
+              </a>
+              <span className="text-[var(--muted-foreground)]">/</span>
+              <a
+                href="tel:+918788516537"
+                className="hover:text-[var(--foreground)] transition-colors font-semibold"
+              >
+                +91 8788516537
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -30,12 +30,14 @@ export function Hero({
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[var(--secondary)] border border-[var(--border)]"
+              className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-xs"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="text-xs uppercase tracking-[0.2em] font-medium text-[var(--muted-foreground)]">
-                Boutique Residential &amp; Commercial Studio • Mumbai
+              <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+              <span className="font-bold uppercase tracking-wider text-amber-900">
+                Get Your Dream Home Interior Done in 60 Days!
               </span>
+              <span className="text-amber-500">•</span>
+              <span className="font-semibold text-neutral-700">Turnkey Packages from ₹8.45L</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -107,10 +109,10 @@ export function Hero({
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {[
-                  { bhk: "1 BHK", area: "450–600 sq.ft", start: "From ₹3.8L" },
-                  { bhk: "2 BHK", area: "650–950 sq.ft", start: "From ₹6.4L", popular: true },
-                  { bhk: "3 BHK", area: "1000–1400 sq.ft", start: "From ₹9.2L" },
-                  { bhk: "4 BHK / Villa", area: "1500+ sq.ft", start: "Bespoke Villa" },
+                  { bhk: "1 BHK", area: "15 Services Turnkey", start: "₹8.45 Lacs" },
+                  { bhk: "2 BHK", area: "15 Services Turnkey", start: "₹10.75 Lacs", popular: true },
+                  { bhk: "3 BHK", area: "15 Services Turnkey", start: "₹13.75 Lacs" },
+                  { bhk: "4 BHK / Villa", area: "Bespoke Villa", start: "Custom Spec" },
                 ].map((item) => (
                   <button
                     key={item.bhk}

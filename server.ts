@@ -915,7 +915,9 @@ async function startServer() {
     }
 
     lines.push(`══════════════════════════════`);
-    lines.push(`_Sent via Interior Points Free Consultation & Cost Calculator Desk_`);
+    lines.push(`_60-Day Dream Home Guarantee • 18mm Semi-Marin Ply • 10-Year Warranty_`);
+    lines.push(`_Studio: +91 7903038750 / +91 8788516537 • interiorpoints97@gmail.com_`);
+    lines.push(`_Shop no 3, Haji Fatima Manzil, Near Asalpha Metro Station, Mumbai 400084_`);
     const text = lines.join("\n");
     return `https://wa.me/${WHATSAPP_CONSULTATION_PHONE}?text=${encodeURIComponent(text)}`;
   }

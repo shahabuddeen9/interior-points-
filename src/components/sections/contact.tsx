@@ -381,19 +381,6 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
                 </a>
 
                 <a
-                  href="mailto:msfusionarchitects@gmail.com"
-                  className="flex items-center space-x-3.5 text-sm text-[var(--foreground)] hover:text-[var(--accent-foreground)] transition-colors group"
-                >
-                  <div className="h-9 w-9 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--accent-foreground)] shrink-0">
-                    <Mail className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-sm">msfusionarchitects@gmail.com</div>
-                    <div className="text-xs text-[var(--muted-foreground)]">Architectural drawings & formal proposals</div>
-                  </div>
-                </a>
-
-                <a
                   href="mailto:interiorpoints97@gmail.com"
                   className="flex items-center space-x-3.5 text-sm text-[var(--foreground)] hover:text-[var(--accent-foreground)] transition-colors group"
                 >
@@ -402,7 +389,20 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
                   </div>
                   <div>
                     <div className="font-semibold text-sm">interiorpoints97@gmail.com</div>
-                    <div className="text-xs text-[var(--muted-foreground)]">Client coordination & accounts</div>
+                    <div className="text-xs text-[var(--muted-foreground)]">Official Studio Desk &amp; Consultations</div>
+                  </div>
+                </a>
+
+                <a
+                  href="mailto:msfusionarchitects@gmail.com"
+                  className="flex items-center space-x-3.5 text-sm text-[var(--foreground)] hover:text-[var(--accent-foreground)] transition-colors group"
+                >
+                  <div className="h-9 w-9 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--accent-foreground)] shrink-0">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-sm">msfusionarchitects@gmail.com</div>
+                    <div className="text-xs text-[var(--muted-foreground)]">Architectural drawings &amp; formal blueprints</div>
                   </div>
                 </a>
               </div>

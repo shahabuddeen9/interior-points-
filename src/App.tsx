@@ -11,6 +11,7 @@ import { About } from "./components/sections/about";
 import { ProjectsPreview } from "./components/sections/projects-preview";
 import { Services } from "./components/sections/services";
 import { WhyChooseUs } from "./components/sections/why-choose-us";
+import { OfficialPackageShowcase } from "./components/sections/official-package";
 import { Pricing } from "./components/sections/pricing";
 import { Testimonials } from "./components/sections/testimonials";
 import { InstagramFeed } from "./components/sections/instagram-feed";
@@ -61,6 +62,7 @@ function MainContent() {
         <ProjectsPreview />
         <Services />
         <WhyChooseUs />
+        <OfficialPackageShowcase onOpenConsultation={openConsultation} />
         <Pricing onOpenConsultation={(bhk) => openConsultation(bhk)} />
         <Testimonials />
         <InstagramFeed />

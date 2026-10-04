@@ -182,7 +182,7 @@ export function Pricing({
               Want to select specific rooms and see live prices?
             </h3>
             <p className="text-xs sm:text-sm text-neutral-400 max-w-xl">
-              Choose your floor plan ({selectedBhk}), select only the works you need (Modular Kitchen, Wardrobes, False Ceiling, Painting, Bathrooms), and forward your itemized estimate directly to WhatsApp (+91 7903038750).
+              Choose your floor plan ({selectedBhk}), select only the works you need (Modular Kitchen, Wardrobes, False Ceiling, Painting, Bathrooms), and forward your itemized estimate directly to WhatsApp (+91 7903038750 / +91 8788516537).
             </p>
           </div>
 
