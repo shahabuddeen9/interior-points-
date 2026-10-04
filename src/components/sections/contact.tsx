@@ -82,13 +82,6 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
         whatsappUrl: whatsappRedirectUrl,
       });
 
-      // Forward consultation data directly to WhatsApp (+91 7903038750)
-      try {
-        window.open(whatsappRedirectUrl, "_blank");
-      } catch (e) {
-        console.warn("Popup blocked, redirecting on screen:", e);
-      }
-
       setFormData({
         name: "",
         phone: "",
@@ -111,9 +104,6 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
           message: formData.message,
           whatsappUrl: fallbackWhatsappUrl,
         });
-        try {
-          window.open(fallbackWhatsappUrl, "_blank");
-        } catch (e) {}
       }
     } finally {
       setLoading(false);

@@ -94,16 +94,24 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand Logo */}
-          <Link href="/" className="group flex flex-col">
-            <div className="flex items-baseline space-x-1.5">
-              <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">
-                INTERIOR POINTS
-              </span>
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span>
+          <Link href="/" className="group flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 p-0.5 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-full h-full rounded-[10px] bg-[#0c1a16] flex flex-col items-center justify-center">
+                <span className="font-display font-black text-sm text-amber-300 tracking-tighter leading-none">JP</span>
+                <span className="text-[6px] text-amber-200/90 uppercase tracking-widest font-bold leading-none mt-0.5">STUDIO</span>
+              </div>
             </div>
-            <span className="text-[10px] uppercase tracking-widest text-[var(--muted-foreground)] -mt-0.5 hidden sm:block font-body">
-              Designing Spaces. Creating Experiences.
-            </span>
+            <div className="flex flex-col">
+              <div className="flex items-baseline space-x-1.5">
+                <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">
+                  INTERIOR POINTS
+                </span>
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span>
+              </div>
+              <span className="text-[10px] uppercase tracking-widest text-[var(--muted-foreground)] -mt-0.5 hidden sm:block font-body">
+                Designing Spaces. Creating Experiences.
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}

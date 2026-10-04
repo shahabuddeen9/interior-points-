@@ -366,6 +366,7 @@ export function ConsultationFlow({
   const [notes, setNotes] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [finalResult, setFinalResult] = useState<{
     whatsappUrl: string;
@@ -536,13 +537,6 @@ export function ConsultationFlow({
       });
 
       setStep(4);
-
-      // Trigger automatic WhatsApp redirect in new tab
-      try {
-        window.open(targetWhatsappUrl, "_blank");
-      } catch (e) {
-        console.warn("Popup blocked, user can click WhatsApp button:", e);
-      }
     } catch (err: any) {
       console.warn("Lead error, falling back to direct WhatsApp:", err);
       setFinalResult({
@@ -555,9 +549,6 @@ export function ConsultationFlow({
         area: cityArea,
       });
       setStep(4);
-      try {
-        window.open(fallbackWhatsappUrl, "_blank");
-      } catch (e) {}
     } finally {
       setLoading(false);
     }
@@ -1218,13 +1209,31 @@ export function ConsultationFlow({
                   `Location: ${finalResult.area}\n` +
                   `Works:\n` +
                   finalResult.selectedWorks.map((w) => `• ${w}`).join("\n");
-                navigator.clipboard.writeText(summary);
-                alert("Estimate summary copied to clipboard!");
+                try {
+                  navigator.clipboard.writeText(summary);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 3000);
+                } catch {
+                  // Fallback
+                }
               }}
-              className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)] text-xs font-semibold shadow-2xs transition-colors"
+              className={`w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border text-xs font-semibold shadow-2xs transition-all ${
+                copied
+                  ? "bg-emerald-50 border-emerald-300 text-emerald-700"
+                  : "border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)]"
+              }`}
             >
-              <Copy className="h-3.5 w-3.5 text-neutral-500" />
-              <span>Copy Full Quotation Summary</span>
+              {copied ? (
+                <>
+                  <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>Quotation Copied to Clipboard!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3.5 w-3.5 text-neutral-500" />
+                  <span>Copy Full Quotation Summary</span>
+                </>
+              )}
             </button>
 
             {onSuccessClose && (

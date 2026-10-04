@@ -278,7 +278,8 @@ export function AdminPage() {
       );
       setTimeout(() => setEstimatorNotice(null), 3000);
     } catch (err: any) {
-      alert("Failed to toggle status: " + err.message);
+      setEstimatorNotice("Failed to toggle status: " + (err.message || "Unknown error"));
+      setTimeout(() => setEstimatorNotice(null), 4000);
     }
   };
 
@@ -292,7 +293,8 @@ export function AdminPage() {
       setTimeout(() => setEstimatorNotice(null), 4000);
       setSpaceToDelete(null);
     } catch (err: any) {
-      alert("Failed to delete space: " + err.message);
+      setEstimatorNotice("Failed to delete space: " + (err.message || "Unknown error"));
+      setTimeout(() => setEstimatorNotice(null), 4000);
     } finally {
       setIsDeletingSpace(false);
     }
@@ -311,7 +313,8 @@ export function AdminPage() {
       setEstimatorNotice(`Space duplicated as "${saved.name}". Click "Edit Space" to adjust market prices.`);
       setTimeout(() => setEstimatorNotice(null), 4000);
     } catch (err: any) {
-      alert("Failed to duplicate space: " + err.message);
+      setEstimatorNotice("Failed to duplicate space: " + (err.message || "Unknown error"));
+      setTimeout(() => setEstimatorNotice(null), 4000);
     }
   };
 
@@ -323,7 +326,8 @@ export function AdminPage() {
       setEstimatorNotice("All estimator spaces and market prices have been reset to default Mumbai turnkey standards.");
       setTimeout(() => setEstimatorNotice(null), 4000);
     } catch (err: any) {
-      alert("Failed to reset spaces: " + err.message);
+      setEstimatorNotice("Failed to reset spaces: " + (err.message || "Unknown error"));
+      setTimeout(() => setEstimatorNotice(null), 4000);
     } finally {
       setIsResettingSpaces(false);
     }
@@ -599,15 +603,18 @@ export function AdminPage() {
       const res = await fetch("/api/stats", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stats }),
+        body: JSON.stringify(stats),
       });
       const json = await res.json();
       if (json.success) {
         setStatsMessage("Credibility statistics saved and live on homepage!");
+        setTimeout(() => setStatsMessage(""), 4000);
+      } else {
+        setStatsMessage(json.error || "Error saving stats");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to save stats:", err);
-      setStatsMessage("Error saving stats");
+      setStatsMessage("Error saving stats: " + (err.message || "Unknown error"));
     } finally {
       setStatsSaving(false);
     }

@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 
 export function WhyChooseUs() {
   return (
-    <section className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] relative overflow-hidden">
+    <section id="why-us" className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div

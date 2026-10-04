@@ -801,11 +801,17 @@ async function startServer() {
   });
 
   app.put("/api/stats", (req, res) => {
-    if (!Array.isArray(req.body)) {
+    const statsList = Array.isArray(req.body)
+      ? req.body
+      : Array.isArray(req.body?.stats)
+      ? req.body.stats
+      : null;
+
+    if (!statsList) {
       res.status(400).json({ success: false, error: "Stats must be an array" });
       return;
     }
-    const saved = db.saveStats(req.body);
+    const saved = db.saveStats(statsList);
     res.json({ success: true, data: saved });
   });
 

@@ -122,8 +122,10 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
           {/* Header */}
           <div className="bg-[var(--secondary)]/60 px-4 py-3.5 flex items-center justify-between border-b border-[var(--border)]">
             <div className="flex items-center space-x-2.5">
-              <div className="h-8 w-8 rounded-full bg-[var(--primary)] text-white flex items-center justify-center font-display font-semibold text-xs tracking-wider">
-                IP
+              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 via-amber-600 to-amber-700 p-0.5 shadow-xs">
+                <div className="w-full h-full rounded-full bg-neutral-900 flex items-center justify-center font-display font-black text-xs text-amber-300 tracking-tighter">
+                  JP
+                </div>
               </div>
               <div>
                 <h3 className="font-display text-base font-semibold tracking-wide text-[var(--foreground)]">
@@ -189,8 +191,8 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
                 className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 {msg.role === "assistant" && (
-                  <div className="h-6 w-6 rounded-full bg-[var(--secondary)] border border-[var(--border)] flex items-center justify-center text-[10px] font-display font-bold text-[var(--foreground)] shrink-0 mt-0.5">
-                    N
+                  <div className="h-6 w-6 rounded-full bg-neutral-900 border border-amber-500/40 flex items-center justify-center text-[9px] font-display font-black text-amber-300 shrink-0 mt-0.5">
+                    JP
                   </div>
                 )}
                 <div

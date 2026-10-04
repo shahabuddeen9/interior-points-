@@ -165,39 +165,6 @@
       }
     },
     {
-      "id": "proj-5",
-      "slug": "shobha-serene-haven",
-      "title": "Sobha Serene Haven",
-      "bhkType": "1 BHK",
-      "roomTypes": [
-        "Full Home",
-        "Kitchen",
-        "Living Room"
-      ],
-      "location": "Bellandur",
-      "city": "Mumbai",
-      "coverImage": "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
-      "images": [
-        "https://images.unsplash.com/photo-1502005229762-ee1b2b8ab00f?auto=format&fit=crop&w=1400&q=80",
-        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1540518614846-7ede433c4b72?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "scope": [
-        "Straight-line modular kitchen with hydraulic lift-up frosted glass cabinets",
-        "Multi-functional Murphy desk that converts seamlessly from work desk to dining",
-        "Floor-to-ceiling sliding wardrobe with full-length mirror panel",
-        "Minimal perimeter false ceiling with dimmable COB spotlights"
-      ],
-      "timeline": "35 Days",
-      "budgetRange": "₹5.5L - ₹6.8L",
-      "description": "A compact 1 BHK bachelor home where smart furniture and warm minimalist tones create a sophisticated executive studio setting with zero wasted floor area.",
-      "featured": true,
-      "clientTestimonial": {
-        "clientName": "Abhishek Varman",
-        "quote": "As a young professional, I wanted quality without a 20-lakh price tag. Interior Points's Essentials package was transparent down to the last rupee."
-      }
-    },
-    {
       "id": "proj-6",
       "slug": "jubilee-hills-regency",
       "title": "Jubilee Hills Regency",
@@ -294,138 +261,18 @@
     },
     {
       "id": "stat-3",
-      "value": "45-Day",
-      "label": "Move-in Guarantee",
-      "description": "Strict project timelines with weekly visual progress audits"
+      "value": "60-Day",
+      "label": "Dream Home Guarantee",
+      "description": "Strict 60-day project delivery with weekly visual progress audits"
     },
     {
       "id": "stat-4",
       "value": "10-Year",
-      "label": "Hardware Warranty",
-      "description": "Partnered with genuine Blum, Hafele & Hettich components"
+      "label": "Comprehensive Warranty",
+      "description": "Backed by authentic Hettich & Hafele hardware and sturdy 18mm ply"
     }
   ],
-  "leads": [
-    {
-      "name": "shahabuddeen",
-      "phone": "9650559781",
-      "email": "mdshahabuddeen9@gmail.com",
-      "city": "Mumbai - Central Suburbs (Asalpha, Ghatkopar, Powai)",
-      "bhkType": "3 BHK",
-      "message": "Society",
-      "selectedWorks": [
-        "Modular Kitchen (₹2.40L – ₹2.85L)",
-        "Wardrobes & Joinery (₹2.35L – ₹2.85L (3 Units))",
-        "Living Room & TV Console (₹1.45L – ₹1.80L)",
-        "False Ceiling & Lighting (₹1.05L – ₹1.30L)",
-        "Bathroom & Civil Revamp (₹1.25L – ₹1.55L (3 Baths))"
-      ],
-      "estimatedPrice": "₹7.48L – ₹9.11L",
-      "possessionTimeline": "Within 30–60 Days",
-      "id": "lead-1791089643832-7g77fk",
-      "status": "new",
-      "createdAt": "2026-10-04T04:54:03.832Z"
-    },
-    {
-      "name": "Rahul Sharma",
-      "phone": "9820123456",
-      "email": "rahul@example.com",
-      "city": "Powai, Mumbai",
-      "bhkType": "2 BHK",
-      "message": "",
-      "id": "lead-1791088839027-tyaps4",
-      "status": "new",
-      "createdAt": "2026-10-04T04:40:39.027Z"
-    },
-    {
-      "name": "yusuf ali",
-      "phone": "9650559781",
-      "email": "yusufali9@gmail.com",
-      "city": "Mumbai - Central Suburbs (Asalpha, Ghatkopar, Powai)",
-      "bhkType": "2 BHK",
-      "message": "barkat apartment",
-      "id": "lead-1790835782573-l7fpor",
-      "status": "new",
-      "createdAt": "2026-10-01T06:23:02.573Z"
-    },
-    {
-      "name": "yusuf ali",
-      "phone": "9650559781",
-      "email": "yusufali9@gmail.com",
-      "city": "Central Suburbs (Asalpha, Ghatkopar West)",
-      "bhkType": "2 BHK",
-      "message": "barkat apartment",
-      "id": "lead-1790835590496-wy2jyk",
-      "status": "new",
-      "createdAt": "2026-10-01T06:19:50.496Z"
-    },
-    {
-      "name": "tarique",
-      "phone": "7990097502",
-      "email": "rizwtarique4@gmail.com",
-      "city": "Mumbai - Thane & Navi Mumbai",
-      "bhkType": "2 BHK",
-      "message": "i want a luxiriuos and a ambient room with a lot of frree pace as well",
-      "id": "lead-1789365920945-slpveg",
-      "status": "new",
-      "createdAt": "2026-09-14T06:05:20.945Z"
-    },
-    {
-      "name": "Rahul Sharma",
-      "phone": "+91 98201 23456",
-      "email": "rahul@example.com",
-      "city": "Mumbai - Central Suburbs",
-      "bhkType": "2 BHK",
-      "message": "Looking for 60-day package near Powai",
-      "id": "lead-1789365811585-sq96xv",
-      "status": "new",
-      "createdAt": "2026-09-14T06:03:31.585Z"
-    },
-    {
-      "name": "Priya Nair",
-      "phone": "+91 9876543210",
-      "email": "priya@example.com",
-      "city": "Mumbai",
-      "bhkType": "2 BHK",
-      "message": "Need modular kitchen and wardrobes",
-      "id": "lead-1789365076677-1yirjh",
-      "status": "new",
-      "createdAt": "2026-09-14T05:51:16.677Z"
-    },
-    {
-      "name": "Aarav Mehta",
-      "phone": "+919876543210",
-      "email": "aarav@example.com",
-      "city": "Mumbai",
-      "bhkType": "3 BHK",
-      "message": "Need acrylic modular kitchen and master wardrobe quote",
-      "id": "lead-1789363944913-2vi1ly",
-      "status": "new",
-      "createdAt": "2026-09-14T05:32:24.913Z"
-    },
-    {
-      "id": "lead-2",
-      "name": "Amitav Roy",
-      "phone": "+91 99201 54321",
-      "email": "amitav.roy@example.com",
-      "city": "Mumbai",
-      "bhkType": "2 BHK",
-      "message": "Interested in the Premium package for 2 BHK in Powai. Need quote and sample material finishes.",
-      "status": "new",
-      "createdAt": "2026-09-13T05:32:16.637Z"
-    },
-    {
-      "id": "lead-1",
-      "name": "Tanvi Saxena",
-      "phone": "+91 98450 12345",
-      "email": "tanvi.saxena@example.com",
-      "city": "Mumbai",
-      "bhkType": "3 BHK",
-      "message": "Possession scheduled for next month at Sobha Dream Acres. Looking for full home interiors with modular kitchen and 3 wardrobes.",
-      "status": "scheduled",
-      "createdAt": "2026-09-12T05:32:16.637Z"
-    }
-  ],
+  "leads": [],
   "reels": [
     {
       "id": "reel-2",
@@ -550,19 +397,19 @@
       "order": 1,
       "pricing": {
         "1 BHK": {
-          "min": 140000,
-          "max": 165000,
-          "label": "₹1.40L – ₹1.65L"
+          "min": 250000,
+          "max": 375000,
+          "label": "₹2.50L – ₹3.75L"
         },
         "2 BHK": {
-          "min": 185000,
-          "max": 220000,
-          "label": "₹1.85L – ₹2.20L"
+          "min": 250000,
+          "max": 375000,
+          "label": "₹2.50L – ₹3.75L"
         },
         "3 BHK": {
-          "min": 240000,
-          "max": 285000,
-          "label": "₹2.40L – ₹2.85L"
+          "min": 250000,
+          "max": 375000,
+          "label": "₹2.50L – ₹3.75L"
         },
         "4 BHK / Villa": {
           "min": 295000,
@@ -573,7 +420,7 @@
     },
     {
       "id": "wardrobes",
-      "name": "Wardrobes & Joinery",
+      "name": "Wardrobes Overhead Storage",
       "category": "Master Bedrooms",
       "iconName": "DoorOpen",
       "tagline": "Floor-to-Ceiling Wardrobes with Concealed Lofts & Sensor Lights",
@@ -588,9 +435,9 @@
       "order": 2,
       "pricing": {
         "1 BHK": {
-          "min": 85000,
-          "max": 105000,
-          "label": "₹85k – ₹1.05L (1 Unit)"
+          "min": 75000,
+          "max": 85000,
+          "label": "₹75k – ₹85k"
         },
         "2 BHK": {
           "min": 160000,
@@ -598,9 +445,9 @@
           "label": "₹1.60L – ₹1.95L (2 Units)"
         },
         "3 BHK": {
-          "min": 235000,
-          "max": 285000,
-          "label": "₹2.35L – ₹2.85L (3 Units)"
+          "min": 225000,
+          "max": 245000,
+          "label": "₹2.25L – ₹2.45L (3 Units)"
         },
         "4 BHK / Villa": {
           "min": 310000,
@@ -628,28 +475,28 @@
         "1 BHK": {
           "min": 55000,
           "max": 70000,
-          "label": "₹55k – ₹70k"
+          "label": "₹78k"
         },
         "2 BHK": {
-          "min": 95000,
-          "max": 120000,
-          "label": "₹95k – ₹1.20L"
+          "min": 70000,
+          "max": 90000,
+          "label": "₹70k – ₹90k"
         },
         "3 BHK": {
-          "min": 145000,
-          "max": 180000,
-          "label": "₹1.45L – ₹1.80L"
+          "min": 85000,
+          "max": 120000,
+          "label": "₹85k – ₹1.20L"
         },
         "4 BHK / Villa": {
-          "min": 195000,
-          "max": 240000,
-          "label": "₹1.95L – ₹2.40L"
+          "min": 120000,
+          "max": 140000,
+          "label": "₹1.20L – ₹1.40L"
         }
       }
     },
     {
       "id": "ceiling_lighting",
-      "name": "False Ceiling & Lighting",
+      "name": "False Ceiling",
       "category": "Atmosphere",
       "iconName": "SunMedium",
       "tagline": "Saint-Gobain Gypsum with Warm 3000K Indirect Cove Glow",
@@ -664,37 +511,37 @@
       "order": 4,
       "pricing": {
         "1 BHK": {
-          "min": 40000,
-          "max": 50000,
-          "label": "₹40k – ₹50k"
+          "min": 60000,
+          "max": 700000,
+          "label": "₹60k – ₹7.00L(1 Unit)"
         },
         "2 BHK": {
-          "min": 70000,
-          "max": 88000,
-          "label": "₹70k – ₹88k"
+          "min": 150000,
+          "max": 160000,
+          "label": "₹1.50L – ₹1.60L(2 Units)"
         },
         "3 BHK": {
-          "min": 105000,
-          "max": 130000,
-          "label": "₹1.05L – ₹1.30L"
+          "min": 230000,
+          "max": 250000,
+          "label": "₹2.30L – ₹2.50L(3 Units)"
         },
         "4 BHK / Villa": {
-          "min": 140000,
-          "max": 175000,
-          "label": "₹1.40L – ₹1.75L"
+          "min": 275000,
+          "max": 315000,
+          "label": "₹2.75L – ₹3.15L"
         }
       }
     },
     {
       "id": "painting",
-      "name": "Luxury Painting & Moldings",
+      "name": "Luxury Painting",
       "category": "Surfaces",
       "iconName": "Paintbrush",
-      "tagline": "Asian Paints Royale Luxury Washable Emulsion & Wall Moldings",
+      "tagline": "Asian Paints Royale Luxury Washable Emulsion",
       "specs": [
         "Complete surface acrylic putty levelling & sanding",
         "2 coats Asian Paints Royale luxury washable emulsion",
-        "French-inspired neo-classical wall trim moldings",
+        "Premium priming & undercoat preparation",
         "Accent color wall or tactile microcement texture"
       ],
       "popular": false,
@@ -702,24 +549,24 @@
       "order": 5,
       "pricing": {
         "1 BHK": {
-          "min": 35000,
-          "max": 45000,
-          "label": "₹35k – ₹45k"
+          "min": 65000,
+          "max": 75000,
+          "label": "₹65k – ₹75k"
         },
         "2 BHK": {
-          "min": 60000,
-          "max": 75000,
-          "label": "₹60k – ₹75k"
+          "min": 95000,
+          "max": 105000,
+          "label": "₹95k – ₹1.05L"
         },
         "3 BHK": {
-          "min": 85000,
-          "max": 105000,
-          "label": "₹85k – ₹1.05L"
+          "min": 125000,
+          "max": 135000,
+          "label": "₹1.25L – ₹1.35L"
         },
         "4 BHK / Villa": {
-          "min": 115000,
-          "max": 145000,
-          "label": "₹1.15L – ₹1.45L"
+          "min": 155000,
+          "max": 175000,
+          "label": "₹1.55L – ₹1.75L"
         }
       }
     },
@@ -816,24 +663,24 @@
       "order": 8,
       "pricing": {
         "1 BHK": {
-          "min": 25000,
-          "max": 35000,
-          "label": "₹25k – ₹35k"
+          "min": 70000,
+          "max": 80000,
+          "label": "₹70k – ₹80k"
         },
         "2 BHK": {
-          "min": 45000,
-          "max": 60000,
-          "label": "₹45k – ₹60k"
+          "min": 95000,
+          "max": 100000,
+          "label": "₹95k – ₹1.00L"
         },
         "3 BHK": {
-          "min": 70000,
-          "max": 90000,
-          "label": "₹70k – ₹90k"
+          "min": 145000,
+          "max": 155000,
+          "label": "₹1.45L – ₹1.55L"
         },
         "4 BHK / Villa": {
-          "min": 95000,
-          "max": 125000,
-          "label": "₹95k – ₹1.25L"
+          "min": 160000,
+          "max": 175000,
+          "label": "₹1.60L – ₹1.75L"
         }
       }
     },
@@ -874,6 +721,43 @@
           "label": "₹1.20L – ₹1.55L"
         }
       }
+    },
+    {
+      "id": "space-1791096152751",
+      "name": "Molding",
+      "category": "Surface",
+      "iconName": "Paintbrush",
+      "tagline": "Custom French Neo-Classical Trims, Non-Yellowing Polyurethane Finish & Seamless Edge Material Guarantee",
+      "specs": [
+        "French inspired neo-classical wall trim moldings.",
+        "Dual coat premium enamel on architectural trims",
+        "Molding pre treatment & joint concealment"
+      ],
+      "popular": false,
+      "enabled": true,
+      "pricing": {
+        "1 BHK": {
+          "min": 30000,
+          "max": 35000,
+          "label": "₹30k – ₹35k"
+        },
+        "2 BHK": {
+          "min": 50000,
+          "max": 60000,
+          "label": "₹50k – ₹60k"
+        },
+        "3 BHK": {
+          "min": 70000,
+          "max": 80000,
+          "label": "₹70k – ₹80k"
+        },
+        "4 BHK / Villa": {
+          "min": 105000,
+          "max": 115000,
+          "label": "₹1.05L – ₹1.15L"
+        }
+      },
+      "order": 10
     }
   ]
 }
