@@ -560,11 +560,11 @@ export function ConsultationFlow({
       <div className="mb-6 pb-4 border-b border-[var(--border)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="h-7 w-7 rounded-full bg-gradient-to-tr from-rose-500 to-amber-500 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+            <span className="h-7 w-7 rounded-full bg-gradient-to-tr from-amber-500 to-amber-700 text-white flex items-center justify-center text-xs font-bold shadow-xs">
               <Calculator className="h-3.5 w-3.5" />
             </span>
             <div>
-              <div className="text-[11px] uppercase tracking-wider font-bold text-[var(--accent-foreground)]">
+              <div className="text-[11px] uppercase tracking-wider font-bold text-[#8a6218]">
                 Instant Cost Estimator &amp; Consultation
               </div>
               <h2 className="text-lg sm:text-xl font-bold font-display text-[var(--foreground)]">
@@ -584,7 +584,7 @@ export function ConsultationFlow({
         {/* Progress Line */}
         <div className="w-full bg-neutral-200 h-1.5 rounded-full mt-3 overflow-hidden">
           <div
-            className="bg-gradient-to-r from-rose-500 via-amber-500 to-emerald-500 h-full transition-all duration-300 rounded-full"
+            className="bg-gradient-to-r from-amber-400 via-[#c59b4c] to-emerald-600 h-full transition-all duration-300 rounded-full"
             style={{ width: `${(step / 3) * 100}%` }}
           />
         </div>
@@ -615,12 +615,12 @@ export function ConsultationFlow({
                   onClick={() => setSelectedBhk(fp.type)}
                   className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
                     isSelected
-                      ? "border-rose-500 bg-rose-50/40 shadow-md ring-2 ring-rose-500/20"
-                      : "border-[var(--border)] bg-white hover:border-neutral-300 hover:shadow-xs"
+                      ? "border-[#c59b4c] bg-amber-50/50 shadow-md ring-2 ring-[#c59b4c]/25"
+                      : "border-[var(--border)] bg-white hover:border-amber-300 hover:shadow-xs"
                   }`}
                 >
                   {fp.badge && (
-                    <span className="absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-xs">
+                    <span className="absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full bg-[#8a6218] text-white text-[10px] font-bold uppercase tracking-wider shadow-xs">
                       {fp.badge}
                     </span>
                   )}
@@ -629,7 +629,7 @@ export function ConsultationFlow({
                     <div
                       className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                         isSelected
-                          ? "bg-rose-500 text-white shadow-xs"
+                          ? "bg-[#c59b4c] text-white shadow-xs"
                           : "bg-neutral-100 text-neutral-700"
                       }`}
                     >
@@ -642,7 +642,7 @@ export function ConsultationFlow({
                           {fp.title}
                         </h3>
                         {isSelected && (
-                          <span className="h-5 w-5 rounded-full bg-rose-500 text-white flex items-center justify-center">
+                          <span className="h-5 w-5 rounded-full bg-[#c59b4c] text-white flex items-center justify-center">
                             <Check className="h-3 w-3 stroke-[3]" />
                           </span>
                         )}
@@ -713,7 +713,7 @@ export function ConsultationFlow({
                       onClick={() => setSelectedBhk(bhk)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                         isActive
-                          ? "bg-rose-600 text-white shadow-xs"
+                          ? "bg-[#151413] text-white shadow-xs"
                           : "text-[var(--foreground)] hover:bg-neutral-100"
                       }`}
                     >

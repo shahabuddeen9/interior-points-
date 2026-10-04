@@ -85,8 +85,8 @@ export function Pricing({
                 }`}
               >
                 {isFeatured && (
-                  <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-[var(--accent)] text-white text-[11px] font-semibold uppercase tracking-wider shadow-sm flex items-center gap-1.5">
-                    <Sparkles className="h-3 w-3" />
+                  <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-[#151413] text-amber-300 border border-amber-400/40 text-[10px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3 text-amber-400" />
                     <span>Most Popular Choice</span>
                   </div>
                 )}
@@ -172,16 +172,16 @@ export function Pricing({
         </div>
 
         {/* Interactive Custom Room Estimator Callout */}
-        <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-neutral-900 text-white border border-neutral-800 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-[#151413] text-white border border-[#c59b4c]/30 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1.5 text-center md:text-left">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-[11px] font-bold uppercase tracking-wider">
-              <Sparkles className="h-3.5 w-3.5" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
+              <Sparkles className="h-3.5 w-3.5 text-amber-400" />
               <span>Custom Room &amp; Space Estimator</span>
             </div>
             <h3 className="font-display text-xl sm:text-2xl font-bold text-white">
               Want to select specific rooms and see live prices?
             </h3>
-            <p className="text-xs sm:text-sm text-neutral-400 max-w-xl">
+            <p className="text-xs sm:text-sm text-neutral-300 max-w-xl">
               Choose your floor plan ({selectedBhk}), select only the works you need (Modular Kitchen, Wardrobes, False Ceiling, Painting, Bathrooms), and forward your itemized estimate directly to WhatsApp (+91 7903038750 / +91 8788516537).
             </p>
           </div>
@@ -191,7 +191,7 @@ export function Pricing({
               variant="gold"
               size="lg"
               onClick={() => onOpenConsultation(selectedBhk)}
-              className="w-full sm:w-auto text-xs font-bold uppercase tracking-wider shadow-lg bg-emerald-600 hover:bg-emerald-500 text-white"
+              className="w-full sm:w-auto text-xs font-bold uppercase tracking-wider shadow-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-neutral-950"
             >
               <span>Calculate My {selectedBhk} on WhatsApp</span>
               <ArrowRight className="h-4 w-4 ml-1.5" />

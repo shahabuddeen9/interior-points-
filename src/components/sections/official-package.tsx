@@ -178,10 +178,10 @@ const PACKAGES = [
 
 export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageProps) {
   return (
-    <section id="turnkey-package" className="py-16 md:py-24 bg-gradient-to-b from-[#0c1a16] via-[#091512] to-[#060e0c] text-white relative overflow-hidden border-y border-amber-900/30 scroll-mt-20 sm:scroll-mt-24">
+    <section id="turnkey-package" className="py-16 md:py-24 bg-gradient-to-b from-[#151413] via-[#1a1918] to-[#121110] text-white relative overflow-hidden border-y border-[#c59b4c]/30 scroll-mt-20 sm:scroll-mt-24">
       {/* Decorative Golden Ambient Glows */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#c59b4c]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Top Monogram & Banner Headline */}
@@ -193,8 +193,8 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
 
           <div className="flex flex-col items-center">
             {/* JP Monogram Crest */}
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 p-0.5 shadow-lg shadow-amber-900/30 mb-3">
-              <div className="w-full h-full rounded-[14px] bg-[#0c1a16] flex flex-col items-center justify-center">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 p-0.5 shadow-lg shadow-black/50 mb-3">
+              <div className="w-full h-full rounded-[14px] bg-[#151413] flex flex-col items-center justify-center">
                 <span className="font-display font-black text-xl text-amber-300 tracking-tighter">JP</span>
                 <span className="text-[7px] text-amber-200 uppercase tracking-widest -mt-1 font-bold">Studio</span>
               </div>
@@ -223,13 +223,13 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
                 transition={{ duration: 0.2 }}
                 className={`relative rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all ${
                   pkg.popular
-                    ? "bg-gradient-to-b from-[#132821] to-[#0d1d18] border-2 border-amber-400/80 shadow-2xl shadow-amber-900/20 ring-1 ring-amber-400/30"
-                    : "bg-[#0f1f1a]/80 border border-amber-500/25 hover:border-amber-400/50 shadow-lg"
+                    ? "bg-gradient-to-b from-[#24221f] to-[#181715] border-2 border-amber-400/90 shadow-2xl shadow-black/60 ring-1 ring-amber-400/30"
+                    : "bg-[#1c1b18]/90 border border-amber-500/25 hover:border-amber-400/50 shadow-xl"
                 }`}
               >
                 {pkg.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-black text-[10px] font-black uppercase tracking-wider shadow-md flex items-center gap-1.5">
-                    <Star className="h-3 w-3 fill-black text-black" />
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-neutral-950 text-[10px] font-black uppercase tracking-wider shadow-md flex items-center gap-1.5">
+                    <Star className="h-3 w-3 fill-neutral-950 text-neutral-950" />
                     <span>Most Popular Choice</span>
                   </div>
                 )}
@@ -286,7 +286,7 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
         {/* Two-Column Deep Inclusions & Materials Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-14">
           {/* Left Column: OUR SERVICE INCLUDES (15 Services) */}
-          <div className="lg:col-span-7 bg-[#0d1d18]/90 border border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+          <div className="lg:col-span-7 bg-[#1c1b18]/95 border border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
             <div className="border-b border-amber-500/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-400">
@@ -307,7 +307,7 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
                 return (
                   <div
                     key={item.num}
-                    className="p-3 rounded-2xl bg-black/30 border border-amber-500/15 hover:border-amber-400/30 transition-colors flex items-start gap-3"
+                    className="p-3 rounded-2xl bg-black/40 border border-amber-500/15 hover:border-amber-400/35 transition-colors flex items-start gap-3"
                   >
                     <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center shrink-0 text-amber-300 font-bold text-xs">
                       {item.num}
@@ -330,7 +330,7 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
           {/* Right Column: MATERIALS WE USE & QUALITY PROMISE */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-6">
             {/* Materials Box */}
-            <div className="bg-[#0d1d18]/90 border border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-xl space-y-5 flex-1">
+            <div className="bg-[#1c1b18]/95 border border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-xl space-y-5 flex-1">
               <div className="border-b border-amber-500/20 pb-4">
                 <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-400">
                   Architectural Grade Standards
@@ -344,7 +344,7 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
                 {MATERIAL_HIGHLIGHTS.map((mat, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-2xl bg-black/30 border border-amber-500/15 flex items-start gap-3"
+                    className="p-3.5 rounded-2xl bg-black/40 border border-amber-500/15 flex items-start gap-3"
                   >
                     <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
                     <div>

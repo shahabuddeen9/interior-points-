@@ -96,14 +96,14 @@ export function Hero({
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.45 }}
-              className="p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-[var(--border)] shadow-xs space-y-3"
+              className="p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-[#e6dfd2] shadow-xs space-y-3"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
-                <span className="font-bold text-[var(--foreground)] uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-rose-600" />
+                <span className="font-bold text-[#151413] uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-[#c59b4c]" />
                   Instant Interior Cost Estimator
                 </span>
-                <span className="text-[11px] text-[var(--muted-foreground)]">
+                <span className="text-[11px] text-[#5e594f]">
                   Pick your flat size to select works &amp; forward quote to WhatsApp:
                 </span>
               </div>
@@ -120,18 +120,18 @@ export function Hero({
                     onClick={() => onOpenConsultation(item.bhk as any)}
                     className={`relative p-2.5 sm:p-3 rounded-xl border text-left transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
                       item.popular
-                        ? "border-rose-500 bg-rose-50/50 shadow-2xs"
-                        : "border-[var(--border)] bg-neutral-50/70 hover:bg-neutral-100 hover:border-neutral-300"
+                        ? "border-amber-400 bg-amber-50/60 shadow-xs ring-1 ring-amber-400/40"
+                        : "border-[#e6dfd2] bg-[#fdfbf7] hover:bg-amber-50/30 hover:border-amber-300"
                     }`}
                   >
                     {item.popular && (
-                      <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[8px] font-bold uppercase tracking-wider">
+                      <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-md bg-[#8a6218] text-white text-[8px] font-bold uppercase tracking-wider shadow-xs">
                         Most Popular
                       </span>
                     )}
-                    <div className="text-xs sm:text-sm font-bold text-[var(--foreground)]">{item.bhk}</div>
-                    <div className="text-[10px] text-[var(--muted-foreground)]">{item.area}</div>
-                    <div className="text-[11px] font-semibold text-emerald-700 mt-1">{item.start}</div>
+                    <div className="text-xs sm:text-sm font-bold text-[#151413]">{item.bhk}</div>
+                    <div className="text-[10px] text-[#5e594f]">{item.area}</div>
+                    <div className="text-[11px] font-bold text-emerald-700 mt-1">{item.start}</div>
                   </button>
                 ))}
               </div>

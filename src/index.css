@@ -20,19 +20,20 @@
 }
 
 :root {
-  --background: oklch(0.968 0.008 85);      /* warm off-white */
-  --foreground: oklch(0.26 0.012 60);       /* near-charcoal text */
-  --primary: oklch(0.27 0.01 60);           /* charcoal */
-  --primary-foreground: oklch(0.97 0.008 85);
-  --secondary: oklch(0.93 0.014 80);        /* warm beige */
-  --secondary-foreground: oklch(0.3 0.012 60);
-  --muted: oklch(0.93 0.012 82);
-  --muted-foreground: oklch(0.52 0.014 65);
-  --accent: oklch(0.74 0.09 75);            /* gold */
-  --accent-foreground: oklch(0.26 0.012 60);
-  --border: oklch(0.88 0.012 80);
-  --ring: oklch(0.74 0.09 75);
-  --radius: 0.25rem;
+  /* Warm Alabaster Linen canvas — radiant, luxurious, clean, high-end architectural feel */
+  --background: #fdfbf7;
+  --foreground: #151413;       /* Deep architectural graphite */
+  --primary: #151413;          /* Rich architectural onyx */
+  --primary-foreground: #fdfbf7;
+  --secondary: #f4eee3;        /* Warm cashmere silk */
+  --secondary-foreground: #22201d;
+  --muted: #eae3d5;            /* Soft warm sandstone */
+  --muted-foreground: #5e594f;  /* Balanced, legible warm slate */
+  --accent: #c59b4c;           /* Burnished champagne gold / brushed brass */
+  --accent-foreground: #8a6218;/* Deep rich bronze-gold for text legibility */
+  --border: #e6dfd2;           /* Subtle warm architectural boundary */
+  --ring: #c59b4c;
+  --radius: 0.5rem;
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-body: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }

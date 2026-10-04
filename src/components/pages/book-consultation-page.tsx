@@ -49,8 +49,8 @@ export function BookConsultationPage() {
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs uppercase tracking-wider font-bold mb-3">
-              <Sparkles className="h-3.5 w-3.5" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-[#8a6218] text-xs uppercase tracking-wider font-bold mb-3">
+              <Sparkles className="h-3.5 w-3.5 text-[#c59b4c]" />
               <span>Instant Cost Estimator &amp; 3D Design Session</span>
             </div>
 

@@ -11,11 +11,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const base = "inline-flex items-center justify-center font-medium tracking-wide transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:pointer-events-none rounded-[var(--radius)]";
     
     const variants = {
-      primary: "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-black/90 active:scale-[0.99] shadow-sm",
-      secondary: "bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:bg-[var(--border)] border border-[var(--border)]",
-      outline: "border border-[var(--border)] bg-transparent hover:border-[var(--primary)] text-[var(--foreground)]",
-      ghost: "bg-transparent hover:bg-black/5 text-[var(--foreground)]",
-      gold: "bg-[var(--accent)] text-[var(--accent-foreground)] hover:brightness-105 active:scale-[0.99] shadow-sm font-semibold",
+      primary: "bg-[#151413] text-[#fdfbf7] hover:bg-neutral-800 active:scale-[0.99] shadow-xs",
+      secondary: "bg-[#f4eee3] text-[#151413] hover:bg-[#eae3d5] border border-[#e6dfd2]",
+      outline: "border border-[#e6dfd2] bg-white hover:border-[#151413] text-[#151413] hover:bg-[#fdfbf7]",
+      ghost: "bg-transparent hover:bg-black/5 text-[#151413]",
+      gold: "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-neutral-950 hover:brightness-105 active:scale-[0.99] shadow-sm font-bold",
     };
 
     const sizes = {
