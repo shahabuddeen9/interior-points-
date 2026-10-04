@@ -79,31 +79,31 @@ export async function fetchProjects(): Promise<Project[]> {
       const contentType = res.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
         const data = await res.json();
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+        if (data.success && Array.isArray(data.data)) {
           const serverProjects: Project[] = data.data;
 
-          // Reconcile: Preserve any locally uploaded photos that may be newer
+          // The server database is the canonical master.
+          // Reconcile: If local has a project with uploaded photos that hasn't synced yet, preserve the uploaded photos.
           const merged = serverProjects.map((serverProj) => {
             const local = localProjects.find(
               (lp) => lp.id === serverProj.id || lp.slug === serverProj.slug
             );
-            if (local && Array.isArray(local.images) && local.images.length > (serverProj.images || []).length) {
+            const localHasUploads = (local?.images || []).some(
+              (img) => (img.startsWith("/uploads/") || img.startsWith("data:")) && !(serverProj.images || []).includes(img)
+            );
+            if (localHasUploads && local) {
+              const combinedImages = [
+                ...(local.images || []),
+                ...(serverProj.images || []).filter((img) => !(local.images || []).includes(img))
+              ];
               return {
                 ...serverProj,
-                images: local.images,
                 coverImage: local.coverImage || serverProj.coverImage,
+                images: combinedImages,
               };
             }
             return serverProj;
           });
-
-          // Append any purely local project records
-          for (const local of localProjects) {
-            const exists = merged.some((p) => p.id === local.id || p.slug === local.slug);
-            if (!exists) {
-              merged.push(local);
-            }
-          }
 
           persistProjectsLocally(merged);
           return merged;
@@ -339,38 +339,55 @@ export async function updateProjectPhotos(
       p.slug === identifier
   );
 
-  if (idx < 0) return null;
+  const existing = idx >= 0 ? currentProjects[idx] : null;
+  const newCover = coverImage || images[0] || existing?.coverImage || "";
+  const finalImages = images.length > 0 ? images : [newCover].filter(Boolean);
 
-  const existing = currentProjects[idx];
-  const newCover = coverImage || images[0] || existing.coverImage;
-  const updated: Project = {
-    ...existing,
-    images: images.length > 0 ? images : [newCover],
-    coverImage: newCover,
-  };
+  if (existing) {
+    const updated: Project = {
+      ...existing,
+      images: finalImages,
+      coverImage: newCover,
+    };
+    currentProjects[idx] = updated;
+    persistProjectsLocally(currentProjects);
+  }
 
-  currentProjects[idx] = updated;
-  persistProjectsLocally(currentProjects);
-
-  // Sync with server
+  // Sync with server directly
   try {
-    const res = await fetch(`/api/projects/${encodeURIComponent(existing.id)}/photos`, {
+    const res = await fetch(`/api/projects/${encodeURIComponent(identifier)}/photos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ images: updated.images, coverImage: updated.coverImage }),
+      body: JSON.stringify({ images: finalImages, coverImage: newCover }),
     });
     if (res.ok) {
       const data = await res.json();
       if (data.success && data.data) {
-        currentProjects[idx] = data.data;
-        persistProjectsLocally(currentProjects);
-        return data.data;
+        const serverData: Project = data.data;
+        const freshList = getStoredProjects();
+        const fIdx = freshList.findIndex(
+          (p) =>
+            p.id?.toLowerCase() === cleanId ||
+            p.slug?.toLowerCase() === cleanId ||
+            p.id === serverData.id ||
+            p.slug === serverData.slug
+        );
+        if (fIdx >= 0) {
+          freshList[fIdx] = serverData;
+        } else {
+          freshList.unshift(serverData);
+        }
+        persistProjectsLocally(freshList);
+        return serverData;
       }
     }
   } catch (err) {
     console.warn("Server photo sync failed; local state safely retained:", err);
   }
 
-  return updated;
+  if (existing) {
+    return { ...existing, images: finalImages, coverImage: newCover };
+  }
+  return null;
 }
 

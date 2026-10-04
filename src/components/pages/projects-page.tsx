@@ -169,7 +169,7 @@ export function ProjectsPage() {
                 {/* Photographic frame */}
                 <div className="relative aspect-[16/11] rounded-[var(--radius)] overflow-hidden bg-neutral-100 border border-[var(--border)]">
                   <img
-                    src={project.coverImage}
+                    src={project.coverImage || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80"}
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700 ease-out"
                     loading="lazy"

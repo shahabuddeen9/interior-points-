@@ -125,7 +125,6 @@ export function ProjectEditorModal({
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState("");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const [saveSuccessNotification, setSaveSuccessNotification] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -175,21 +174,14 @@ export function ProjectEditorModal({
       );
       setFeatured(true);
       setSelectedRooms(["Kitchen", "Wardrobe", "False Ceiling", "Living Room"]);
-      const defaultImg =
-        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80";
-      setCoverImage(defaultImg);
-      setImages([
-        defaultImg,
-        "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1558997519-83ea9252def8?auto=format&fit=crop&w=1200&q=80"
-      ]);
+      setCoverImage("");
+      setImages([]);
       setClientName("");
       setClientQuote("");
     }
     setErrorMessage("");
     setNewImageUrl("");
     setHasUnsavedChanges(false);
-    setShowCloseConfirm(false);
     setSaveSuccessNotification("");
   }, [projectToEdit, isOpen]);
 
@@ -208,10 +200,10 @@ export function ProjectEditorModal({
     const url = (urlToAdd || newImageUrl).trim();
     if (!url) return;
     if (!images.includes(url)) {
-      const updated = [...images, url];
+      const updated = [url, ...images];
       const newCover = coverImage || url;
       setImages(updated);
-      if (!coverImage) setCoverImage(url);
+      setCoverImage(newCover);
       setHasUnsavedChanges(true);
 
       // If editing existing project, auto-sync
@@ -245,34 +237,35 @@ export function ProjectEditorModal({
       }
 
       if (uploadedUrls.length > 0) {
-        let nextImages = [...images];
-        let nextCover = coverImage;
-
-        if (isCover) {
-          nextCover = uploadedUrls[0];
-          nextImages = [uploadedUrls[0], ...nextImages.filter((img) => img !== uploadedUrls[0])];
-        } else {
-          uploadedUrls.forEach((u) => {
-            if (!nextImages.includes(u)) nextImages.push(u);
-          });
-          if (!nextCover) nextCover = uploadedUrls[0];
-        }
+        // Uploaded photos take precedence: the uploaded photo immediately becomes the cover image
+        // and is placed at the very front of the project images list.
+        const isStockUnsplash = (u: string) => u.includes("images.unsplash.com");
+        const existingRealPhotos = images.filter((img) => !uploadedUrls.includes(img) && !isStockUnsplash(img));
+        const nextImages = isCover
+          ? [uploadedUrls[0], ...images.filter((img) => img !== uploadedUrls[0])]
+          : [...uploadedUrls, ...existingRealPhotos];
+        const nextCover = uploadedUrls[0];
 
         setImages(nextImages);
         setCoverImage(nextCover);
         setHasUnsavedChanges(true);
 
         // If editing an existing project, auto-save the photos immediately to server
-        if (isEditing && projectToEdit?.id) {
+        const targetId = projectToEdit?.id;
+        if (isEditing && targetId) {
           setUploadMessage("Permanently saving photos to residence...");
-          const updated = await updateProjectPhotos(projectToEdit.id, nextImages, nextCover);
-          if (updated) {
-            onSave(updated);
-            setSaveSuccessNotification("Photos uploaded and saved directly to this residence!");
-            setTimeout(() => setSaveSuccessNotification(""), 4000);
+          try {
+            const updated = await updateProjectPhotos(targetId, nextImages, nextCover);
+            if (updated) {
+              onSave(updated);
+              setSaveSuccessNotification("Photo uploaded and saved directly to this residence!");
+              setTimeout(() => setSaveSuccessNotification(""), 4000);
+            }
+          } catch (syncErr) {
+            console.warn("Could not auto-sync photos:", syncErr);
           }
         } else {
-          setSaveSuccessNotification(`${uploadedUrls.length} photo(s) uploaded successfully! Click Save to finish.`);
+          setSaveSuccessNotification(`${uploadedUrls.length} photo(s) uploaded successfully!`);
           setTimeout(() => setSaveSuccessNotification(""), 4000);
         }
       }
@@ -313,25 +306,13 @@ export function ProjectEditorModal({
     }
   };
 
-  // Safe close handler that prevents accidental loss of uploaded photos
-  const handleRequestClose = () => {
-    if (hasUnsavedChanges) {
-      setShowCloseConfirm(true);
-    } else {
-      onClose();
-    }
-  };
-
-  // Submit form
-  const handleSubmit = async (e?: React.FormEvent) => {
-    if (e && e.preventDefault) e.preventDefault();
-    if (!title.trim() || !location.trim()) {
-      setErrorMessage("Please fill in Project Title and Location.");
-      return;
-    }
-
+  // Save changes and close cleanly
+  const handleSaveAndClose = async () => {
     setSaving(true);
     setErrorMessage("");
+
+    const effectiveTitle = title.trim() || (isEditing ? projectToEdit?.title : "Custom Mumbai Residence") || "Custom Residence";
+    const effectiveLocation = location.trim() || "Mumbai";
 
     const scopeArray = scopeText
       .split(",")
@@ -342,14 +323,14 @@ export function ProjectEditorModal({
     const finalImages = images.length > 0 ? images : [finalCover];
 
     const payload: Partial<Project> = {
-      title: title.trim(),
+      title: effectiveTitle,
       bhkType,
-      location: location.trim(),
-      city: city.trim(),
-      budgetRange: budgetRange.trim(),
-      timeline: timeline.trim(),
+      location: effectiveLocation,
+      city: city.trim() || "Mumbai",
+      budgetRange: budgetRange.trim() || "₹10.75L Package",
+      timeline: timeline.trim() || "60 Days",
       description: description.trim(),
-      scope: scopeArray,
+      scope: scopeArray.length > 0 ? scopeArray : ["Modular Kitchen", "Wardrobes", "False Ceiling"],
       roomTypes: selectedRooms.length > 0 ? selectedRooms : ["Full Home"],
       coverImage: finalCover,
       images: finalImages,
@@ -367,12 +348,37 @@ export function ProjectEditorModal({
       setHasUnsavedChanges(false);
       onSave(saved);
       onClose();
+      return saved;
     } catch (err: any) {
       console.error("Save project error:", err);
       setErrorMessage(err.message || "An error occurred while saving the project.");
+      throw err;
     } finally {
       setSaving(false);
     }
+  };
+
+  // Safe close handler that saves work when closing so photos are never lost
+  const handleRequestClose = async () => {
+    if (hasUnsavedChanges && (title.trim() || images.length > 0)) {
+      try {
+        await handleSaveAndClose();
+      } catch {
+        onClose();
+      }
+    } else {
+      onClose();
+    }
+  };
+
+  // Submit form
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!title.trim() || !location.trim()) {
+      setErrorMessage("Please fill in Project Title and Location.");
+      return;
+    }
+    await handleSaveAndClose();
   };
 
   return (
@@ -874,7 +880,7 @@ export function ProjectEditorModal({
                 type="button"
                 variant="outline"
                 size="md"
-                onClick={handleRequestClose}
+                onClick={onClose}
                 disabled={saving || uploading}
                 className="text-xs cursor-pointer"
               >
@@ -892,63 +898,6 @@ export function ProjectEditorModal({
             </div>
           </div>
         </form>
-
-        {/* Unsaved Changes Confirmation Dialog */}
-        {showCloseConfirm && (
-          <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg p-5 max-w-md w-full shadow-2xl border border-[var(--border)] space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-full bg-amber-100 text-amber-700 shrink-0">
-                  <AlertTriangle className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-neutral-900">Save residence changes before closing?</h4>
-                  <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
-                    You have attached photos or edited details that haven't been saved yet. Would you like to save them now so they stay on your website?
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border)]">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowCloseConfirm(false)}
-                  className="text-xs cursor-pointer"
-                >
-                  Keep Editing
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setShowCloseConfirm(false);
-                    setHasUnsavedChanges(false);
-                    onClose();
-                  }}
-                  className="text-xs text-rose-600 border-rose-200 hover:bg-rose-50 cursor-pointer"
-                >
-                  Discard
-                </Button>
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="sm"
-                  onClick={() => {
-                    setShowCloseConfirm(false);
-                    handleSubmit();
-                  }}
-                  disabled={saving}
-                  className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold flex items-center gap-1.5 cursor-pointer"
-                >
-                  {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
-                  <span>Save & Close</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

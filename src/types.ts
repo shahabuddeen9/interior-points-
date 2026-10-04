@@ -77,3 +77,18 @@ export interface ChatMessage {
   content: string;
   timestamp: string;
 }
+
+export interface InstagramReel {
+  id: string;
+  shortcode: string;
+  url: string;
+  tag: string;
+  title: string;
+  caption: string;
+  likes: string;
+  comments: string;
+  views: string;
+  previewImage: string;
+  timestamp?: string;
+  isCustom?: boolean;
+}

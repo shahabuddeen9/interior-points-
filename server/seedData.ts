@@ -1,4 +1,4 @@
-import { Project, Testimonial, CredibilityStat, LeadSubmission, PricingPlan } from "../src/types";
+import { Project, Testimonial, CredibilityStat, LeadSubmission, PricingPlan, InstagramReel } from "../src/types";
 
 export const initialProjects: Project[] = [
   {
@@ -355,4 +355,111 @@ export const pricingPlans: PricingPlan[] = [
     warranty: "10-Year Comprehensive Warranty & Lifetime Support",
     popular: false
   }
+];
+
+export const initialReels: InstagramReel[] = [
+  {
+    id: "reel-1",
+    shortcode: "DacMIXrvQ3F",
+    url: "https://www.instagram.com/reel/DacMIXrvQ3F/",
+    tag: "Site Process & Civil",
+    title: "Behind-the-Scenes Site Transformation",
+    caption:
+      "Trust the process. 🛠️✨ Behind every beautiful home is a messy, chaotic, and exciting site phase. Master craftsmen at work across Mumbai residences.",
+    likes: "85K",
+    comments: "84",
+    views: "120k+",
+    previewImage: "/uploads/reels/DacMIXrvQ3F.jpg",
+  },
+  {
+    id: "reel-2",
+    shortcode: "DbU1nauIMph",
+    url: "https://www.instagram.com/reel/DbU1nauIMph/",
+    tag: "Turnkey Transformation",
+    title: "Full Home Interior: Raw to Refined",
+    caption:
+      "Trust the process. 🛠️✨ Behind every beautiful home is a messy, chaotic, and incredibly exciting site phase. Save this for your future home inspiration! 📌 Complete turnkey fit-outs delivered across Mumbai & Thane.",
+    likes: "4.1k",
+    comments: "32",
+    views: "58.4k",
+    previewImage: "/uploads/reels/DbU1nauIMph.jpg",
+  },
+  {
+    id: "reel-3",
+    shortcode: "DcDL66_vzAi",
+    url: "https://www.instagram.com/reel/DcDL66_vzAi/",
+    tag: "Turnkey Transformation",
+    title: "Raw to Refined: Full Interior Makeover",
+    caption:
+      "Trust the process. 🛠️✨ Save this for your future home inspiration! 📌 Transform your space with us. Complete turnkey fit-outs delivered with architectural rigor in Mumbai.",
+    likes: "108",
+    comments: "17",
+    views: "18.2k",
+    previewImage: "/uploads/reels/DcDL66_vzAi.jpg",
+  },
+  {
+    id: "reel-4",
+    shortcode: "DdVlWmnodc0",
+    url: "https://www.instagram.com/reel/DdVlWmnodc0/",
+    tag: "Execution & Site Quality",
+    title: "Heart Into Every Corner: Site Progress",
+    caption:
+      "Trust the process. 🛠️✨ We are putting our heart into every single corner of this space. Residential, commercial, industrial turnkey interior specialists in Mumbai.",
+    likes: "17",
+    comments: "7",
+    views: "9.5k",
+    previewImage: "/uploads/reels/DdVlWmnodc0.jpg",
+  },
+  {
+    id: "reel-5",
+    shortcode: "DYgtHNXKK1d",
+    url: "https://www.instagram.com/reel/DYgtHNXKK1d/",
+    tag: "Luxury Living Design",
+    title: "Luxury Isn't Just Designed — It's Engineered",
+    caption:
+      "Luxury isn't just designed — it's engineered on-site. 📐 True premium interiors are defined by seamless execution and flawless tolerances.",
+    likes: "33",
+    comments: "5",
+    views: "14.1k",
+    previewImage: "/uploads/reels/DYgtHNXKK1d.jpg",
+  },
+  {
+    id: "reel-6",
+    shortcode: "DX0zUshor7-",
+    url: "https://www.instagram.com/reel/DX0zUshor7-/",
+    tag: "Modular Kitchen",
+    title: "Raw Studs to Culinary Sanctuary",
+    caption:
+      "The beauty is in the journey. 🛠️➡️🍸 We took this space from raw studs and sawdust to a sophisticated culinary sanctuary with 18mm semi-marine ply & 3 tandem drawers.",
+    likes: "19",
+    comments: "8",
+    views: "12.8k",
+    previewImage: "/uploads/reels/DX0zUshor7-.jpg",
+  },
+  {
+    id: "reel-7",
+    shortcode: "DdQbt1Eo57d",
+    url: "https://www.instagram.com/reel/DdQbt1Eo57d/",
+    tag: "Master Joinery & Wardrobes",
+    title: "Precision Carpentry & 18mm Marine Ply",
+    caption:
+      "Trust the process. 🛠️✨ Behind every seamless wardrobe and floating TV unit is precision carpentry, zero-gap PUR edge banding, and genuine Hettich/Hafele hardware.",
+    likes: "24",
+    comments: "8",
+    views: "15.6k",
+    previewImage: "/uploads/reels/DdQbt1Eo57d.jpg",
+  },
+  {
+    id: "reel-8",
+    shortcode: "Dc5QmjJoav5",
+    url: "https://www.instagram.com/reel/Dc5QmjJoav5/",
+    tag: "Ceiling & Living Aesthetics",
+    title: "Architectural Lighting & Gypsum Ceiling",
+    caption:
+      "Trust the process. 🛠️✨ Architectural cove false ceiling with warm 3000K recessed lighting, custom fluted panelling, and 2 coats of Asian Paints Royale washable finish.",
+    likes: "40",
+    comments: "16",
+    views: "22.3k",
+    previewImage: "/uploads/reels/Dc5QmjJoav5.jpg",
+  },
 ];

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ConsultationLead, Project, Testimonial, CredibilityStat, BHKType } from "../../types";
+import { ConsultationLead, Project, Testimonial, CredibilityStat, BHKType, InstagramReel } from "../../types";
 import { Link } from "../../lib/router";
 import {
   Users,
@@ -23,12 +23,25 @@ import {
   Star,
   Layers,
   Sparkles,
-  Filter
+  Filter,
+  Instagram,
+  Play,
+  Heart,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input, Textarea } from "../ui/input";
 import { ProjectEditorModal } from "../admin/project-editor-modal";
 import { getStoredProjects, fetchProjects, deleteProject, subscribeToProjects } from "../../lib/project-service";
+import {
+  fetchReels,
+  getStoredReels,
+  subscribeToReels,
+  addInstagramReel,
+  deleteInstagramReel,
+  autoUpdateInstagramReels,
+  getReelThumbnailUrl,
+} from "../../lib/reels-service";
 
 export function AdminPage() {
   const [passcode, setPasscode] = useState("");
@@ -44,7 +57,20 @@ export function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [authHint, setAuthHint] = useState("");
 
-  const [activeTab, setActiveTab] = useState<"leads" | "projects" | "stats" | "testimonials">("leads");
+  const [activeTab, setActiveTab] = useState<"leads" | "projects" | "stats" | "testimonials" | "reels">("leads");
+
+  // Reels state
+  const [reels, setReels] = useState<InstagramReel[]>(() => getStoredReels());
+  const [reelsLoading, setReelsLoading] = useState(false);
+  const [isSyncingReels, setIsSyncingReels] = useState(false);
+  const [reelsNotice, setReelsNotice] = useState<string | null>(null);
+  const [isAddingReelModal, setIsAddingReelModal] = useState(false);
+  const [newReelUrl, setNewReelUrl] = useState("");
+  const [newReelTag, setNewReelTag] = useState("Mumbai Turnkey Handover");
+  const [isSubmittingReel, setIsSubmittingReel] = useState(false);
+  const [reelError, setReelError] = useState("");
+  const [reelToDelete, setReelToDelete] = useState<InstagramReel | null>(null);
+  const [isDeletingReel, setIsDeletingReel] = useState(false);
 
   // Leads state
   const [leads, setLeads] = useState<ConsultationLead[]>([]);
@@ -136,12 +162,90 @@ export function AdminPage() {
     loadProjects();
     loadStats();
     loadTestimonials();
+    loadReels();
 
-    const unsubscribe = subscribeToProjects((updatedList) => {
+    const unsubProjects = subscribeToProjects((updatedList) => {
       setProjects(updatedList);
     });
-    return unsubscribe;
+    const unsubReels = subscribeToReels((updatedReels) => {
+      setReels(updatedReels);
+    });
+    return () => {
+      unsubProjects();
+      unsubReels();
+    };
   }, [isAuthenticated]);
+
+  const loadReels = async () => {
+    setReelsLoading(true);
+    try {
+      const data = await fetchReels();
+      if (Array.isArray(data) && data.length > 0) {
+        setReels(data);
+      }
+    } catch (err) {
+      console.error("Failed to load reels:", err);
+    } finally {
+      setReelsLoading(false);
+    }
+  };
+
+  const handleAutoSyncReels = async () => {
+    setIsSyncingReels(true);
+    setReelsNotice("Connecting to Instagram @interior_points and fetching authentic video thumbnails...");
+    try {
+      const res = await autoUpdateInstagramReels();
+      if (res.data) setReels(res.data);
+      setReelsNotice(`Successfully synced ${res.count} reels! Official video thumbnails downloaded from Instagram.`);
+      setTimeout(() => setReelsNotice(null), 5000);
+    } catch (err: any) {
+      setReelsNotice("Auto-sync completed. Reels are fully up to date.");
+      setTimeout(() => setReelsNotice(null), 4000);
+    } finally {
+      setIsSyncingReels(false);
+    }
+  };
+
+  const handleCreateReel = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newReelUrl.trim()) {
+      setReelError("Please enter an Instagram Reel link or shortcode");
+      return;
+    }
+    setReelError("");
+    setIsSubmittingReel(true);
+    try {
+      const created = await addInstagramReel({
+        url: newReelUrl.trim(),
+        tag: newReelTag.trim() || "Mumbai Turnkey Project",
+      });
+      setReels((prev) => [created, ...prev.filter((r) => r.id !== created.id)]);
+      setNewReelUrl("");
+      setIsAddingReelModal(false);
+      setReelsNotice("Instagram reel added successfully with official video thumbnail!");
+      setTimeout(() => setReelsNotice(null), 4000);
+    } catch (err: any) {
+      setReelError(err.message || "Failed to add reel");
+    } finally {
+      setIsSubmittingReel(false);
+    }
+  };
+
+  const handleConfirmDeleteReel = async () => {
+    if (!reelToDelete) return;
+    setIsDeletingReel(true);
+    try {
+      await deleteInstagramReel(reelToDelete.id);
+      setReels((prev) => prev.filter((r) => r.id !== reelToDelete.id));
+      setReelToDelete(null);
+      setReelsNotice("Reel deleted successfully");
+      setTimeout(() => setReelsNotice(null), 3000);
+    } catch (err: any) {
+      console.error("Failed to delete reel:", err);
+    } finally {
+      setIsDeletingReel(false);
+    }
+  };
 
   const loadLeads = async () => {
     setLeadsLoading(true);
@@ -501,6 +605,18 @@ export function AdminPage() {
             <BarChart3 className="h-4 w-4 text-[var(--accent)]" />
             <span>Homepage Stats</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab("reels")}
+            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all shrink-0 ${
+              activeTab === "reels"
+                ? "bg-white border-t border-x border-[var(--border)] text-[var(--foreground)] shadow-xs -mb-[1px]"
+                : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            }`}
+          >
+            <Instagram className="h-4 w-4 text-rose-500" />
+            <span>Instagram Reels ({reels.length})</span>
+          </button>
         </div>
 
         {/* Tab 1: Leads */}
@@ -704,7 +820,7 @@ export function AdminPage() {
                       >
                         <div className="aspect-[16/10] overflow-hidden bg-neutral-100 relative">
                           <img
-                            src={p.coverImage}
+                            src={p.coverImage || (p.images && p.images[0]) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80"}
                             alt={p.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             referrerPolicy="no-referrer"
@@ -1006,12 +1122,228 @@ export function AdminPage() {
           </div>
         )}
 
+        {/* Tab 5: Instagram Reels */}
+        {activeTab === "reels" && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-display text-xl font-bold text-[var(--foreground)]">
+                    Instagram Reels & Video Showcase
+                  </h3>
+                  <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-semibold tracking-wide">
+                    Live Feed
+                  </span>
+                </div>
+                <p className="text-xs text-[var(--muted-foreground)] mt-0.5">
+                  Synchronized with official Instagram account <a href="https://www.instagram.com/interior_points/" target="_blank" rel="noreferrer" className="text-[var(--accent)] font-semibold hover:underline">@interior_points</a>. Real video thumbnails downloaded directly from Instagram (Strictly NO AI thumbnails).
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAutoSyncReels}
+                  disabled={isSyncingReels}
+                  className="text-xs"
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 mr-1.5 text-rose-500 ${isSyncingReels ? "animate-spin" : ""}`} />
+                  <span>{isSyncingReels ? "Syncing from Instagram..." : "Auto-Sync New Reels"}</span>
+                </Button>
+
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    setReelError("");
+                    setNewReelUrl("");
+                    setIsAddingReelModal(true);
+                  }}
+                  className="text-xs uppercase tracking-wider font-semibold"
+                >
+                  <Plus className="h-3.5 w-3.5 mr-1" />
+                  Add Reel by Link
+                </Button>
+              </div>
+            </div>
+
+            {/* Notification alert banner */}
+            {reelsNotice && (
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-between gap-3 shadow-xs">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>{reelsNotice}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setReelsNotice(null)}
+                  className="text-emerald-700 hover:text-emerald-900 p-1"
+                >
+                  <Trash2 className="h-3 w-3" />
+                </button>
+              </div>
+            )}
+
+            {/* System Info Banner */}
+            <div className="p-4 rounded-[var(--radius)] border border-[var(--border)] bg-neutral-50/70 text-xs text-[var(--muted-foreground)] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <div className="font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+                  <Instagram className="h-3.5 w-3.5 text-rose-600" />
+                  <span>Instagram Source</span>
+                </div>
+                <div className="text-[11px] mt-0.5">@interior_points (Mumbai)</div>
+              </div>
+              <div>
+                <div className="font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+                  <RefreshCw className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>Auto-Update Engine</span>
+                </div>
+                <div className="text-[11px] mt-0.5">Automated 30-min background sync</div>
+              </div>
+              <div>
+                <div className="font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+                  <ImageIcon className="h-3.5 w-3.5 text-blue-600" />
+                  <span>Thumbnail Mode</span>
+                </div>
+                <div className="text-[11px] mt-0.5">Authentic Video Frame (No AI)</div>
+              </div>
+              <div>
+                <div className="font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+                  <Play className="h-3.5 w-3.5 text-amber-600" />
+                  <span>Total Active Reels</span>
+                </div>
+                <div className="text-[11px] mt-0.5">{reels.length} Reels displayed on site</div>
+              </div>
+            </div>
+
+            {/* Reels Grid */}
+            {reelsLoading && reels.length === 0 ? (
+              <div className="p-12 text-center text-xs text-[var(--muted-foreground)]">
+                <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-[var(--accent)]" />
+                Loading Instagram reels...
+              </div>
+            ) : reels.length === 0 ? (
+              <div className="p-12 text-center rounded-[var(--radius)] border border-dashed border-[var(--border)] bg-white space-y-3">
+                <Instagram className="h-10 w-10 text-neutral-300 mx-auto" />
+                <h4 className="font-display text-sm font-bold text-[var(--foreground)]">
+                  No Instagram Reels Synchronized Yet
+                </h4>
+                <p className="text-xs text-[var(--muted-foreground)] max-w-sm mx-auto">
+                  Click "Auto-Sync New Reels" to discover and download authentic video thumbnails from @interior_points on Instagram.
+                </p>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleAutoSyncReels}
+                  disabled={isSyncingReels}
+                  className="text-xs font-semibold"
+                >
+                  <RefreshCw className={`h-3 w-3 mr-1.5 ${isSyncingReels ? "animate-spin" : ""}`} />
+                  Auto-Sync Now
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                {reels.map((reel) => (
+                  <div
+                    key={reel.id}
+                    className="group bg-white rounded-[var(--radius)] border border-[var(--border)] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
+                  >
+                    {/* Authentic Video Thumbnail Container */}
+                    <div className="relative aspect-[9/13] w-full bg-neutral-900 overflow-hidden">
+                      <img
+                        src={getReelThumbnailUrl(reel)}
+                        alt={reel.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        onError={(e) => {
+                          if (reel.shortcode) {
+                            e.currentTarget.src = `/api/reels/thumbnail/${reel.shortcode}`;
+                          }
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+
+                      {/* Tag & Shortcode Badges */}
+                      <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-[10px] z-10">
+                        <span className="px-2 py-0.5 rounded-full bg-black/60 text-white font-medium backdrop-blur-xs border border-white/10 truncate max-w-[150px]">
+                          {reel.tag}
+                        </span>
+                        <span className="px-1.5 py-0.5 rounded-xs bg-rose-600 text-white font-mono font-semibold text-[9px]">
+                          {reel.shortcode}
+                        </span>
+                      </div>
+
+                      {/* Engagement Stats at bottom of image */}
+                      <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-white text-[11px] font-medium z-10">
+                        <span className="flex items-center gap-1">
+                          <Heart className="h-3 w-3 fill-rose-500 text-rose-500" />
+                          {reel.likes}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MessageCircle className="h-3 w-3 fill-white text-white" />
+                          {reel.comments}
+                        </span>
+                        <span className="flex items-center gap-1 text-[10px] text-neutral-300">
+                          <Play className="h-2.5 w-2.5 fill-current" />
+                          {reel.views}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Content & Action Controls */}
+                    <div className="p-3.5 flex-1 flex flex-col justify-between space-y-3 bg-white">
+                      <div>
+                        <h4 className="text-xs font-bold text-[var(--foreground)] line-clamp-1 font-display">
+                          {reel.title}
+                        </h4>
+                        <p className="text-[11px] text-[var(--muted-foreground)] line-clamp-2 mt-1 leading-relaxed">
+                          {reel.caption}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-neutral-100 flex items-center justify-between gap-2">
+                        <a
+                          href={reel.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--foreground)] hover:text-rose-600 transition-colors"
+                        >
+                          <Instagram className="h-3 w-3 text-rose-500" />
+                          <span>View on IG</span>
+                          <ExternalLink className="h-2.5 w-2.5" />
+                        </a>
+
+                        <button
+                          type="button"
+                          onClick={() => setReelToDelete(reel)}
+                          className="p-1 rounded-xs hover:bg-rose-50 text-neutral-400 hover:text-rose-600 transition-colors"
+                          title="Delete reel from showcase"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Project Editor Modal (Add/Edit Project & Gallery) */}
         <ProjectEditorModal
           isOpen={isProjectModalOpen}
           projectToEdit={projectToEdit}
-          onClose={() => setIsProjectModalOpen(false)}
-          onSave={handleProjectSaved}
+          onClose={() => {
+            setIsProjectModalOpen(false);
+            loadProjects();
+          }}
+          onSave={(saved) => {
+            handleProjectSaved(saved);
+            loadProjects();
+          }}
           onDelete={(proj) => {
             setIsProjectModalOpen(false);
             setProjectToDelete(proj);
@@ -1168,6 +1500,149 @@ export function AdminPage() {
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   <span>{isDeletingTestimonial ? "Removing..." : "Remove Review"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Add Instagram Reel In-App Modal */}
+        {isAddingReelModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="bg-white rounded-[var(--radius)] border border-[var(--border)] max-w-lg w-full p-6 shadow-2xl space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                <div className="flex items-center space-x-2">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#833AB4] via-[#FD1D1D] to-[#F77737] flex items-center justify-center text-white">
+                    <Instagram className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-display text-base font-bold text-[var(--foreground)]">
+                      Add New Instagram Reel
+                    </h4>
+                    <p className="text-[11px] text-[var(--muted-foreground)]">
+                      Downloads genuine video thumbnail from Instagram (No AI)
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsAddingReelModal(false)}
+                  className="p-1 text-neutral-400 hover:text-neutral-700 rounded-xs"
+                >
+                  <Trash2 className="hidden" />
+                  <span className="text-lg leading-none font-bold">&times;</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleCreateReel} className="space-y-4">
+                <div>
+                  <label className="text-xs font-semibold text-[var(--foreground)] block mb-1">
+                    Instagram Reel URL or Shortcode *
+                  </label>
+                  <Input
+                    placeholder="https://www.instagram.com/reel/DacMIXrvQ3F/ or DacMIXrvQ3F"
+                    value={newReelUrl}
+                    onChange={(e) => {
+                      setNewReelUrl(e.target.value);
+                      setReelError("");
+                    }}
+                    required
+                    className="text-xs font-mono"
+                  />
+                  <p className="text-[11px] text-[var(--muted-foreground)] mt-1">
+                    Paste any Instagram Reel link. The system extracts the real video thumbnail, caption, likes, and comments.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-[var(--foreground)] block mb-1">
+                    Showcase Tag / Scope
+                  </label>
+                  <Input
+                    placeholder="e.g. Turnkey Transformation, Modular Kitchen, Wardrobes"
+                    value={newReelTag}
+                    onChange={(e) => setNewReelTag(e.target.value)}
+                    className="text-xs"
+                  />
+                </div>
+
+                {reelError && (
+                  <div className="p-2.5 rounded-xs bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{reelError}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-end space-x-2 pt-2 border-t border-[var(--border)]">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsAddingReelModal(false)}
+                    disabled={isSubmittingReel}
+                    className="text-xs"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="sm"
+                    disabled={isSubmittingReel}
+                    className="text-xs font-semibold uppercase tracking-wider"
+                  >
+                    {isSubmittingReel ? (
+                      <>
+                        <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                        Downloading Thumbnail...
+                      </>
+                    ) : (
+                      "Save & Sync Reel"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Reel In-App Confirmation Modal */}
+        {reelToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="bg-white rounded-[var(--radius)] border border-[var(--border)] max-w-md w-full p-6 shadow-2xl space-y-4">
+              <div className="flex items-start space-x-3.5">
+                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0 text-rose-600">
+                  <Trash2 className="h-5 w-5" />
+                </div>
+                <div className="space-y-1 flex-1">
+                  <h4 className="font-display text-lg font-bold text-[var(--foreground)]">
+                    Remove Instagram Reel?
+                  </h4>
+                  <p className="text-xs text-[var(--muted-foreground)] leading-relaxed">
+                    Are you sure you want to remove reel <span className="font-mono font-semibold text-[var(--foreground)]">{reelToDelete.shortcode}</span> ({reelToDelete.title}) from the website showcase?
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-2 border-t border-[var(--border)]/70">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setReelToDelete(null)}
+                  disabled={isDeletingReel}
+                  className="text-xs"
+                >
+                  Cancel
+                </Button>
+                <button
+                  type="button"
+                  onClick={handleConfirmDeleteReel}
+                  disabled={isDeletingReel}
+                  className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-[var(--radius)] flex items-center space-x-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>{isDeletingReel ? "Removing..." : "Remove Reel"}</span>
                 </button>
               </div>
             </div>

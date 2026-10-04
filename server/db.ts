@@ -1,13 +1,14 @@
 import fs from "fs";
 import path from "path";
-import { Project, Testimonial, CredibilityStat, LeadSubmission } from "../src/types";
-import { initialProjects, initialTestimonials, initialStats, initialLeads } from "./seedData";
+import { Project, Testimonial, CredibilityStat, LeadSubmission, InstagramReel } from "../src/types";
+import { initialProjects, initialTestimonials, initialStats, initialLeads, initialReels } from "./seedData";
 
 interface DatabaseSchema {
   projects: Project[];
   testimonials: Testimonial[];
   stats: CredibilityStat[];
   leads: LeadSubmission[];
+  reels: InstagramReel[];
 }
 
 let memoryDb: DatabaseSchema | null = null;
@@ -23,11 +24,13 @@ function getInitialData(): DatabaseSchema {
     testimonials: [...initialTestimonials],
     stats: [...initialStats],
     leads: [...initialLeads],
+    reels: [...initialReels],
   };
 }
 
 function ensureDbExists(): DatabaseSchema {
   if (memoryDb) {
+    if (!memoryDb.reels) memoryDb.reels = [...initialReels];
     return memoryDb;
   }
 
@@ -41,6 +44,7 @@ function ensureDbExists(): DatabaseSchema {
         testimonials: parsed.testimonials || [...initialTestimonials],
         stats: parsed.stats || [...initialStats],
         leads: parsed.leads || [...initialLeads],
+        reels: parsed.reels || [...initialReels],
       };
       return memoryDb;
     }
@@ -58,6 +62,7 @@ function ensureDbExists(): DatabaseSchema {
         testimonials: parsed.testimonials || [...initialTestimonials],
         stats: parsed.stats || [...initialStats],
         leads: parsed.leads || [...initialLeads],
+        reels: parsed.reels || [...initialReels],
       };
       return memoryDb;
     }
@@ -230,6 +235,42 @@ export const db = {
     const len = data.leads.length;
     data.leads = data.leads.filter((l) => l.id !== id);
     if (data.leads.length !== len) {
+      writeDb(data);
+      return true;
+    }
+    return false;
+  },
+
+  getReels: (): InstagramReel[] => {
+    const data = ensureDbExists();
+    return data.reels || [...initialReels];
+  },
+  saveReel: (reel: InstagramReel): InstagramReel => {
+    const data = ensureDbExists();
+    if (!data.reels) data.reels = [...initialReels];
+    const idx = data.reels.findIndex(
+      (r) => r.id === reel.id || r.shortcode === reel.shortcode
+    );
+    if (idx >= 0) {
+      data.reels[idx] = { ...data.reels[idx], ...reel };
+    } else {
+      data.reels.unshift(reel);
+    }
+    writeDb(data);
+    return idx >= 0 ? data.reels[idx] : reel;
+  },
+  setReels: (reels: InstagramReel[]): InstagramReel[] => {
+    const data = ensureDbExists();
+    data.reels = reels;
+    writeDb(data);
+    return data.reels;
+  },
+  deleteReel: (id: string): boolean => {
+    const data = ensureDbExists();
+    if (!data.reels) return false;
+    const len = data.reels.length;
+    data.reels = data.reels.filter((r) => r.id !== id && r.shortcode !== id);
+    if (data.reels.length !== len) {
       writeDb(data);
       return true;
     }

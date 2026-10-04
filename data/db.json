@@ -394,5 +394,111 @@
       "status": "new",
       "createdAt": "2026-09-13T05:32:16.637Z"
     }
+  ],
+  "reels": [
+    {
+      "id": "reel-2",
+      "shortcode": "DcDL66_vzAi",
+      "url": "https://www.instagram.com/reel/DcDL66_vzAi/",
+      "tag": "Turnkey Transformation",
+      "title": "Raw to Refined: Full Interior Makeover",
+      "caption": "Trust the process. 🛠️✨ Save this for your future home inspiration! 📌 Transform your space with us. Complete turnkey fit-outs delivered with architectural rigor in Mumbai.",
+      "likes": "108",
+      "comments": "17",
+      "views": "68.1k",
+      "previewImage": "/uploads/reels/DcDL66_vzAi.jpg"
+    },
+    {
+      "id": "reel-3",
+      "shortcode": "DX0zUshor7-",
+      "url": "https://www.instagram.com/reel/DX0zUshor7-/",
+      "tag": "Modular Kitchen",
+      "title": "Raw Studs to Culinary Sanctuary",
+      "caption": "The beauty is in the journey. 🛠️➡️🍸 We took this space from raw studs and sawdust to a sophisticated culinary sanctuary with 18mm semi-marine ply & 3 tandem drawers.",
+      "likes": "19",
+      "comments": "8",
+      "views": "44.8k",
+      "previewImage": "/uploads/reels/DX0zUshor7-.jpg"
+    },
+    {
+      "id": "reel-4",
+      "shortcode": "DdQbt1Eo57d",
+      "url": "https://www.instagram.com/reel/DdQbt1Eo57d/",
+      "tag": "Master Joinery & Wardrobes",
+      "title": "Precision Carpentry & 18mm Marine Ply",
+      "caption": "Trust the process. 🛠️✨ Behind every seamless wardrobe and floating TV unit is precision carpentry, zero-gap PUR edge banding, and genuine Hettich/Hafele hardware.",
+      "likes": "24",
+      "comments": "8",
+      "views": "38.2k",
+      "previewImage": "/uploads/reels/DdQbt1Eo57d.jpg"
+    },
+    {
+      "id": "reel-5",
+      "shortcode": "Dc5QmjJoav5",
+      "url": "https://www.instagram.com/reel/Dc5QmjJoav5/",
+      "tag": "Ceiling & Living Aesthetics",
+      "title": "Architectural Lighting & Gypsum Ceiling",
+      "caption": "Trust the process. 🛠️✨ Architectural cove false ceiling with warm 3000K recessed lighting, custom fluted panelling, and 2 coats of Asian Paints Royale washable finish.",
+      "likes": "40",
+      "comments": "16",
+      "views": "49.6k",
+      "previewImage": "/uploads/reels/Dc5QmjJoav5.jpg"
+    },
+    {
+      "id": "reel-1791086208929-DacMIXrvQ3F",
+      "shortcode": "DacMIXrvQ3F",
+      "url": "https://www.instagram.com/reel/DacMIXrvQ3F/",
+      "tag": "Mumbai Turnkey Project",
+      "title": "Turnkey Interior Showcase",
+      "caption": "Trust the process. 🛠️✨ Turnkey residential makeover executed with architectural precision in Mumbai.",
+      "likes": "85K",
+      "comments": "84",
+      "views": "25k+",
+      "previewImage": "/uploads/reels/DacMIXrvQ3F.jpg",
+      "timestamp": "2026-10-04T03:56:48.929Z",
+      "isCustom": false
+    },
+    {
+      "id": "reel-1791086209649-DbU1nauIMph",
+      "shortcode": "DbU1nauIMph",
+      "url": "https://www.instagram.com/reel/DbU1nauIMph/",
+      "tag": "Mumbai Turnkey Project",
+      "title": "Turnkey Interior Showcase",
+      "caption": "Trust the process. 🛠️✨ Turnkey residential makeover executed with architectural precision in Mumbai.",
+      "likes": "4,111",
+      "comments": "32",
+      "views": "25k+",
+      "previewImage": "/uploads/reels/DbU1nauIMph.jpg",
+      "timestamp": "2026-10-04T03:56:49.649Z",
+      "isCustom": false
+    },
+    {
+      "id": "reel-1791086211334-DdVlWmnodc0",
+      "shortcode": "DdVlWmnodc0",
+      "url": "https://www.instagram.com/reel/DdVlWmnodc0/",
+      "tag": "Mumbai Turnkey Project",
+      "title": "Turnkey Interior Showcase",
+      "caption": "Trust the process. 🛠️✨ Turnkey residential makeover executed with architectural precision in Mumbai.",
+      "likes": "17",
+      "comments": "7",
+      "views": "25k+",
+      "previewImage": "/uploads/reels/DdVlWmnodc0.jpg",
+      "timestamp": "2026-10-04T03:56:51.334Z",
+      "isCustom": false
+    },
+    {
+      "id": "reel-1791086211939-DYgtHNXKK1d",
+      "shortcode": "DYgtHNXKK1d",
+      "url": "https://www.instagram.com/reel/DYgtHNXKK1d/",
+      "tag": "Mumbai Turnkey Project",
+      "title": "Turnkey Interior Showcase",
+      "caption": "Trust the process. 🛠️✨ Turnkey residential makeover executed with architectural precision in Mumbai.",
+      "likes": "33",
+      "comments": "0",
+      "views": "25k+",
+      "previewImage": "/uploads/reels/DYgtHNXKK1d.jpg",
+      "timestamp": "2026-10-04T03:56:51.939Z",
+      "isCustom": false
+    }
   ]
 }

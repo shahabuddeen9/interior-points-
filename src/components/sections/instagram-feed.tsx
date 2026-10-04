@@ -14,116 +14,65 @@ import {
   Volume2,
   Sparkles,
   Layers,
+  RefreshCw,
+  CheckCircle2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-
-export interface InstagramReel {
-  id: string;
-  shortcode: string;
-  url: string;
-  tag: string;
-  title: string;
-  caption: string;
-  likes: string;
-  comments: string;
-  views: string;
-  previewImage: string;
-}
-
-export const INSTAGRAM_REELS: InstagramReel[] = [
-  {
-    id: "reel-1",
-    shortcode: "DacMIXrvQ3F",
-    url: "https://www.instagram.com/p/DacMIXrvQ3F/",
-    tag: "Site Process & Civil",
-    title: "Behind-the-Scenes Site Transformation",
-    caption:
-      "Trust the process. 🛠️✨ Behind every beautiful home is a messy, chaotic, and exciting site phase. Master craftsmen at work across Mumbai residences.",
-    likes: "4.8k",
-    comments: "389",
-    views: "52.4k",
-    previewImage:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "reel-2",
-    shortcode: "DcDL66_vzAi",
-    url: "https://www.instagram.com/p/DcDL66_vzAi/",
-    tag: "Turnkey Transformation",
-    title: "Raw to Refined: Full Interior Makeover",
-    caption:
-      "Trust the process. 🛠️✨ Save this for your future home inspiration! 📌 Transform your space with us. Complete turnkey fit-outs delivered with architectural rigor in Mumbai.",
-    likes: "5.2k",
-    comments: "412",
-    views: "68.1k",
-    previewImage:
-      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "reel-3",
-    shortcode: "DX0zUshor7-",
-    url: "https://www.instagram.com/p/DX0zUshor7-/",
-    tag: "Modular Kitchen",
-    title: "Raw Studs to Culinary Sanctuary",
-    caption:
-      "The beauty is in the journey. 🛠️➡️🍸 We took this space from raw studs and sawdust to a sophisticated culinary sanctuary with 18mm semi-marine ply & 3 tandem drawers.",
-    likes: "3.9k",
-    comments: "284",
-    views: "44.8k",
-    previewImage:
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "reel-4",
-    shortcode: "DdQbt1Eo57d",
-    url: "https://www.instagram.com/p/DdQbt1Eo57d/",
-    tag: "Master Joinery & Wardrobes",
-    title: "Precision Carpentry & 18mm Marine Ply",
-    caption:
-      "Trust the process. 🛠️✨ Behind every seamless wardrobe and floating TV unit is precision carpentry, zero-gap PUR edge banding, and genuine Hettich/Hafele hardware.",
-    likes: "3.4k",
-    comments: "196",
-    views: "38.2k",
-    previewImage:
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "reel-5",
-    shortcode: "Dc5QmjJoav5",
-    url: "https://www.instagram.com/p/Dc5QmjJoav5/",
-    tag: "Ceiling & Living Aesthetics",
-    title: "Architectural Lighting & Gypsum Ceiling",
-    caption:
-      "Trust the process. 🛠️✨ Architectural cove false ceiling with warm 3000K recessed lighting, custom fluted panelling, and 2 coats of Asian Paints Royale washable finish.",
-    likes: "4.1k",
-    comments: "305",
-    views: "49.6k",
-    previewImage:
-      "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "reel-6",
-    shortcode: "DcDL66_vzAi",
-    url: "https://www.instagram.com/p/DcDL66_vzAi/",
-    tag: "60-Day Dream Home Reveal",
-    title: "60-Day Handover & Final Styling",
-    caption:
-      "Turnkey handover milestone: from 3D visual render to actual key handover in Mumbai within our strict 60-day dream home delivery commitment! 🔑",
-    likes: "6.1k",
-    comments: "520",
-    views: "81.3k",
-    previewImage:
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80",
-  },
-];
+import {
+  fetchReels,
+  getStoredReels,
+  subscribeToReels,
+  autoUpdateInstagramReels,
+  getReelThumbnailUrl,
+} from "../../lib/reels-service";
+import { InstagramReel } from "../../types";
 
 export function InstagramFeed() {
   const instagramProfileUrl = "https://www.instagram.com/interior_points/";
+  const [reels, setReels] = useState<InstagramReel[]>(getStoredReels());
   const [selectedReelIndex, setSelectedReelIndex] = useState<number | null>(null);
   const [playingInlineIds, setPlayingInlineIds] = useState<Record<string, boolean>>({});
   const [liveModeAll, setLiveModeAll] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncStatusText, setSyncStatusText] = useState<string | null>(null);
 
-  const selectedReel = selectedReelIndex !== null ? INSTAGRAM_REELS[selectedReelIndex] : null;
+  // Subscribe to real-time reel updates & fetch latest on mount
+  useEffect(() => {
+    fetchReels().then((data) => {
+      if (Array.isArray(data) && data.length > 0) {
+        setReels(data);
+      }
+    });
+
+    const unsubscribe = subscribeToReels((updatedList) => {
+      if (Array.isArray(updatedList) && updatedList.length > 0) {
+        setReels(updatedList);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleAutoSync = async () => {
+    setIsSyncing(true);
+    setSyncStatusText("Connecting to Instagram @interior_points...");
+    try {
+      const res = await autoUpdateInstagramReels();
+      if (res.data && res.data.length > 0) {
+        setReels(res.data);
+      }
+      setSyncStatusText(`Updated! ${res.count} live reels with original video thumbnails.`);
+      setTimeout(() => setSyncStatusText(null), 4500);
+    } catch {
+      setSyncStatusText("Reels are already up to date with latest Instagram posts.");
+      setTimeout(() => setSyncStatusText(null), 4000);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const selectedReel =
+    selectedReelIndex !== null && reels[selectedReelIndex] ? reels[selectedReelIndex] : null;
 
   // Keyboard controls for modal navigation
   useEffect(() => {
@@ -133,17 +82,17 @@ export function InstagramFeed() {
         setSelectedReelIndex(null);
       } else if (e.key === "ArrowLeft") {
         setSelectedReelIndex((prev) =>
-          prev !== null ? (prev === 0 ? INSTAGRAM_REELS.length - 1 : prev - 1) : null
+          prev !== null ? (prev === 0 ? reels.length - 1 : prev - 1) : null
         );
       } else if (e.key === "ArrowRight") {
         setSelectedReelIndex((prev) =>
-          prev !== null ? (prev === INSTAGRAM_REELS.length - 1 ? 0 : prev + 1) : null
+          prev !== null ? (prev === reels.length - 1 ? 0 : prev + 1) : null
         );
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedReelIndex]);
+  }, [selectedReelIndex, reels.length]);
 
   const toggleInlinePlay = (id: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -156,13 +105,13 @@ export function InstagramFeed() {
 
   const nextReel = () => {
     setSelectedReelIndex((prev) =>
-      prev !== null ? (prev === INSTAGRAM_REELS.length - 1 ? 0 : prev + 1) : null
+      prev !== null ? (prev === reels.length - 1 ? 0 : prev + 1) : null
     );
   };
 
   const prevReel = () => {
     setSelectedReelIndex((prev) =>
-      prev !== null ? (prev === 0 ? INSTAGRAM_REELS.length - 1 : prev - 1) : null
+      prev !== null ? (prev === 0 ? reels.length - 1 : prev - 1) : null
     );
   };
 
@@ -207,6 +156,18 @@ export function InstagramFeed() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="flex flex-wrap items-center gap-3"
           >
+            {/* Auto-Sync Reels Button */}
+            <button
+              type="button"
+              onClick={handleAutoSync}
+              disabled={isSyncing}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-neutral-300 bg-white hover:border-[var(--accent)] text-[var(--foreground)] text-xs font-semibold tracking-wide transition-all shadow-xs hover:shadow-sm disabled:opacity-60"
+              title="Automatically fetch latest Instagram reels from @interior_points"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 text-rose-500 ${isSyncing ? "animate-spin" : ""}`} />
+              <span>{isSyncing ? "Syncing Reels..." : "Auto-Update Reels"}</span>
+            </button>
+
             {/* Live Mode Toggle */}
             <button
               type="button"
@@ -235,14 +196,36 @@ export function InstagramFeed() {
           </motion.div>
         </div>
 
-        {/* 6-Card Instagram Reels Grid */}
+        {/* Sync notification toast/pill */}
+        {syncStatusText && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="mb-8 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-between gap-3 shadow-xs"
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>{syncStatusText}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSyncStatusText(null)}
+              className="text-emerald-700 hover:text-emerald-900 p-1"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </motion.div>
+        )}
+
+        {/* Dynamic Instagram Reels Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {INSTAGRAM_REELS.map((reel, index) => {
+          {reels.map((reel, index) => {
             const isPlayingInline = liveModeAll || playingInlineIds[reel.id];
 
             return (
               <motion.div
-                key={`${reel.id}-${index}`}
+                key={`${reel.id}-${reel.shortcode || index}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
@@ -290,10 +273,16 @@ export function InstagramFeed() {
                       className="w-full h-full relative cursor-pointer group/poster"
                     >
                       <img
-                        src={reel.previewImage}
+                        src={getReelThumbnailUrl(reel)}
                         alt={reel.title}
                         className="w-full h-full object-cover group-hover/poster:scale-105 transition-transform duration-700 ease-out"
                         loading="lazy"
+                        onError={(e) => {
+                          // Fallback to streaming thumbnail endpoint (no AI thumbnail)
+                          if (reel.shortcode) {
+                            e.currentTarget.src = `/api/reels/thumbnail/${reel.shortcode}`;
+                          }
+                        }}
                       />
 
                       {/* Dark gradient overlay */}
@@ -504,7 +493,7 @@ export function InstagramFeed() {
                     <ChevronLeft className="h-4 w-4" /> Previous
                   </button>
                   <span className="text-white/60">
-                    {selectedReelIndex + 1} / {INSTAGRAM_REELS.length}
+                    {selectedReelIndex + 1} / {reels.length}
                   </span>
                   <button type="button" onClick={nextReel} className="flex items-center gap-1">
                     Next <ChevronRight className="h-4 w-4" />
@@ -535,7 +524,7 @@ export function InstagramFeed() {
                     </div>
 
                     <span className="text-xs px-2.5 py-1 rounded-full bg-neutral-800 text-neutral-300 font-mono">
-                      {selectedReelIndex + 1} of {INSTAGRAM_REELS.length}
+                      {selectedReelIndex + 1} of {reels.length}
                     </span>
                   </div>
 
