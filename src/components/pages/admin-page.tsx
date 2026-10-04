@@ -647,8 +647,9 @@ export function AdminPage() {
                       <tr className="bg-[var(--secondary)]/50 border-b border-[var(--border)] text-[var(--muted-foreground)] uppercase tracking-wider font-semibold">
                         <th className="p-3.5">Client & Contact</th>
                         <th className="p-3.5">City & BHK</th>
-                        <th className="p-3.5">Message / Requirements</th>
-                        <th className="p-3.5">Date & Time</th>
+                        <th className="p-3.5">Scope & Estimate</th>
+                        <th className="p-3.5">Timeline & Notes</th>
+                        <th className="p-3.5">Date</th>
                         <th className="p-3.5">Status</th>
                         <th className="p-3.5 text-right">Actions</th>
                       </tr>
@@ -667,8 +668,36 @@ export function AdminPage() {
                             </span>
                             <div className="text-[var(--muted-foreground)] mt-1">{lead.city}</div>
                           </td>
+                          <td className="p-3.5 max-w-xs">
+                            {lead.estimatedPrice ? (
+                              <div className="font-mono font-bold text-emerald-700 text-xs mb-1">
+                                {lead.estimatedPrice}
+                              </div>
+                            ) : null}
+                            {Array.isArray(lead.selectedWorks) && lead.selectedWorks.length > 0 ? (
+                              <div className="flex flex-wrap gap-1">
+                                {lead.selectedWorks.map((w, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="px-1.5 py-0.5 rounded-xs bg-neutral-100 text-neutral-800 text-[10px]"
+                                  >
+                                    {w}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-neutral-400 text-[11px]">General Turnkey Inquiry</span>
+                            )}
+                          </td>
                           <td className="p-3.5 max-w-xs text-[var(--muted-foreground)]">
-                            {lead.message || "No custom note provided."}
+                            {lead.possessionTimeline && (
+                              <div className="text-[11px] font-medium text-neutral-700 mb-1">
+                                📅 {lead.possessionTimeline}
+                              </div>
+                            )}
+                            <div className="text-[11px] line-clamp-2">
+                              {lead.message || "No custom note provided."}
+                            </div>
                           </td>
                           <td className="p-3.5 text-[var(--muted-foreground)] whitespace-nowrap">
                             {new Date(lead.createdAt).toLocaleDateString()} <br />
@@ -695,13 +724,26 @@ export function AdminPage() {
                             </select>
                           </td>
                           <td className="p-3.5 text-right whitespace-nowrap">
-                            <button
-                              onClick={() => handleDeleteLead(lead)}
-                              className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-xs transition-colors"
-                              title="Remove lead"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
+                            <div className="flex items-center justify-end gap-1">
+                              <a
+                                href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                                  `Hi ${lead.name}, thank you for requesting an interior estimate for your ${lead.bhkType} with Interior Points. We have reviewed your selected scope (${lead.estimatedPrice || "Turnkey"}). Would you like to review 3D layout options?`
+                                )}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-xs transition-colors"
+                                title="Chat with customer on WhatsApp"
+                              >
+                                <MessageCircle className="h-4 w-4" />
+                              </a>
+                              <button
+                                onClick={() => handleDeleteLead(lead)}
+                                className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-xs transition-colors"
+                                title="Remove lead"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

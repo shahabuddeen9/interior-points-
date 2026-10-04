@@ -21,10 +21,10 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
     { name: "About", href: path === "/" ? "#about" : "/#about" },
     { name: "Projects", href: "/projects" },
     { name: "Reels", href: path === "/" ? "#instagram-reels" : "/#instagram-reels" },
+    { name: "Cost Estimator", href: "/book-consultation", isBadge: true },
     { name: "Services", href: path === "/" ? "#services" : "/#services" },
     { name: "Why Us", href: path === "/" ? "#why-us" : "/#why-us" },
     { name: "Pricing", href: path === "/" ? "#pricing" : "/#pricing" },
-    { name: "Testimonials", href: path === "/" ? "#testimonials" : "/#testimonials" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -107,6 +107,11 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
               >
                 {link.name === "Reels" && (
                   <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
+                )}
+                {link.name === "Cost Estimator" && (
+                  <span className="px-1.5 py-0.5 rounded-full bg-rose-600 text-white font-bold text-[9px] uppercase tracking-wide">
+                    Estimator
+                  </span>
                 )}
                 <span>{link.name}</span>
               </Link>

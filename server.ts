@@ -819,20 +819,42 @@ async function startServer() {
     city?: string;
     bhkType?: string;
     message?: string;
+    selectedWorks?: string[];
+    estimatedPrice?: string;
+    possessionTimeline?: string;
   }) {
-    const parts = [
-      `*New Free Consultation Query — Interior Points*`,
-      `• *Full Name:* ${data.name || "Customer"}`,
-      `• *Phone Number:* ${data.phone || "Not provided"}`,
-      `• *Email Address:* ${data.email || "Not provided"}`,
-      `• *City / Location:* ${data.city || "Mumbai"}`,
-      `• *Home Configuration:* ${data.bhkType || "Residential"}`,
+    const lines = [
+      `*🏠 New Free Consultation & Estimate — Interior Points*`,
+      `══════════════════════════════`,
+      `👤 *Customer Name:* ${data.name || "Customer"}`,
+      `📱 *Phone Number:* ${data.phone || "Not provided"}`,
+      `📧 *Email Address:* ${data.email || "Not provided"}`,
+      `📍 *Location / Society:* ${data.city || "Mumbai"}`,
+      `📐 *Floor Plan / BHK:* ${data.bhkType || "Residential"}`,
     ];
-    if (data.message && data.message.trim()) {
-      parts.push(`• *Apartment / Requirements:* ${data.message.trim()}`);
+
+    if (data.possessionTimeline) {
+      lines.push(`📅 *Possession Timeline:* ${data.possessionTimeline}`);
     }
-    parts.push(`\n_Forwarded automatically from Interior Points Web Studio_`);
-    const text = parts.join("\n");
+
+    if (data.estimatedPrice) {
+      lines.push(`💰 *Estimated Investment:* ${data.estimatedPrice}`);
+    }
+
+    if (Array.isArray(data.selectedWorks) && data.selectedWorks.length > 0) {
+      lines.push(`\n📋 *Selected Scope of Work (${data.selectedWorks.length} spaces):*`);
+      data.selectedWorks.forEach((item, i) => {
+        lines.push(`  ${i + 1}. ✅ ${item}`);
+      });
+    }
+
+    if (data.message && data.message.trim()) {
+      lines.push(`\n💬 *Customer Notes:* ${data.message.trim()}`);
+    }
+
+    lines.push(`══════════════════════════════`);
+    lines.push(`_Sent via Interior Points Free Consultation & Cost Calculator Desk_`);
+    const text = lines.join("\n");
     return `https://wa.me/${WHATSAPP_CONSULTATION_PHONE}?text=${encodeURIComponent(text)}`;
   }
 
@@ -840,7 +862,17 @@ async function startServer() {
   app.post("/api/leads", (req, res) => {
     try {
       const body = req.body || {};
-      const { name, phone, email, city, bhkType, message } = body;
+      const {
+        name,
+        phone,
+        email,
+        city,
+        bhkType,
+        message,
+        selectedWorks,
+        estimatedPrice,
+        possessionTimeline,
+      } = body;
 
       if (!name || typeof name !== "string" || name.trim().length === 0) {
         return res.status(400).json({ success: false, error: "Please enter your name" });
@@ -855,6 +887,9 @@ async function startServer() {
       const cleanCity = typeof city === "string" && city.trim() ? city.trim() : "Mumbai";
       const cleanBhk = typeof bhkType === "string" && bhkType.trim() ? bhkType.trim() : "2 BHK";
       const cleanMessage = typeof message === "string" && message.trim() ? message.trim() : "";
+      const cleanSelectedWorks = Array.isArray(selectedWorks) ? selectedWorks : undefined;
+      const cleanEstimatedPrice = typeof estimatedPrice === "string" ? estimatedPrice.trim() : undefined;
+      const cleanTimeline = typeof possessionTimeline === "string" ? possessionTimeline.trim() : undefined;
 
       let lead;
       try {
@@ -865,6 +900,9 @@ async function startServer() {
           city: cleanCity,
           bhkType: cleanBhk,
           message: cleanMessage,
+          selectedWorks: cleanSelectedWorks,
+          estimatedPrice: cleanEstimatedPrice,
+          possessionTimeline: cleanTimeline,
         });
       } catch (dbErr) {
         console.warn("Could not save lead to disk store, using fallback record:", dbErr);
@@ -876,6 +914,9 @@ async function startServer() {
           city: cleanCity,
           bhkType: cleanBhk,
           message: cleanMessage,
+          selectedWorks: cleanSelectedWorks,
+          estimatedPrice: cleanEstimatedPrice,
+          possessionTimeline: cleanTimeline,
           status: "new" as const,
           createdAt: new Date().toISOString(),
         };
@@ -888,6 +929,9 @@ async function startServer() {
         city: lead.city,
         bhkType: lead.bhkType,
         message: lead.message,
+        selectedWorks: lead.selectedWorks,
+        estimatedPrice: lead.estimatedPrice,
+        possessionTimeline: lead.possessionTimeline,
       });
 
       return res.status(201).json({

@@ -50,6 +50,9 @@ export interface LeadSubmission {
   city: string;
   bhkType: string;
   message?: string;
+  selectedWorks?: string[];
+  estimatedPrice?: string;
+  possessionTimeline?: string;
   status: "new" | "contacted" | "scheduled" | "closed";
   createdAt: string;
 }

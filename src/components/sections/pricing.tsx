@@ -4,7 +4,11 @@ import { pricingPlans } from "../../../server/seedData";
 import { Button } from "../ui/button";
 import { motion, AnimatePresence } from "motion/react";
 
-export function Pricing({ onOpenConsultation }: { onOpenConsultation: () => void }) {
+export function Pricing({
+  onOpenConsultation,
+}: {
+  onOpenConsultation: (bhk?: "1 BHK" | "2 BHK" | "3 BHK") => void;
+}) {
   const [selectedBhk, setSelectedBhk] = useState<"1 BHK" | "2 BHK" | "3 BHK">("2 BHK");
 
   return (
@@ -156,9 +160,9 @@ export function Pricing({ onOpenConsultation }: { onOpenConsultation: () => void
                     variant={isFeatured ? "primary" : "outline"}
                     size="md"
                     className="w-full text-xs font-semibold uppercase tracking-wider transition-colors group"
-                    onClick={onOpenConsultation}
+                    onClick={() => onOpenConsultation(selectedBhk)}
                   >
-                    <span>Request {plan.name} Spec</span>
+                    <span>Request {plan.name} Spec ({selectedBhk})</span>
                     <ArrowRight className="h-3.5 w-3.5 ml-1.5 inline group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </div>
@@ -167,8 +171,36 @@ export function Pricing({ onOpenConsultation }: { onOpenConsultation: () => void
           })}
         </div>
 
+        {/* Interactive Custom Room Estimator Callout */}
+        <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-neutral-900 text-white border border-neutral-800 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1.5 text-center md:text-left">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-[11px] font-bold uppercase tracking-wider">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Custom Room &amp; Space Estimator</span>
+            </div>
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-white">
+              Want to select specific rooms and see live prices?
+            </h3>
+            <p className="text-xs sm:text-sm text-neutral-400 max-w-xl">
+              Choose your floor plan ({selectedBhk}), select only the works you need (Modular Kitchen, Wardrobes, False Ceiling, Painting, Bathrooms), and forward your itemized estimate directly to WhatsApp (+91 7903038750).
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full md:w-auto">
+            <Button
+              variant="gold"
+              size="lg"
+              onClick={() => onOpenConsultation(selectedBhk)}
+              className="w-full sm:w-auto text-xs font-bold uppercase tracking-wider shadow-lg bg-emerald-600 hover:bg-emerald-500 text-white"
+            >
+              <span>Calculate My {selectedBhk} on WhatsApp</span>
+              <ArrowRight className="h-4 w-4 ml-1.5" />
+            </Button>
+          </div>
+        </div>
+
         {/* Note on custom BOQs */}
-        <div className="mt-12 text-center text-xs text-[var(--muted-foreground)] font-body max-w-2xl mx-auto">
+        <div className="mt-8 text-center text-xs text-[var(--muted-foreground)] font-body max-w-2xl mx-auto">
           * Figures are indicative based on standard room sizes. Every Interior Points quote is backed by a locked,
           non-escalating itemized agreement prior to token advance.
         </div>

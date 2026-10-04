@@ -4,7 +4,11 @@ import { Button } from "../ui/button";
 import { useRouter } from "../../lib/router";
 import { motion } from "motion/react";
 
-export function Hero({ onOpenConsultation }: { onOpenConsultation: () => void }) {
+export function Hero({
+  onOpenConsultation,
+}: {
+  onOpenConsultation: (bhk?: "1 BHK" | "2 BHK" | "3 BHK" | "4 BHK / Villa") => void;
+}) {
   const { navigate } = useRouter();
 
   return (
@@ -69,7 +73,7 @@ export function Hero({ onOpenConsultation }: { onOpenConsultation: () => void })
               <Button
                 variant="primary"
                 size="lg"
-                onClick={onOpenConsultation}
+                onClick={() => onOpenConsultation()}
                 className="group flex items-center justify-center gap-2.5 text-xs font-semibold uppercase tracking-wider shadow-sm hover:shadow-md transition-all"
               >
                 <span>Book a Free Consultation</span>
@@ -83,6 +87,52 @@ export function Hero({ onOpenConsultation }: { onOpenConsultation: () => void })
               >
                 Explore Selected Residences
               </Button>
+            </motion.div>
+
+            {/* 1/2/3 BHK Quick Cost Estimator Launcher */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.45 }}
+              className="p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-[var(--border)] shadow-xs space-y-3"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
+                <span className="font-bold text-[var(--foreground)] uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-rose-600" />
+                  Instant Interior Cost Estimator
+                </span>
+                <span className="text-[11px] text-[var(--muted-foreground)]">
+                  Pick your flat size to select works &amp; forward quote to WhatsApp:
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {[
+                  { bhk: "1 BHK", area: "450–600 sq.ft", start: "From ₹3.8L" },
+                  { bhk: "2 BHK", area: "650–950 sq.ft", start: "From ₹6.4L", popular: true },
+                  { bhk: "3 BHK", area: "1000–1400 sq.ft", start: "From ₹9.2L" },
+                  { bhk: "4 BHK / Villa", area: "1500+ sq.ft", start: "Bespoke Villa" },
+                ].map((item) => (
+                  <button
+                    key={item.bhk}
+                    type="button"
+                    onClick={() => onOpenConsultation(item.bhk as any)}
+                    className={`relative p-2.5 sm:p-3 rounded-xl border text-left transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
+                      item.popular
+                        ? "border-rose-500 bg-rose-50/50 shadow-2xs"
+                        : "border-[var(--border)] bg-neutral-50/70 hover:bg-neutral-100 hover:border-neutral-300"
+                    }`}
+                  >
+                    {item.popular && (
+                      <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[8px] font-bold uppercase tracking-wider">
+                        Most Popular
+                      </span>
+                    )}
+                    <div className="text-xs sm:text-sm font-bold text-[var(--foreground)]">{item.bhk}</div>
+                    <div className="text-[10px] text-[var(--muted-foreground)]">{item.area}</div>
+                    <div className="text-[11px] font-semibold text-emerald-700 mt-1">{item.start}</div>
+                  </button>
+                ))}
+              </div>
             </motion.div>
 
             {/* Honest Credibility Bar with Fine Hairlines & Motion */}
