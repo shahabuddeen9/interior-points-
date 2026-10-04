@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { Project, Testimonial, CredibilityStat, LeadSubmission, InstagramReel } from "../src/types";
-import { initialProjects, initialTestimonials, initialStats, initialLeads, initialReels } from "./seedData";
+import { Project, Testimonial, CredibilityStat, LeadSubmission, InstagramReel, EstimatorSpace } from "../src/types";
+import { initialProjects, initialTestimonials, initialStats, initialLeads, initialReels, initialEstimatorSpaces } from "./seedData";
 
 interface DatabaseSchema {
   projects: Project[];
@@ -9,6 +9,7 @@ interface DatabaseSchema {
   stats: CredibilityStat[];
   leads: LeadSubmission[];
   reels: InstagramReel[];
+  estimatorSpaces: EstimatorSpace[];
 }
 
 let memoryDb: DatabaseSchema | null = null;
@@ -25,12 +26,14 @@ function getInitialData(): DatabaseSchema {
     stats: [...initialStats],
     leads: [...initialLeads],
     reels: [...initialReels],
+    estimatorSpaces: [...initialEstimatorSpaces],
   };
 }
 
 function ensureDbExists(): DatabaseSchema {
   if (memoryDb) {
     if (!memoryDb.reels) memoryDb.reels = [...initialReels];
+    if (!memoryDb.estimatorSpaces) memoryDb.estimatorSpaces = [...initialEstimatorSpaces];
     return memoryDb;
   }
 
@@ -45,6 +48,7 @@ function ensureDbExists(): DatabaseSchema {
         stats: parsed.stats || [...initialStats],
         leads: parsed.leads || [...initialLeads],
         reels: parsed.reels || [...initialReels],
+        estimatorSpaces: parsed.estimatorSpaces || [...initialEstimatorSpaces],
       };
       return memoryDb;
     }
@@ -63,6 +67,7 @@ function ensureDbExists(): DatabaseSchema {
         stats: parsed.stats || [...initialStats],
         leads: parsed.leads || [...initialLeads],
         reels: parsed.reels || [...initialReels],
+        estimatorSpaces: parsed.estimatorSpaces || [...initialEstimatorSpaces],
       };
       return memoryDb;
     }
@@ -275,5 +280,69 @@ export const db = {
       return true;
     }
     return false;
+  },
+
+  getEstimatorSpaces: (includeDisabled = false): EstimatorSpace[] => {
+    const data = ensureDbExists();
+    const list = data.estimatorSpaces || [...initialEstimatorSpaces];
+    const filtered = includeDisabled ? list : list.filter((s) => s.enabled !== false);
+    return filtered.sort((a, b) => (a.order || 0) - (b.order || 0));
+  },
+
+  saveEstimatorSpace: (space: EstimatorSpace): EstimatorSpace => {
+    const data = ensureDbExists();
+    if (!data.estimatorSpaces) data.estimatorSpaces = [...initialEstimatorSpaces];
+
+    const cleanId = (space.id || "").trim() || `space-${Date.now()}`;
+    const formattedSpace: EstimatorSpace = {
+      ...space,
+      id: cleanId,
+      enabled: space.enabled !== false,
+      specs: Array.isArray(space.specs) ? space.specs : [],
+    };
+
+    const idx = data.estimatorSpaces.findIndex((s) => s.id === cleanId);
+    if (idx >= 0) {
+      data.estimatorSpaces[idx] = {
+        ...data.estimatorSpaces[idx],
+        ...formattedSpace,
+      };
+      writeDb(data);
+      return data.estimatorSpaces[idx];
+    } else {
+      if (!formattedSpace.order) {
+        formattedSpace.order = data.estimatorSpaces.length + 1;
+      }
+      data.estimatorSpaces.push(formattedSpace);
+      writeDb(data);
+      return formattedSpace;
+    }
+  },
+
+  deleteEstimatorSpace: (id: string): boolean => {
+    const data = ensureDbExists();
+    if (!data.estimatorSpaces) return false;
+    const cleanId = (id || "").trim();
+    const len = data.estimatorSpaces.length;
+    data.estimatorSpaces = data.estimatorSpaces.filter((s) => s.id !== cleanId);
+    if (data.estimatorSpaces.length !== len) {
+      writeDb(data);
+      return true;
+    }
+    return false;
+  },
+
+  setEstimatorSpaces: (spaces: EstimatorSpace[]): EstimatorSpace[] => {
+    const data = ensureDbExists();
+    data.estimatorSpaces = spaces;
+    writeDb(data);
+    return data.estimatorSpaces;
+  },
+
+  resetEstimatorSpaces: (): EstimatorSpace[] => {
+    const data = ensureDbExists();
+    data.estimatorSpaces = JSON.parse(JSON.stringify(initialEstimatorSpaces));
+    writeDb(data);
+    return data.estimatorSpaces;
   },
 };

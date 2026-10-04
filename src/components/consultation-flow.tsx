@@ -20,6 +20,7 @@ import {
   MessageCircle,
   Building2,
   Home,
+  Briefcase,
   BadgePercent,
   Calculator,
   Loader2,
@@ -32,6 +33,23 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "./ui/button";
 import { Input, Textarea } from "./ui/input";
+import { fetchEstimatorSpaces } from "../lib/estimator-service";
+
+export const ICON_MAP: Record<string, React.ElementType> = {
+  ChefHat,
+  DoorOpen,
+  Tv,
+  SunMedium,
+  Paintbrush,
+  Bath,
+  Armchair,
+  Zap,
+  Layers,
+  Home,
+  Briefcase,
+  Building2,
+  Sparkles,
+};
 
 export type FloorPlanType = "1 BHK" | "2 BHK" | "3 BHK" | "4 BHK / Villa";
 
@@ -91,7 +109,7 @@ export const FLOOR_PLANS: {
   },
 ];
 
-export const SCOPE_WORKS: ScopeWorkItem[] = [
+export const DEFAULT_SCOPE_WORKS: ScopeWorkItem[] = [
   {
     id: "kitchen",
     name: "Modular Kitchen",
@@ -267,6 +285,8 @@ export const SCOPE_WORKS: ScopeWorkItem[] = [
   },
 ];
 
+export const SCOPE_WORKS = DEFAULT_SCOPE_WORKS;
+
 interface ConsultationFlowProps {
   onSuccessClose?: () => void;
   initialBhk?: FloorPlanType;
@@ -280,6 +300,46 @@ export function ConsultationFlow({
 }: ConsultationFlowProps) {
   // Step 1: Floor Plan | Step 2: Scope & Live Pricing | Step 3: Contact Details & WhatsApp Send | Step 4: Success
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+
+  // Dynamic Estimator Spaces (loaded from server / admin portal)
+  const [spaces, setSpaces] = useState<ScopeWorkItem[]>(DEFAULT_SCOPE_WORKS);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadSpaces = () => {
+      fetchEstimatorSpaces(false)
+        .then((data) => {
+          if (active && Array.isArray(data) && data.length > 0) {
+            const mapped: ScopeWorkItem[] = data.map((item) => ({
+              id: item.id,
+              name: item.name,
+              category: item.category,
+              tagline: item.tagline,
+              specs: item.specs || [],
+              popular: item.popular,
+              icon: ICON_MAP[item.iconName || ""] || Sparkles,
+              pricing: item.pricing,
+            }));
+            setSpaces(mapped);
+            setSelectedWorkIds((prev) => prev.filter((id) => mapped.some((m) => m.id === id)));
+          }
+        })
+        .catch((err) => console.warn("Using fallback default spaces:", err));
+    };
+
+    loadSpaces();
+
+    const handleUpdate = () => {
+      loadSpaces();
+    };
+
+    window.addEventListener("estimator-spaces-updated", handleUpdate);
+    return () => {
+      active = false;
+      window.removeEventListener("estimator-spaces-updated", handleUpdate);
+    };
+  }, []);
 
   // Selections
   const [selectedBhk, setSelectedBhk] = useState<FloorPlanType>(initialBhk);
@@ -317,15 +377,15 @@ export function ConsultationFlow({
     area: string;
   } | null>(null);
 
-  // Dynamic Price Calculator
+  // Dynamic Price Calculator based on admin-configured market prices
   const calculation = useMemo(() => {
     let minSum = 0;
     let maxSum = 0;
     const items: { name: string; priceText: string; min: number; max: number }[] = [];
 
-    SCOPE_WORKS.forEach((w) => {
+    spaces.forEach((w) => {
       if (selectedWorkIds.includes(w.id)) {
-        const p = w.pricing[selectedBhk];
+        const p = w.pricing?.[selectedBhk] || { min: 0, max: 0, label: "Price on request" };
         minSum += p.min;
         maxSum += p.max;
         items.push({
@@ -337,9 +397,9 @@ export function ConsultationFlow({
       }
     });
 
-    // Combo Bundle Discount: 12% if >= 4 works, 15% if all 7 works selected
+    // Combo Bundle Discount: 12% if >= 4 works, 15% if all works selected
     const isTurnkeyCombo = selectedWorkIds.length >= 4;
-    const discountRate = selectedWorkIds.length === SCOPE_WORKS.length ? 0.15 : isTurnkeyCombo ? 0.12 : 0;
+    const discountRate = selectedWorkIds.length === spaces.length ? 0.15 : isTurnkeyCombo ? 0.12 : 0;
 
     const discountAmountMin = Math.round(minSum * discountRate);
     const discountAmountMax = Math.round(maxSum * discountRate);
@@ -368,7 +428,7 @@ export function ConsultationFlow({
       formattedRawRange: `${formatInLakhs(minSum)} – ${formatInLakhs(maxSum)}`,
       formattedSavings: formatInLakhs(discountAmountMin),
     };
-  }, [selectedBhk, selectedWorkIds]);
+  }, [selectedBhk, selectedWorkIds, spaces]);
 
   const toggleWork = (id: string) => {
     setSelectedWorkIds((prev) =>
@@ -377,7 +437,7 @@ export function ConsultationFlow({
   };
 
   const selectAllWorks = () => {
-    setSelectedWorkIds(SCOPE_WORKS.map((w) => w.id));
+    setSelectedWorkIds(spaces.map((w) => w.id));
   };
 
   const clearWorks = () => {
@@ -677,7 +737,7 @@ export function ConsultationFlow({
                 onClick={selectAllWorks}
                 className="px-2.5 py-1.5 rounded-lg bg-white border border-[var(--border)] hover:border-neutral-400 font-semibold text-[var(--foreground)] shadow-2xs transition-colors"
               >
-                Select All ({SCOPE_WORKS.length} Spaces)
+                Select All ({spaces.length} Spaces)
               </button>
               <button
                 type="button"
@@ -698,10 +758,10 @@ export function ConsultationFlow({
 
           {/* Cards for each Work category */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {SCOPE_WORKS.map((work) => {
+            {spaces.map((work) => {
               const isSelected = selectedWorkIds.includes(work.id);
-              const priceInfo = work.pricing[selectedBhk];
-              const IconComp = work.icon;
+              const priceInfo = work.pricing?.[selectedBhk] || { min: 0, max: 0, label: "Price on request" };
+              const IconComp = work.icon || Sparkles;
 
               return (
                 <div

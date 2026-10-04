@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ConsultationLead, Project, Testimonial, CredibilityStat, BHKType, InstagramReel } from "../../types";
+import { ConsultationLead, Project, Testimonial, CredibilityStat, BHKType, InstagramReel, EstimatorSpace, FloorPlanType } from "../../types";
 import { Link } from "../../lib/router";
 import {
   Users,
@@ -28,10 +28,26 @@ import {
   Play,
   Heart,
   MessageCircle,
+  Calculator,
+  Sliders,
+  DollarSign,
+  ChefHat,
+  DoorOpen,
+  Tv,
+  SunMedium,
+  Paintbrush,
+  Bath,
+  Armchair,
+  Zap,
+  Building2,
+  Home,
+  CheckCircle2,
+  Copy,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input, Textarea } from "../ui/input";
 import { ProjectEditorModal } from "../admin/project-editor-modal";
+import { EstimatorSpaceModal } from "../admin/estimator-space-modal";
 import { getStoredProjects, fetchProjects, deleteProject, subscribeToProjects } from "../../lib/project-service";
 import {
   fetchReels,
@@ -42,6 +58,29 @@ import {
   autoUpdateInstagramReels,
   getReelThumbnailUrl,
 } from "../../lib/reels-service";
+import {
+  fetchEstimatorSpaces,
+  saveEstimatorSpace,
+  deleteEstimatorSpace,
+  resetEstimatorSpaces,
+  formatPriceInLakhs,
+} from "../../lib/estimator-service";
+
+const ESTIMATOR_ICON_MAP: Record<string, React.ElementType> = {
+  ChefHat,
+  DoorOpen,
+  Tv,
+  SunMedium,
+  Paintbrush,
+  Bath,
+  Armchair,
+  Zap,
+  Layers,
+  Building2,
+  Home,
+  Briefcase,
+  Sparkles,
+};
 
 export function AdminPage() {
   const [passcode, setPasscode] = useState("");
@@ -57,7 +96,18 @@ export function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [authHint, setAuthHint] = useState("");
 
-  const [activeTab, setActiveTab] = useState<"leads" | "projects" | "stats" | "testimonials" | "reels">("leads");
+  const [activeTab, setActiveTab] = useState<"leads" | "projects" | "stats" | "testimonials" | "reels" | "estimator">("leads");
+
+  // Estimator Spaces state
+  const [estimatorSpaces, setEstimatorSpaces] = useState<EstimatorSpace[]>([]);
+  const [estimatorLoading, setEstimatorLoading] = useState(false);
+  const [estimatorNotice, setEstimatorNotice] = useState<string | null>(null);
+  const [estimatorSearchQuery, setEstimatorSearchQuery] = useState("");
+  const [isEditingSpaceModal, setIsEditingSpaceModal] = useState(false);
+  const [spaceToEdit, setSpaceToEdit] = useState<EstimatorSpace | null>(null);
+  const [spaceToDelete, setSpaceToDelete] = useState<EstimatorSpace | null>(null);
+  const [isDeletingSpace, setIsDeletingSpace] = useState(false);
+  const [isResettingSpaces, setIsResettingSpaces] = useState(false);
 
   // Reels state
   const [reels, setReels] = useState<InstagramReel[]>(() => getStoredReels());
@@ -163,6 +213,7 @@ export function AdminPage() {
     loadStats();
     loadTestimonials();
     loadReels();
+    loadEstimatorSpaces();
 
     const unsubProjects = subscribeToProjects((updatedList) => {
       setProjects(updatedList);
@@ -175,6 +226,108 @@ export function AdminPage() {
       unsubReels();
     };
   }, [isAuthenticated]);
+
+  const loadEstimatorSpaces = async () => {
+    setEstimatorLoading(true);
+    try {
+      const data = await fetchEstimatorSpaces(true);
+      if (Array.isArray(data)) {
+        setEstimatorSpaces(data);
+      }
+    } catch (err) {
+      console.error("Failed to load estimator spaces:", err);
+    } finally {
+      setEstimatorLoading(false);
+    }
+  };
+
+  const handleOpenAddSpace = () => {
+    setSpaceToEdit(null);
+    setIsEditingSpaceModal(true);
+  };
+
+  const handleOpenEditSpace = (space: EstimatorSpace) => {
+    setSpaceToEdit(space);
+    setIsEditingSpaceModal(true);
+  };
+
+  const handleSaveSpace = async (space: EstimatorSpace) => {
+    const saved = await saveEstimatorSpace(space);
+    setEstimatorSpaces((prev) => {
+      const idx = prev.findIndex((s) => s.id === saved.id);
+      if (idx >= 0) {
+        const next = [...prev];
+        next[idx] = saved;
+        return next;
+      }
+      return [...prev, saved];
+    });
+    setIsEditingSpaceModal(false);
+    setSpaceToEdit(null);
+    setEstimatorNotice(`Space "${saved.name}" and market prices saved successfully!`);
+    setTimeout(() => setEstimatorNotice(null), 4000);
+  };
+
+  const handleToggleSpaceEnabled = async (space: EstimatorSpace) => {
+    try {
+      const updated: EstimatorSpace = { ...space, enabled: space.enabled === false };
+      const saved = await saveEstimatorSpace(updated);
+      setEstimatorSpaces((prev) => prev.map((s) => (s.id === saved.id ? saved : s)));
+      setEstimatorNotice(
+        `"${space.name}" is now ${saved.enabled ? "ACTIVE in" : "HIDDEN from"} the Cost Estimator.`
+      );
+      setTimeout(() => setEstimatorNotice(null), 3000);
+    } catch (err: any) {
+      alert("Failed to toggle status: " + err.message);
+    }
+  };
+
+  const handleConfirmDeleteSpace = async () => {
+    if (!spaceToDelete) return;
+    setIsDeletingSpace(true);
+    try {
+      await deleteEstimatorSpace(spaceToDelete.id);
+      setEstimatorSpaces((prev) => prev.filter((s) => s.id !== spaceToDelete.id));
+      setEstimatorNotice(`Space "${spaceToDelete.name}" was permanently removed from the Cost Estimator.`);
+      setTimeout(() => setEstimatorNotice(null), 4000);
+      setSpaceToDelete(null);
+    } catch (err: any) {
+      alert("Failed to delete space: " + err.message);
+    } finally {
+      setIsDeletingSpace(false);
+    }
+  };
+
+  const handleDuplicateSpace = async (space: EstimatorSpace) => {
+    try {
+      const duplicated: EstimatorSpace = {
+        ...JSON.parse(JSON.stringify(space)),
+        id: `space-${Date.now()}`,
+        name: `${space.name} (Copy)`,
+        enabled: true,
+      };
+      const saved = await saveEstimatorSpace(duplicated);
+      setEstimatorSpaces((prev) => [...prev, saved]);
+      setEstimatorNotice(`Space duplicated as "${saved.name}". Click "Edit Space" to adjust market prices.`);
+      setTimeout(() => setEstimatorNotice(null), 4000);
+    } catch (err: any) {
+      alert("Failed to duplicate space: " + err.message);
+    }
+  };
+
+  const handleResetEstimatorSpaces = async () => {
+    setIsResettingSpaces(true);
+    try {
+      const reset = await resetEstimatorSpaces();
+      setEstimatorSpaces(reset);
+      setEstimatorNotice("All estimator spaces and market prices have been reset to default Mumbai turnkey standards.");
+      setTimeout(() => setEstimatorNotice(null), 4000);
+    } catch (err: any) {
+      alert("Failed to reset spaces: " + err.message);
+    } finally {
+      setIsResettingSpaces(false);
+    }
+  };
 
   const loadReels = async () => {
     setReelsLoading(true);
@@ -616,6 +769,18 @@ export function AdminPage() {
           >
             <Instagram className="h-4 w-4 text-rose-500" />
             <span>Instagram Reels ({reels.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("estimator")}
+            className={`px-4 py-2.5 rounded-t-[var(--radius)] text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 transition-all shrink-0 ${
+              activeTab === "estimator"
+                ? "bg-white border-t border-x border-[var(--border)] text-[var(--foreground)] shadow-xs -mb-[1px]"
+                : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            }`}
+          >
+            <Calculator className="h-4 w-4 text-[var(--accent)]" />
+            <span>Cost Estimator Spaces ({estimatorSpaces.length})</span>
           </button>
         </div>
 
@@ -1374,6 +1539,332 @@ export function AdminPage() {
           </div>
         )}
 
+        {/* Tab 6: Cost Estimator Spaces & Market Pricing */}
+        {activeTab === "estimator" && (
+          <div className="space-y-6">
+            {/* Notification Banner */}
+            {estimatorNotice && (
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between shadow-2xs animate-in fade-in">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span className="font-medium">{estimatorNotice}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEstimatorNotice(null)}
+                  className="text-emerald-700 font-bold hover:underline text-[11px] cursor-pointer"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
+
+            {/* Header with Title and Global Action Buttons */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[var(--foreground)]">
+                    Cost Estimator Spaces &amp; Market Pricing
+                  </h3>
+                  <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-bold tracking-wide">
+                    Live Calculator Control
+                  </span>
+                </div>
+                <p className="text-xs text-[var(--muted-foreground)] mt-1 max-w-2xl leading-relaxed">
+                  Manage the spaces appearing under "Step 2: Select Spaces &amp; Calculate" on the website. Adjust prices according to current Mumbai market rates, add custom scopes (e.g. Home Office, Balcony Deck), or delete spaces you do not offer.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetEstimatorSpaces}
+                  disabled={isResettingSpaces}
+                  className="text-xs"
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 mr-1.5 text-neutral-500 ${isResettingSpaces ? "animate-spin" : ""}`} />
+                  <span>Reset to Factory Defaults</span>
+                </Button>
+
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleOpenAddSpace}
+                  className="text-xs font-semibold uppercase tracking-wider bg-rose-600 hover:bg-rose-500 text-white"
+                >
+                  <Plus className="h-3.5 w-3.5 mr-1" />
+                  <span>Add New Space</span>
+                </Button>
+              </div>
+            </div>
+
+            {/* Quick Metrics KPI Bar */}
+            {(() => {
+              const activeCount = estimatorSpaces.filter((s) => s.enabled !== false).length;
+              let turnkey2BhkMin = 0;
+              let turnkey2BhkMax = 0;
+              estimatorSpaces
+                .filter((s) => s.enabled !== false)
+                .forEach((s) => {
+                  const p = s.pricing?.["2 BHK"];
+                  if (p) {
+                    turnkey2BhkMin += p.min || 0;
+                    turnkey2BhkMax += p.max || 0;
+                  }
+                });
+
+              return (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-4 rounded-xl bg-white border border-[var(--border)] shadow-2xs space-y-1">
+                    <span className="text-[11px] font-semibold text-[var(--muted-foreground)] uppercase tracking-wider block">
+                      Total Spaces Configured
+                    </span>
+                    <div className="text-2xl font-bold font-display text-[var(--foreground)]">
+                      {estimatorSpaces.length} Spaces
+                    </div>
+                    <div className="text-[11px] text-neutral-500">
+                      Configured for 1, 2, 3 BHK &amp; Villa
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-white border border-[var(--border)] shadow-2xs space-y-1">
+                    <span className="text-[11px] font-semibold text-[var(--muted-foreground)] uppercase tracking-wider block">
+                      Active In Cost Estimator
+                    </span>
+                    <div className="text-2xl font-bold font-display text-emerald-600">
+                      {activeCount} Active Spaces
+                    </div>
+                    <div className="text-[11px] text-neutral-500">
+                      {estimatorSpaces.length - activeCount} hidden / disabled
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-white border border-[var(--border)] shadow-2xs space-y-1">
+                    <span className="text-[11px] font-semibold text-[var(--muted-foreground)] uppercase tracking-wider block">
+                      Typical 2 BHK Turnkey Total
+                    </span>
+                    <div className="text-2xl font-bold font-display font-mono text-[var(--accent-foreground)]">
+                      {formatPriceInLakhs(turnkey2BhkMin)} – {formatPriceInLakhs(turnkey2BhkMax)}
+                    </div>
+                    <div className="text-[11px] text-neutral-500">
+                      Sum of all enabled spaces before combo discount
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Filter and Search Bar */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-xl bg-white border border-[var(--border)] shadow-2xs">
+              <div className="relative w-full sm:w-80">
+                <Search className="h-4 w-4 text-neutral-400 absolute left-3 top-2.5" />
+                <Input
+                  placeholder="Filter by space name, category, or specs..."
+                  value={estimatorSearchQuery}
+                  onChange={(e) => setEstimatorSearchQuery(e.target.value)}
+                  className="text-xs pl-9"
+                />
+              </div>
+
+              <div className="text-xs text-[var(--muted-foreground)] self-start sm:self-auto font-medium">
+                Showing {
+                  estimatorSpaces.filter((s) => {
+                    const q = estimatorSearchQuery.toLowerCase().trim();
+                    if (!q) return true;
+                    return (
+                      s.name.toLowerCase().includes(q) ||
+                      s.category.toLowerCase().includes(q) ||
+                      (s.tagline && s.tagline.toLowerCase().includes(q))
+                    );
+                  }).length
+                } of {estimatorSpaces.length} spaces
+              </div>
+            </div>
+
+            {/* Spaces Cards Grid */}
+            {estimatorLoading && estimatorSpaces.length === 0 ? (
+              <div className="p-12 text-center text-xs text-[var(--muted-foreground)] bg-white rounded-2xl border border-[var(--border)]">
+                <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-[var(--accent)]" />
+                Loading estimator spaces...
+              </div>
+            ) : estimatorSpaces.length === 0 ? (
+              <div className="p-12 text-center rounded-2xl border border-dashed border-[var(--border)] bg-white space-y-3">
+                <Calculator className="h-10 w-10 text-neutral-300 mx-auto" />
+                <h4 className="font-display text-base font-bold text-[var(--foreground)]">
+                  No Estimator Spaces Configured
+                </h4>
+                <p className="text-xs text-[var(--muted-foreground)] max-w-sm mx-auto">
+                  Add custom interior works or click "Reset to Factory Defaults" to populate standard Mumbai turnkey spaces.
+                </p>
+                <div className="flex items-center justify-center gap-2 pt-2">
+                  <Button variant="outline" size="sm" onClick={handleResetEstimatorSpaces}>
+                    Reset to Defaults
+                  </Button>
+                  <Button variant="primary" size="sm" onClick={handleOpenAddSpace}>
+                    Add First Space
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                {estimatorSpaces
+                  .filter((s) => {
+                    const q = estimatorSearchQuery.toLowerCase().trim();
+                    if (!q) return true;
+                    return (
+                      s.name.toLowerCase().includes(q) ||
+                      s.category.toLowerCase().includes(q) ||
+                      (s.tagline && s.tagline.toLowerCase().includes(q))
+                    );
+                  })
+                  .map((space) => {
+                    const isEnabled = space.enabled !== false;
+                    const SpaceIcon = ESTIMATOR_ICON_MAP[space.iconName || ""] || Sparkles;
+
+                    return (
+                      <div
+                        key={space.id}
+                        className={`bg-white rounded-2xl border-2 p-5 transition-all shadow-xs hover:shadow-md flex flex-col justify-between ${
+                          isEnabled
+                            ? "border-[var(--border)] hover:border-neutral-400"
+                            : "border-dashed border-neutral-300 bg-neutral-50/70 opacity-75"
+                        }`}
+                      >
+                        <div className="space-y-4">
+                          {/* Card Header */}
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-center gap-3">
+                              <div className="h-11 w-11 rounded-xl bg-neutral-100 flex items-center justify-center text-neutral-800 font-bold shrink-0">
+                                <SpaceIcon className="h-5 w-5 text-rose-600" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-display text-base font-bold text-[var(--foreground)]">
+                                    {space.name}
+                                  </h4>
+                                  {space.popular && (
+                                    <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold uppercase tracking-wider">
+                                      Popular
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted-foreground)]">
+                                  {space.category}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Active Toggle */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <button
+                                type="button"
+                                onClick={() => handleToggleSpaceEnabled(space)}
+                                className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center gap-1 cursor-pointer ${
+                                  isEnabled
+                                    ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                                    : "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
+                                }`}
+                                title="Click to toggle display in public calculator"
+                              >
+                                <span className={`h-1.5 w-1.5 rounded-full ${isEnabled ? "bg-emerald-600" : "bg-neutral-500"}`} />
+                                <span>{isEnabled ? "Active" : "Hidden"}</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Tagline */}
+                          {space.tagline && (
+                            <p className="text-xs text-[var(--muted-foreground)] leading-relaxed">
+                              {space.tagline}
+                            </p>
+                          )}
+
+                          {/* Specs summary */}
+                          {Array.isArray(space.specs) && space.specs.length > 0 && (
+                            <ul className="space-y-1 pt-1">
+                              {space.specs.slice(0, 3).map((spec, i) => (
+                                <li key={i} className="text-[11px] text-neutral-600 flex items-start gap-1.5">
+                                  <span className="text-emerald-600 font-bold shrink-0">•</span>
+                                  <span className="leading-snug">{spec}</span>
+                                </li>
+                              ))}
+                              {space.specs.length > 3 && (
+                                <li className="text-[10px] text-neutral-400 italic pl-3">
+                                  +{space.specs.length - 3} more specifications
+                                </li>
+                              )}
+                            </ul>
+                          )}
+
+                          {/* Market Price Matrix by BHK */}
+                          <div className="pt-3 border-t border-neutral-100">
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-500 block mb-2">
+                              Configured Market Prices (BHK)
+                            </span>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                              {(["1 BHK", "2 BHK", "3 BHK", "4 BHK / Villa"] as const).map((bhk) => {
+                                const pricing = space.pricing?.[bhk] || { min: 0, max: 0, label: "₹0" };
+                                return (
+                                  <div
+                                    key={bhk}
+                                    className="p-2 rounded-lg bg-neutral-50 border border-neutral-200/80 text-left"
+                                  >
+                                    <div className="text-[10px] font-bold text-neutral-500">{bhk}</div>
+                                    <div className="text-xs font-bold font-mono text-neutral-900 mt-0.5 truncate" title={pricing.label}>
+                                      {pricing.label || "₹0"}
+                                    </div>
+                                    <div className="text-[9px] text-neutral-400 font-mono">
+                                      ₹{(pricing.min / 1000).toFixed(0)}k–{(pricing.max / 1000).toFixed(0)}k
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Card Footer Actions */}
+                        <div className="mt-4 pt-3 border-t border-[var(--border)] flex items-center justify-between gap-3 flex-wrap">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditSpace(space)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                          >
+                            <Edit3 className="h-3.5 w-3.5" />
+                            <span>Edit Space &amp; Market Prices</span>
+                          </button>
+
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleDuplicateSpace(space)}
+                              className="px-2.5 py-1.5 text-neutral-600 hover:text-neutral-900 rounded-lg hover:bg-neutral-100 border border-neutral-200 text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer"
+                              title="Duplicate space with its market prices"
+                            >
+                              <Copy className="h-3.5 w-3.5" />
+                              <span className="hidden sm:inline">Duplicate</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => setSpaceToDelete(space)}
+                              className="px-2.5 py-1.5 text-neutral-500 hover:text-rose-600 rounded-lg hover:bg-rose-50 border border-neutral-200 hover:border-rose-200 text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer"
+                              title="Delete space from cost estimator"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                              <span className="hidden sm:inline">Delete</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Project Editor Modal (Add/Edit Project & Gallery) */}
         <ProjectEditorModal
           isOpen={isProjectModalOpen}
@@ -1685,6 +2176,66 @@ export function AdminPage() {
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   <span>{isDeletingReel ? "Removing..." : "Remove Reel"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Estimator Space Editor Modal (Add/Edit Space & Market Prices) */}
+        <EstimatorSpaceModal
+          isOpen={isEditingSpaceModal}
+          spaceToEdit={spaceToEdit}
+          onClose={() => {
+            setIsEditingSpaceModal(false);
+            setSpaceToEdit(null);
+          }}
+          onSave={handleSaveSpace}
+        />
+
+        {/* Delete Space In-App Confirmation Modal */}
+        {spaceToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="bg-white rounded-2xl border border-[var(--border)] max-w-md w-full p-6 shadow-2xl space-y-4">
+              <div className="flex items-start space-x-3.5">
+                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0 text-rose-600">
+                  <Trash2 className="h-5 w-5" />
+                </div>
+                <div className="space-y-1 flex-1">
+                  <h4 className="font-display text-lg font-bold text-[var(--foreground)]">
+                    Delete Space from Cost Estimator?
+                  </h4>
+                  <p className="text-xs text-[var(--muted-foreground)] leading-relaxed">
+                    Are you sure you want to permanently delete <span className="font-bold text-[var(--foreground)]">"{spaceToDelete.name}"</span>?
+                    It will be immediately removed from "Step 2: Select Spaces &amp; Calculate" on the website and will no longer be offered in client estimates.
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-amber-600" />
+                <span>Tip: You can also use the <strong>Active/Hidden</strong> toggle on the card to temporarily hide a space without permanently deleting it.</span>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-2 border-t border-[var(--border)]">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSpaceToDelete(null)}
+                  disabled={isDeletingSpace}
+                  className="text-xs"
+                >
+                  Cancel
+                </Button>
+                <button
+                  type="button"
+                  onClick={handleConfirmDeleteSpace}
+                  disabled={isDeletingSpace}
+                  className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg flex items-center space-x-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>{isDeletingSpace ? "Deleting..." : "Permanently Delete Space"}</span>
                 </button>
               </div>
             </div>

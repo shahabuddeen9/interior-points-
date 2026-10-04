@@ -95,3 +95,25 @@ export interface InstagramReel {
   timestamp?: string;
   isCustom?: boolean;
 }
+
+export type FloorPlanType = "1 BHK" | "2 BHK" | "3 BHK" | "4 BHK / Villa";
+
+export interface ScopeWorkPricing {
+  min: number;
+  max: number;
+  label: string;
+}
+
+export interface EstimatorSpace {
+  id: string;
+  name: string;
+  category: string;
+  iconName?: string;
+  tagline: string;
+  specs: string[];
+  popular?: boolean;
+  order?: number;
+  enabled?: boolean;
+  pricing: Record<FloorPlanType, ScopeWorkPricing>;
+}
+

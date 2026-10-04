@@ -307,6 +307,26 @@
   ],
   "leads": [
     {
+      "name": "shahabuddeen",
+      "phone": "9650559781",
+      "email": "mdshahabuddeen9@gmail.com",
+      "city": "Mumbai - Central Suburbs (Asalpha, Ghatkopar, Powai)",
+      "bhkType": "3 BHK",
+      "message": "Society",
+      "selectedWorks": [
+        "Modular Kitchen (₹2.40L – ₹2.85L)",
+        "Wardrobes & Joinery (₹2.35L – ₹2.85L (3 Units))",
+        "Living Room & TV Console (₹1.45L – ₹1.80L)",
+        "False Ceiling & Lighting (₹1.05L – ₹1.30L)",
+        "Bathroom & Civil Revamp (₹1.25L – ₹1.55L (3 Baths))"
+      ],
+      "estimatedPrice": "₹7.48L – ₹9.11L",
+      "possessionTimeline": "Within 30–60 Days",
+      "id": "lead-1791089643832-7g77fk",
+      "status": "new",
+      "createdAt": "2026-10-04T04:54:03.832Z"
+    },
+    {
       "name": "Rahul Sharma",
       "phone": "9820123456",
       "email": "rahul@example.com",
@@ -476,7 +496,7 @@
       "tag": "Mumbai Turnkey Project",
       "title": "Turnkey Interior Showcase",
       "caption": "Trust the process. 🛠️✨ Turnkey residential makeover executed with architectural precision in Mumbai.",
-      "likes": "4,112",
+      "likes": "4,113",
       "comments": "32",
       "views": "25k+",
       "previewImage": "/uploads/reels/DbU1nauIMph.jpg",
@@ -510,6 +530,350 @@
       "previewImage": "/uploads/reels/DYgtHNXKK1d.jpg",
       "timestamp": "2026-10-04T03:56:47.990Z",
       "isCustom": false
+    }
+  ],
+  "estimatorSpaces": [
+    {
+      "id": "kitchen",
+      "name": "Modular Kitchen",
+      "category": "Cooking Sanctuary",
+      "iconName": "ChefHat",
+      "tagline": "18mm Marine Ply, Anti-scratch Acrylic & Blum Tandem Drawers",
+      "specs": [
+        "L-shape / Parallel layout with Kalinga Quartz or Granite countertop",
+        "Cutlery, thali & bottle pull-out organizers",
+        "Soft-close tandem drawers & hydraulic overhead lift-ups",
+        "Under-cabinet warm 3000K task lighting profiles"
+      ],
+      "popular": true,
+      "enabled": true,
+      "order": 1,
+      "pricing": {
+        "1 BHK": {
+          "min": 140000,
+          "max": 165000,
+          "label": "₹1.40L – ₹1.65L"
+        },
+        "2 BHK": {
+          "min": 185000,
+          "max": 220000,
+          "label": "₹1.85L – ₹2.20L"
+        },
+        "3 BHK": {
+          "min": 240000,
+          "max": 285000,
+          "label": "₹2.40L – ₹2.85L"
+        },
+        "4 BHK / Villa": {
+          "min": 295000,
+          "max": 350000,
+          "label": "₹2.95L – ₹3.50L"
+        }
+      }
+    },
+    {
+      "id": "wardrobes",
+      "name": "Wardrobes & Joinery",
+      "category": "Master Bedrooms",
+      "iconName": "DoorOpen",
+      "tagline": "Floor-to-Ceiling Wardrobes with Concealed Lofts & Sensor Lights",
+      "specs": [
+        "Sliding or hinged doors with zero-gap PUR edge banding",
+        "Matte PU / Tinted fluted glass finish with bronze profiles",
+        "Internal sensor LED profiles and digital locker drawers",
+        "18mm marine grade ply with 10-year hardware warranty"
+      ],
+      "popular": true,
+      "enabled": true,
+      "order": 2,
+      "pricing": {
+        "1 BHK": {
+          "min": 85000,
+          "max": 105000,
+          "label": "₹85k – ₹1.05L (1 Unit)"
+        },
+        "2 BHK": {
+          "min": 160000,
+          "max": 195000,
+          "label": "₹1.60L – ₹1.95L (2 Units)"
+        },
+        "3 BHK": {
+          "min": 235000,
+          "max": 285000,
+          "label": "₹2.35L – ₹2.85L (3 Units)"
+        },
+        "4 BHK / Villa": {
+          "min": 310000,
+          "max": 375000,
+          "label": "₹3.10L – ₹3.75L (4 Units)"
+        }
+      }
+    },
+    {
+      "id": "living_tv",
+      "name": "Living Room & TV Console",
+      "category": "Entertainment",
+      "iconName": "Tv",
+      "tagline": "Floating TV Console, Fluted Acoustic Wood & Foyer Divider",
+      "specs": [
+        "Bespoke CNC fluted panelling with hidden master bedroom door",
+        "Floating drawer unit with concealed wire conduits",
+        "Foyer shoe cabinet with integrated seating cushion",
+        "Champagne brass trims & low-glare display niches"
+      ],
+      "popular": false,
+      "enabled": true,
+      "order": 3,
+      "pricing": {
+        "1 BHK": {
+          "min": 55000,
+          "max": 70000,
+          "label": "₹55k – ₹70k"
+        },
+        "2 BHK": {
+          "min": 95000,
+          "max": 120000,
+          "label": "₹95k – ₹1.20L"
+        },
+        "3 BHK": {
+          "min": 145000,
+          "max": 180000,
+          "label": "₹1.45L – ₹1.80L"
+        },
+        "4 BHK / Villa": {
+          "min": 195000,
+          "max": 240000,
+          "label": "₹1.95L – ₹2.40L"
+        }
+      }
+    },
+    {
+      "id": "ceiling_lighting",
+      "name": "False Ceiling & Lighting",
+      "category": "Atmosphere",
+      "iconName": "SunMedium",
+      "tagline": "Saint-Gobain Gypsum with Warm 3000K Indirect Cove Glow",
+      "specs": [
+        "Zero-crack GI channel framing across living & bedrooms",
+        "Indirect perimeter cove lighting with uniform warm glow",
+        "Architectural magnetic track lights & COB low-glare spots",
+        "Fan point re-routing and concealed wiring integration"
+      ],
+      "popular": false,
+      "enabled": true,
+      "order": 4,
+      "pricing": {
+        "1 BHK": {
+          "min": 40000,
+          "max": 50000,
+          "label": "₹40k – ₹50k"
+        },
+        "2 BHK": {
+          "min": 70000,
+          "max": 88000,
+          "label": "₹70k – ₹88k"
+        },
+        "3 BHK": {
+          "min": 105000,
+          "max": 130000,
+          "label": "₹1.05L – ₹1.30L"
+        },
+        "4 BHK / Villa": {
+          "min": 140000,
+          "max": 175000,
+          "label": "₹1.40L – ₹1.75L"
+        }
+      }
+    },
+    {
+      "id": "painting",
+      "name": "Luxury Painting & Moldings",
+      "category": "Surfaces",
+      "iconName": "Paintbrush",
+      "tagline": "Asian Paints Royale Luxury Washable Emulsion & Wall Moldings",
+      "specs": [
+        "Complete surface acrylic putty levelling & sanding",
+        "2 coats Asian Paints Royale luxury washable emulsion",
+        "French-inspired neo-classical wall trim moldings",
+        "Accent color wall or tactile microcement texture"
+      ],
+      "popular": false,
+      "enabled": true,
+      "order": 5,
+      "pricing": {
+        "1 BHK": {
+          "min": 35000,
+          "max": 45000,
+          "label": "₹35k – ₹45k"
+        },
+        "2 BHK": {
+          "min": 60000,
+          "max": 75000,
+          "label": "₹60k – ₹75k"
+        },
+        "3 BHK": {
+          "min": 85000,
+          "max": 105000,
+          "label": "₹85k – ₹1.05L"
+        },
+        "4 BHK / Villa": {
+          "min": 115000,
+          "max": 145000,
+          "label": "₹1.15L – ₹1.45L"
+        }
+      }
+    },
+    {
+      "id": "bathroom_civil",
+      "name": "Bathroom & Civil Revamp",
+      "category": "Sanitary & Civil",
+      "iconName": "Bath",
+      "tagline": "Vitrified Tile Cladding, Vanity Counter & Grohe/Kohler Diverters",
+      "specs": [
+        "Quartz counter with under-counter basin & mirror cabinet",
+        "Wall-hung WC with concealed dual-flush cistern",
+        "Complete water-proofing with 5-year guarantee",
+        "Concealed plumbing and premium matte black / chrome fittings"
+      ],
+      "popular": false,
+      "enabled": true,
+      "order": 6,
+      "pricing": {
+        "1 BHK": {
+          "min": 50000,
+          "max": 65000,
+          "label": "₹50k – ₹65k (1 Bath)"
+        },
+        "2 BHK": {
+          "min": 85000,
+          "max": 110000,
+          "label": "₹85k – ₹1.10L (2 Baths)"
+        },
+        "3 BHK": {
+          "min": 125000,
+          "max": 155000,
+          "label": "₹1.25L – ₹1.55L (3 Baths)"
+        },
+        "4 BHK / Villa": {
+          "min": 165000,
+          "max": 210000,
+          "label": "₹1.65L – ₹2.10L (4 Baths)"
+        }
+      }
+    },
+    {
+      "id": "furniture_decor",
+      "name": "Loose Furniture & Mandir",
+      "category": "Furnishings",
+      "iconName": "Armchair",
+      "tagline": "Custom Upholstered Sofa, Dining Table & Teak Pooja Mandir",
+      "specs": [
+        "Custom 3+2 high-density foam sofa in spill-resistant fabric",
+        "Solid ashwood or quartz 4/6 seater dining table with chairs",
+        "Bespoke teakwood and brass accent Pooja Mandir niche",
+        "Master bed frame with plush fabric headboard panelling"
+      ],
+      "popular": false,
+      "enabled": true,
+      "order": 7,
+      "pricing": {
+        "1 BHK": {
+          "min": 55000,
+          "max": 75000,
+          "label": "₹55k – ₹75k"
+        },
+        "2 BHK": {
+          "min": 95000,
+          "max": 130000,
+          "label": "₹95k – ₹1.30L"
+        },
+        "3 BHK": {
+          "min": 145000,
+          "max": 190000,
+          "label": "₹1.45L – ₹1.90L"
+        },
+        "4 BHK / Villa": {
+          "min": 195000,
+          "max": 250000,
+          "label": "₹1.95L – ₹2.50L"
+        }
+      }
+    },
+    {
+      "id": "electrical_smart",
+      "name": "Electrical & Smart Wiring",
+      "category": "Automation & Power",
+      "iconName": "Zap",
+      "tagline": "Concealed Polycab Conduits, Legrand/Schneider Modular Switches & Smart Relays",
+      "specs": [
+        "Complete concealed copper wiring with individual MCB distribution",
+        "Legrand Arteor / Schneider Opale modular switchplates",
+        "Smart WiFi scene controllers & two-way bed switches",
+        "AC, geyser & high-load kitchen appliance dedicated lines"
+      ],
+      "popular": false,
+      "enabled": true,
+      "order": 8,
+      "pricing": {
+        "1 BHK": {
+          "min": 25000,
+          "max": 35000,
+          "label": "₹25k – ₹35k"
+        },
+        "2 BHK": {
+          "min": 45000,
+          "max": 60000,
+          "label": "₹45k – ₹60k"
+        },
+        "3 BHK": {
+          "min": 70000,
+          "max": 90000,
+          "label": "₹70k – ₹90k"
+        },
+        "4 BHK / Villa": {
+          "min": 95000,
+          "max": 125000,
+          "label": "₹95k – ₹1.25L"
+        }
+      }
+    },
+    {
+      "id": "flooring_tiling",
+      "name": "Flooring & Italian Marble Polish",
+      "category": "Floors & Polish",
+      "iconName": "Layers",
+      "tagline": "High-Gloss Vitrified Tiles / Italian Marble Diamond Polish & Skirting",
+      "specs": [
+        "Seamless vitrified tile installation with 2mm epoxy spacers",
+        "Multi-stage diamond pad polish with anti-stain crystallizer",
+        "Flush hardwood or brass transition thresholds",
+        "Matching 4-inch perimeter wall skirting"
+      ],
+      "popular": false,
+      "enabled": true,
+      "order": 9,
+      "pricing": {
+        "1 BHK": {
+          "min": 30000,
+          "max": 42000,
+          "label": "₹30k – ₹42k"
+        },
+        "2 BHK": {
+          "min": 55000,
+          "max": 72000,
+          "label": "₹55k – ₹72k"
+        },
+        "3 BHK": {
+          "min": 85000,
+          "max": 110000,
+          "label": "₹85k – ₹1.10L"
+        },
+        "4 BHK / Villa": {
+          "min": 120000,
+          "max": 155000,
+          "label": "₹1.20L – ₹1.55L"
+        }
+      }
     }
   ]
 }
