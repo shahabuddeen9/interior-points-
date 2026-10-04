@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "motion/react";
 
 export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => void }) {
-  const { path, navigate } = useRouter();
+  const { path, navigate, isActive } = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -116,23 +116,30 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium tracking-wide">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-[var(--foreground)]/80 hover:text-[var(--foreground)] hover:border-b-2 hover:border-[var(--accent)] py-1 transition-all flex items-center gap-1"
-              >
-                {link.name === "Reels" && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
-                )}
-                {link.name === "Cost Estimator" && (
-                  <span className="px-1.5 py-0.5 rounded-full bg-rose-600 text-white font-bold text-[9px] uppercase tracking-wide">
-                    Estimator
-                  </span>
-                )}
-                <span>{link.name}</span>
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const current = isActive(link.href);
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`py-1 transition-all flex items-center gap-1.5 ${
+                    current
+                      ? "text-[var(--primary)] font-bold border-b-2 border-[var(--accent)]"
+                      : "text-[var(--foreground)]/80 hover:text-[var(--foreground)] hover:border-b-2 hover:border-[var(--accent)]"
+                  }`}
+                >
+                  {link.name === "Reels" && (
+                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
+                  )}
+                  {link.name === "Cost Estimator" && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-rose-600 text-white font-bold text-[9px] uppercase tracking-wide">
+                      Estimator
+                    </span>
+                  )}
+                  <span>{link.name}</span>
+                </Link>
+              );
+            })}
           </nav>
 
           {/* CTA & Actions */}
@@ -191,21 +198,33 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
             className="md:hidden border-b border-[var(--border)] bg-[var(--background)] px-6 py-5 shadow-lg overflow-hidden"
           >
             <nav className="flex flex-col space-y-3">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-base font-medium text-[var(--foreground)] py-1.5 border-b border-[var(--border)]/40 hover:text-[var(--accent)] flex items-center justify-between"
-                >
-                  <span>{link.name}</span>
-                  {link.name === "Reels" && (
-                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-600 font-semibold uppercase">
-                      Live
-                    </span>
-                  )}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const current = isActive(link.href);
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`text-base py-1.5 border-b border-[var(--border)]/40 flex items-center justify-between transition-colors ${
+                      current
+                        ? "font-bold text-[var(--primary)] pl-2 border-l-2 border-l-[var(--accent)]"
+                        : "font-medium text-[var(--foreground)] hover:text-[var(--accent)]"
+                    }`}
+                  >
+                    <span>{link.name}</span>
+                    {link.name === "Reels" && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-600 font-semibold uppercase">
+                        Live
+                      </span>
+                    )}
+                    {link.name === "Cost Estimator" && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-600 text-white font-bold uppercase">
+                        Estimator
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
               <div className="pt-3 flex flex-col gap-2.5">
                 <Button
                   variant="primary"

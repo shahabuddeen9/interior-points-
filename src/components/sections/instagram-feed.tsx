@@ -118,7 +118,7 @@ export function InstagramFeed() {
   return (
     <section
       id="instagram-reels"
-      className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] relative overflow-hidden"
+      className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] relative overflow-hidden scroll-mt-20 sm:scroll-mt-24"
     >
       {/* Subtle Background Accent Lighting */}
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-[var(--accent)]/5 rounded-full blur-3xl pointer-events-none" />

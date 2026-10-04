@@ -43,7 +43,7 @@ export function About() {
   }, []);
 
   return (
-    <section id="about" className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] relative overflow-hidden">
+    <section id="about" className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] relative overflow-hidden scroll-mt-20 sm:scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div

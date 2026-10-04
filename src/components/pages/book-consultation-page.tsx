@@ -17,6 +17,20 @@ import { motion } from "motion/react";
 export function BookConsultationPage() {
   const { path } = useRouter();
 
+  const queryBhk =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("bhk")
+      : null;
+
+  let initialBhk: FloorPlanType | undefined = undefined;
+  if (queryBhk) {
+    const q = queryBhk.toUpperCase().replace(/\s+/g, "");
+    if (q.includes("1")) initialBhk = "1 BHK";
+    else if (q.includes("2")) initialBhk = "2 BHK";
+    else if (q.includes("3")) initialBhk = "3 BHK";
+    else if (q.includes("4") || q.includes("VILLA")) initialBhk = "4 BHK / Villa";
+  }
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -75,7 +89,7 @@ export function BookConsultationPage() {
       <section className="py-12 sm:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-3xl border border-[var(--border)] p-6 sm:p-10 shadow-lg">
-            <ConsultationFlow isFullPage={true} />
+            <ConsultationFlow isFullPage={true} initialBhk={initialBhk} />
           </div>
         </div>
       </section>

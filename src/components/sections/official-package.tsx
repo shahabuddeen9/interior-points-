@@ -178,7 +178,7 @@ const PACKAGES = [
 
 export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageProps) {
   return (
-    <section id="turnkey-package" className="py-16 md:py-24 bg-gradient-to-b from-[#0c1a16] via-[#091512] to-[#060e0c] text-white relative overflow-hidden border-y border-amber-900/30">
+    <section id="turnkey-package" className="py-16 md:py-24 bg-gradient-to-b from-[#0c1a16] via-[#091512] to-[#060e0c] text-white relative overflow-hidden border-y border-amber-900/30 scroll-mt-20 sm:scroll-mt-24">
       {/* Decorative Golden Ambient Glows */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />

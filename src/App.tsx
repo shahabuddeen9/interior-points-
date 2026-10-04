@@ -38,19 +38,38 @@ function MainContent() {
 
   // Router logic
   const renderRoute = () => {
-    if (path === "/book-consultation" || path === "/consultation") {
+    const clean = path.toLowerCase().replace(/\/+$/, "") || "/";
+
+    if (
+      clean === "/book-consultation" ||
+      clean === "/consultation" ||
+      clean === "/estimator" ||
+      clean === "/cost-estimator" ||
+      clean === "/calculator" ||
+      clean === "/quote" ||
+      clean === "/estimate"
+    ) {
       return <BookConsultationPage />;
     }
-    if (path === "/projects") {
+    if (
+      clean === "/projects" ||
+      clean === "/portfolio" ||
+      clean === "/works" ||
+      clean === "/gallery"
+    ) {
       return <ProjectsPage />;
     }
-    if (path.startsWith("/projects/")) {
+    if (
+      clean.startsWith("/projects/") ||
+      clean.startsWith("/portfolio/") ||
+      clean.startsWith("/works/")
+    ) {
       return <ProjectDetailPage onOpenConsultation={() => openConsultation()} />;
     }
-    if (path === "/contact") {
+    if (clean === "/contact" || clean === "/inquiry" || clean === "/reach-us") {
       return <ContactPage />;
     }
-    if (path === "/admin") {
+    if (clean === "/admin" || clean === "/login" || clean === "/dashboard") {
       return <AdminPage />;
     }
 

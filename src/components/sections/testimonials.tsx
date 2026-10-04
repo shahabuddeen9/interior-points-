@@ -29,7 +29,7 @@ export function Testimonials() {
   const current = testimonials[currentIndex] || testimonials[0];
 
   return (
-    <section id="testimonials" className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)]">
+    <section id="testimonials" className="py-20 md:py-28 border-b border-[var(--border)] bg-[var(--background)] scroll-mt-20 sm:scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl mb-16">
