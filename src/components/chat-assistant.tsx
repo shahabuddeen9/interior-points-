@@ -123,8 +123,8 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
           <div className="bg-[var(--secondary)]/60 px-4 py-3.5 flex items-center justify-between border-b border-[var(--border)]">
             <div className="flex items-center space-x-2.5">
               <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 via-amber-600 to-amber-700 p-0.5 shadow-xs">
-                <div className="w-full h-full rounded-full bg-neutral-900 flex items-center justify-center font-display font-black text-xs text-amber-300 tracking-tighter">
-                  iP
+                <div className="w-full h-full rounded-full bg-neutral-900 flex items-center justify-center font-display font-black text-xs text-amber-300 tracking-wider">
+                  IP
                 </div>
               </div>
               <div>
@@ -192,7 +192,7 @@ export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () 
               >
                 {msg.role === "assistant" && (
                   <div className="h-6 w-6 rounded-full bg-neutral-900 border border-amber-500/40 flex items-center justify-center text-[9px] font-display font-black text-amber-300 shrink-0 mt-0.5">
-                    iP
+                    IP
                   </div>
                 )}
                 <div

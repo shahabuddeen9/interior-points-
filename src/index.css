@@ -66,9 +66,9 @@ h1, h2, h3, .font-display, .font-serif {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.82 0.015 80);
+  background: #d9cbaf;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.74 0.09 75);
+  background: #c59b4c;
 }

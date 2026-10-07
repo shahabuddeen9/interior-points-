@@ -940,7 +940,7 @@ export function ConsultationFlow({
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="text-xs text-rose-600 font-semibold hover:underline self-start sm:self-auto"
+              className="text-xs text-[#8a6218] hover:text-[#c59b4c] font-semibold hover:underline self-start sm:self-auto"
             >
               Modify Works &amp; Budget
             </button>
@@ -1186,7 +1186,7 @@ export function ConsultationFlow({
                 href="tel:+917903038750"
                 className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-[var(--border)] bg-white hover:bg-neutral-50 text-[var(--foreground)] text-xs font-semibold shadow-2xs transition-colors"
               >
-                <Phone className="h-3.5 w-3.5 text-rose-600" />
+                <Phone className="h-3.5 w-3.5 text-[#c59b4c]" />
                 <span>Call 7903038750</span>
               </a>
 
