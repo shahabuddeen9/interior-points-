@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "../lib/router";
+import { BrandLogo } from "./brand-logo";
 import { Phone, Mail, MapPin, Clock, ShieldCheck, Instagram, Facebook, Linkedin } from "lucide-react";
 
 export function SiteFooter() {
@@ -9,20 +10,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 p-0.5 shadow-sm shrink-0">
-                <div className="w-full h-full rounded-[10px] bg-[#151413] flex flex-col items-center justify-center">
-                  <span className="font-display font-black text-sm text-amber-300 tracking-tighter leading-none">JP</span>
-                  <span className="text-[6px] text-amber-200/90 uppercase tracking-widest font-bold leading-none mt-0.5">STUDIO</span>
-                </div>
-              </div>
-              <div className="flex items-baseline space-x-1.5">
-                <span className="font-display text-2xl font-bold tracking-tight text-[#151413]">
-                  INTERIOR POINTS
-                </span>
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#c59b4c]"></span>
-              </div>
-            </div>
+            <BrandLogo href="/" size="md" />
             <p className="font-display italic text-base text-[#151413]/85">
               "Designing Spaces. Creating Experiences."
             </p>

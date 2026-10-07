@@ -192,11 +192,26 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
           </div>
 
           <div className="flex flex-col items-center">
-            {/* JP Monogram Crest */}
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 p-0.5 shadow-lg shadow-black/50 mb-3">
-              <div className="w-full h-full rounded-[14px] bg-[#151413] flex flex-col items-center justify-center">
-                <span className="font-display font-black text-xl text-amber-300 tracking-tighter">JP</span>
-                <span className="text-[7px] text-amber-200 uppercase tracking-widest -mt-1 font-bold">Studio</span>
+            {/* IP Monogram Crest */}
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 p-0.5 shadow-lg shadow-black/50 mb-3">
+              <div className="w-full h-full rounded-[14px] bg-[#151413] flex flex-col items-center justify-center p-1.5">
+                <svg
+                  width="36"
+                  height="28"
+                  viewBox="0 0 46 36"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect x="3" y="2" width="6.5" height="6.5" rx="1.2" fill="#c59b4c" />
+                  <rect x="3" y="11" width="6.5" height="23" rx="1.5" fill="#fdfbf7" />
+                  <rect x="14" y="2" width="6.5" height="32" rx="1.5" fill="#fdfbf7" />
+                  <path d="M17 2H30C36.6 2 42 7.4 42 14C42 20.6 36.6 26 30 26H17V2Z" fill="#fdfbf7" />
+                  <path d="M20.5 6.5H29.5C33.6 6.5 37 9.9 37 14C37 18.1 33.6 21.5 29.5 21.5H20.5V6.5Z" fill="#151413" />
+                  <path d="M24 15.5L29 10.5L34 15.5" stroke="#c59b4c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M25.5 15V19H32.5V15" stroke="#c59b4c" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <rect x="27.5" y="16" width="3" height="3" rx="0.5" fill="#c59b4c" />
+                </svg>
+                <span className="text-[6.5px] text-amber-200 uppercase tracking-widest font-bold leading-none mt-1">INTERIOR POINTS</span>
               </div>
             </div>
 
