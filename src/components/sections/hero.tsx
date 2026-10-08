@@ -101,10 +101,10 @@ export function Hero({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
                 <span className="font-bold text-[#151413] uppercase tracking-wider flex items-center gap-1.5">
                   <Sparkles className="h-3.5 w-3.5 text-[#c59b4c]" />
-                  Instant Interior Cost Estimator
+                  Instant Interior Cost Estimator (10 Spaces Available)
                 </span>
                 <span className="text-[11px] text-[#5e594f]">
-                  Pick your flat size to select works &amp; forward quote to WhatsApp:
+                  Pick your flat size to customize all 10 turnkey spaces &amp; forward quote to WhatsApp:
                 </span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">

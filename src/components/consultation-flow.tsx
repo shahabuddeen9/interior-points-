@@ -283,6 +283,25 @@ export const DEFAULT_SCOPE_WORKS: ScopeWorkItem[] = [
       "4 BHK / Villa": { min: 120000, max: 155000, label: "₹1.20L – ₹1.55L" },
     },
   },
+  {
+    id: "space-1791096152751",
+    name: "Molding & Neo-Classical Trims",
+    category: "Surface & Wall Art",
+    icon: Paintbrush,
+    tagline: "Custom French Neo-Classical Trims, Non-Yellowing Polyurethane Finish & Seamless Edge Guarantee",
+    specs: [
+      "French-inspired neo-classical precision wall trim moldings",
+      "Dual coat premium enamel on architectural trims",
+      "Molding pre-treatment, anti-crack joint concealment & primer",
+    ],
+    popular: false,
+    pricing: {
+      "1 BHK": { min: 30000, max: 35000, label: "₹30k – ₹35k" },
+      "2 BHK": { min: 50000, max: 60000, label: "₹50k – ₹60k" },
+      "3 BHK": { min: 70000, max: 80000, label: "₹70k – ₹80k" },
+      "4 BHK / Villa": { min: 105000, max: 115000, label: "₹1.05L – ₹1.15L" },
+    },
+  },
 ];
 
 export const SCOPE_WORKS = DEFAULT_SCOPE_WORKS;
@@ -298,8 +317,8 @@ export function ConsultationFlow({
   initialBhk = "2 BHK",
   isFullPage = false,
 }: ConsultationFlowProps) {
-  // Step 1: Floor Plan | Step 2: Scope & Live Pricing | Step 3: Contact Details & WhatsApp Send | Step 4: Success
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  // Step 1: Floor Plan & 10 Spaces Live Estimator | Step 2: Contact Details & WhatsApp Send | Step 3: Success
+  const [step, setStep] = useState<1 | 2 | 3>(1);
 
   // Dynamic Estimator Spaces (loaded from server / admin portal)
   const [spaces, setSpaces] = useState<ScopeWorkItem[]>(DEFAULT_SCOPE_WORKS);
@@ -322,7 +341,10 @@ export function ConsultationFlow({
               pricing: item.pricing,
             }));
             setSpaces(mapped);
-            setSelectedWorkIds((prev) => prev.filter((id) => mapped.some((m) => m.id === id)));
+            setSelectedWorkIds((prev) => {
+              const valid = prev.filter((id) => mapped.some((m) => m.id === id));
+              return valid.length > 0 ? valid : mapped.map((m) => m.id);
+            });
           }
         })
         .catch((err) => console.warn("Using fallback default spaces:", err));
@@ -348,6 +370,8 @@ export function ConsultationFlow({
     "wardrobes",
     "living_tv",
     "ceiling_lighting",
+    "painting",
+    "flooring_tiling",
   ]);
 
   // Keep selectedBhk in sync if initialBhk prop changes
@@ -451,7 +475,7 @@ export function ConsultationFlow({
       return;
     }
     setError(null);
-    setStep(3);
+    setStep(2);
   };
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
@@ -469,7 +493,7 @@ export function ConsultationFlow({
 
     if (selectedWorkIds.length === 0) {
       setError("Please select at least one work category.");
-      setStep(2);
+      setStep(1);
       return;
     }
 
@@ -536,7 +560,7 @@ export function ConsultationFlow({
         area: cityArea,
       });
 
-      setStep(4);
+      setStep(3);
     } catch (err: any) {
       console.warn("Lead error, falling back to direct WhatsApp:", err);
       setFinalResult({
@@ -548,7 +572,7 @@ export function ConsultationFlow({
         phone: cleanPhone,
         area: cityArea,
       });
-      setStep(4);
+      setStep(3);
     } finally {
       setLoading(false);
     }
@@ -564,20 +588,22 @@ export function ConsultationFlow({
               <Calculator className="h-3.5 w-3.5" />
             </span>
             <div>
-              <div className="text-[11px] uppercase tracking-wider font-bold text-[#8a6218]">
-                Instant Cost Estimator &amp; Consultation
+              <div className="text-[11px] uppercase tracking-wider font-bold text-[#8a6218] flex items-center gap-2">
+                <span>Instant Cost Estimator</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[10px]">
+                  {spaces.length} Spaces Available
+                </span>
               </div>
               <h2 className="text-lg sm:text-xl font-bold font-display text-[var(--foreground)]">
-                {step === 1 && "Step 1: Choose Your Home Configuration"}
-                {step === 2 && `Step 2: Select Spaces & Calculate ${selectedBhk} Price`}
-                {step === 3 && "Step 3: Connect With Senior Interior Architect"}
-                {step === 4 && "Consultation Booked & Sent to WhatsApp!"}
+                {step === 1 && `Step 1: Choose ${selectedBhk} & Customize ${spaces.length} Spaces`}
+                {step === 2 && "Step 2: Connect With Senior Interior Architect"}
+                {step === 3 && "Consultation Booked & Sent to WhatsApp!"}
               </h2>
             </div>
           </div>
 
           <div className="text-xs font-semibold text-[var(--muted-foreground)]">
-            Step {step} of 3
+            {step <= 2 ? `Step ${step} of 2` : "Confirmed"}
           </div>
         </div>
 
@@ -585,12 +611,12 @@ export function ConsultationFlow({
         <div className="w-full bg-neutral-200 h-1.5 rounded-full mt-3 overflow-hidden">
           <div
             className="bg-gradient-to-r from-amber-400 via-[#c59b4c] to-emerald-600 h-full transition-all duration-300 rounded-full"
-            style={{ width: `${(step / 3) * 100}%` }}
+            style={{ width: `${(Math.min(step, 2) / 2) * 100}%` }}
           />
         </div>
       </div>
 
-      {/* STEP 1: Floor Plan Selection (1 BHK, 2 BHK, 3 BHK, 4 BHK) */}
+      {/* STEP 1: Floor Plan & All Available Spaces Selection with Real-Time Price Calculation */}
       {step === 1 && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -598,325 +624,281 @@ export function ConsultationFlow({
           exit={{ opacity: 0, y: -15 }}
           className="space-y-6"
         >
-          <div className="text-center sm:text-left">
-            <p className="text-xs sm:text-sm text-[var(--muted-foreground)] leading-relaxed">
-              Select your floor plan to view room-by-room modular kitchen, wardrobe, false ceiling, and civil revamp estimates tailored to Mumbai residences.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {FLOOR_PLANS.map((fp) => {
-              const isSelected = selectedBhk === fp.type;
-              const IconComp = fp.icon;
-
-              return (
-                <div
-                  key={fp.type}
-                  onClick={() => setSelectedBhk(fp.type)}
-                  className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
-                    isSelected
-                      ? "border-[#c59b4c] bg-amber-50/50 shadow-md ring-2 ring-[#c59b4c]/25"
-                      : "border-[var(--border)] bg-white hover:border-amber-300 hover:shadow-xs"
-                  }`}
-                >
-                  {fp.badge && (
-                    <span className="absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full bg-[#8a6218] text-white text-[10px] font-bold uppercase tracking-wider shadow-xs">
-                      {fp.badge}
-                    </span>
-                  )}
-
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                        isSelected
-                          ? "bg-[#c59b4c] text-white shadow-xs"
-                          : "bg-neutral-100 text-neutral-700"
-                      }`}
-                    >
-                      <IconComp className="h-6 w-6" />
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-display text-base font-bold text-[var(--foreground)]">
-                          {fp.title}
-                        </h3>
-                        {isSelected && (
-                          <span className="h-5 w-5 rounded-full bg-[#c59b4c] text-white flex items-center justify-center">
-                            <Check className="h-3 w-3 stroke-[3]" />
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-[var(--muted-foreground)] leading-snug">
-                        {fp.subtitle}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between text-xs font-medium text-[var(--muted-foreground)]">
-                    <span className="flex items-center gap-1 font-mono">
-                      <Building2 className="h-3.5 w-3.5 text-neutral-400" />
-                      {fp.carpetArea}
-                    </span>
-                    <span className="flex items-center gap-1 text-emerald-700 font-semibold">
-                      <Clock className="h-3.5 w-3.5" />
-                      {fp.handoverDays}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Bottom Action Footer */}
-          <div className="pt-4 border-t border-[var(--border)] flex items-center justify-between gap-4">
-            <div className="text-xs text-[var(--muted-foreground)] flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-              <span>Verified 60-day dream home delivery commitment across Mumbai</span>
-            </div>
-
-            <Button
-              type="button"
-              variant="primary"
-              size="md"
-              onClick={() => setStep(2)}
-              className="text-xs uppercase tracking-wider font-semibold shadow-xs"
-            >
-              <span>Next: Select Works &amp; View Pricing</span>
-              <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
-            </Button>
-          </div>
-        </motion.div>
-      )}
-
-      {/* STEP 2: Work Scope Selection with Real-Time Price Calculation */}
-      {step === 2 && (
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          className="space-y-6"
-        >
-          {/* Header controls: Interactive BHK Switcher & Quick Selection Buttons */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3.5 p-4 rounded-2xl bg-neutral-50 border border-[var(--border)] shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-              <span className="text-xs font-bold text-[var(--foreground)] uppercase tracking-wider shrink-0">
-                Floor Plan:
-              </span>
-              <div className="inline-flex p-1 rounded-xl bg-white border border-[var(--border)] shadow-2xs gap-1">
-                {(["1 BHK", "2 BHK", "3 BHK", "4 BHK / Villa"] as const).map((bhk) => {
-                  const isActive = selectedBhk === bhk;
-                  return (
-                    <button
-                      key={bhk}
-                      type="button"
-                      onClick={() => setSelectedBhk(bhk)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                        isActive
-                          ? "bg-[#151413] text-white shadow-xs"
-                          : "text-[var(--foreground)] hover:bg-neutral-100"
-                      }`}
-                    >
-                      {bhk}
-                    </button>
-                  );
-                })}
+          {/* Section 1: Choose Floor Plan */}
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--foreground)]">
+                  1. Select Home Configuration
+                </h3>
+                <p className="text-xs text-[var(--muted-foreground)]">
+                  Choose your flat layout. All {spaces.length} turnkey room prices below recalculate instantly:
+                </p>
               </div>
+              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shrink-0">
+                Selected: {selectedBhk}
+              </span>
             </div>
 
-            <div className="flex items-center gap-2 text-xs">
-              <button
-                type="button"
-                onClick={selectAllWorks}
-                className="px-2.5 py-1.5 rounded-lg bg-white border border-[var(--border)] hover:border-neutral-400 font-semibold text-[var(--foreground)] shadow-2xs transition-colors"
-              >
-                Select All ({spaces.length} Spaces)
-              </button>
-              <button
-                type="button"
-                onClick={clearWorks}
-                className="px-2.5 py-1.5 rounded-lg bg-white border border-[var(--border)] hover:border-neutral-400 font-medium text-[var(--muted-foreground)] transition-colors"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {FLOOR_PLANS.map((fp) => {
+                const isSelected = selectedBhk === fp.type;
+                const IconComp = fp.icon;
 
-          {error && (
-            <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
-              <Info className="h-4 w-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+                return (
+                  <div
+                    key={fp.type}
+                    onClick={() => setSelectedBhk(fp.type)}
+                    className={`relative p-3.5 sm:p-4 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
+                      isSelected
+                        ? "border-[#c59b4c] bg-amber-50/70 shadow-md ring-2 ring-[#c59b4c]/30"
+                        : "border-[var(--border)] bg-white hover:border-amber-300 hover:shadow-xs"
+                    }`}
+                  >
+                    {fp.badge && (
+                      <span className="absolute -top-2.5 right-2 sm:right-3 px-2 py-0.5 rounded-full bg-[#8a6218] text-white text-[9px] font-bold uppercase tracking-wider shadow-xs">
+                        {fp.badge}
+                      </span>
+                    )}
 
-          {/* Cards for each Work category */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {spaces.map((work) => {
-              const isSelected = selectedWorkIds.includes(work.id);
-              const priceInfo = work.pricing?.[selectedBhk] || { min: 0, max: 0, label: "Price on request" };
-              const IconComp = work.icon || Sparkles;
-
-              return (
-                <div
-                  key={work.id}
-                  onClick={() => toggleWork(work.id)}
-                  className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
-                    isSelected
-                      ? "border-emerald-600 bg-emerald-50/30 shadow-xs"
-                      : "border-[var(--border)] bg-white hover:border-neutral-300 opacity-90"
-                  }`}
-                >
-                  <div>
-                    {/* Top Bar: Icon, Name & Checkbox */}
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-2.5">
+                    <div>
+                      <div className="flex items-center justify-between gap-1 mb-2">
                         <div
-                          className={`h-9 w-9 rounded-lg flex items-center justify-center transition-colors ${
+                          className={`h-9 w-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                             isSelected
-                              ? "bg-emerald-600 text-white shadow-xs"
-                              : "bg-neutral-100 text-neutral-600"
+                              ? "bg-[#c59b4c] text-white shadow-xs"
+                              : "bg-neutral-100 text-neutral-700"
                           }`}
                         >
                           <IconComp className="h-4 w-4" />
                         </div>
-                        <div>
-                          <div className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted-foreground)]">
-                            {work.category}
-                          </div>
-                          <h4 className="text-sm font-bold text-[var(--foreground)] font-display">
-                            {work.name}
-                          </h4>
-                        </div>
+                        {isSelected && (
+                          <span className="h-5 w-5 rounded-full bg-[#c59b4c] text-white flex items-center justify-center shrink-0">
+                            <Check className="h-3 w-3 stroke-[3]" />
+                          </span>
+                        )}
                       </div>
 
-                      {/* Checkbox badge */}
-                      <div
-                        className={`h-6 w-6 rounded-md border flex items-center justify-center transition-all ${
-                          isSelected
-                            ? "bg-emerald-600 border-emerald-600 text-white"
-                            : "border-neutral-300 bg-white"
-                        }`}
-                      >
-                        {isSelected && <Check className="h-4 w-4 stroke-[3]" />}
-                      </div>
+                      <h4 className="font-display text-sm font-bold text-[var(--foreground)] leading-tight">
+                        {fp.title}
+                      </h4>
+                      <p className="text-[11px] text-[var(--muted-foreground)] mt-0.5 line-clamp-1">
+                        {fp.subtitle}
+                      </p>
                     </div>
 
-                    {/* Tagline */}
-                    <p className="text-xs text-[var(--muted-foreground)] mt-2 leading-relaxed">
-                      {work.tagline}
-                    </p>
-
-                    {/* Bullet Specs */}
-                    <ul className="mt-2.5 space-y-1">
-                      {work.specs.slice(0, 2).map((sp, idx) => (
-                        <li key={idx} className="text-[11px] text-neutral-600 flex items-start gap-1.5">
-                          <span className="text-emerald-600 font-bold">•</span>
-                          <span>{sp}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="mt-3 pt-2 border-t border-neutral-100 flex items-center justify-between text-[11px] font-medium text-[var(--muted-foreground)]">
+                      <span className="font-mono text-[10px]">{fp.carpetArea}</span>
+                      <span className="text-emerald-700 font-semibold text-[10px]">{fp.handoverDays}</span>
+                    </div>
                   </div>
-
-                  {/* Price Tag Footer for this BHK */}
-                  <div className="mt-3.5 pt-2.5 border-t border-neutral-100 flex items-center justify-between">
-                    <span className="text-[11px] text-[var(--muted-foreground)] font-medium">
-                      Estimate for {selectedBhk}:
-                    </span>
-                    <span
-                      className={`text-xs font-bold px-2 py-0.5 rounded-md ${
-                        isSelected
-                          ? "bg-emerald-100 text-emerald-900 font-mono"
-                          : "bg-neutral-100 text-neutral-700 font-mono"
-                      }`}
-                    >
-                      {priceInfo.label}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
-          {/* Sticky Live Price Estimate Summary Card */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-neutral-900 to-neutral-950 text-white border border-neutral-800 shadow-xl space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          {/* Section 2: Room-by-Room Turnkey Spaces (All Available Categories) */}
+          <div className="space-y-4 pt-2">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50/90 via-white to-emerald-50/70 border border-[var(--border)] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-widest text-amber-400 font-bold">
-                    Estimated Investment ({selectedBhk})
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider shadow-xs">
+                    {spaces.length} Spaces Available &amp; Configured
                   </span>
-                  {calculation.discountPercent > 0 && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
-                      <BadgePercent className="h-3 w-3" />
-                      {calculation.discountPercent}% Bundle Savings Applied!
-                    </span>
-                  )}
+                  <span className="text-xs font-bold text-[var(--foreground)]">
+                    Turnkey Room-by-Room Pricing
+                  </span>
                 </div>
-
-                <div className="flex items-baseline gap-3 mt-1">
-                  <div className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display text-white">
-                    {calculation.selectedItems.length > 0
-                      ? calculation.formattedRange
-                      : "₹0 (Select spaces above)"}
-                  </div>
-                  {calculation.discountPercent > 0 && (
-                    <div className="text-xs text-neutral-400 line-through">
-                      {calculation.formattedRawRange}
-                    </div>
-                  )}
-                </div>
-
-                <p className="text-xs text-neutral-400 mt-1">
-                  Includes 18mm semi-marine ply, branded hardware (Blum/Hettich), architectural drawings, 3D renders, civil labor &amp; GST.
+                <p className="text-xs text-[var(--muted-foreground)] mt-1">
+                  All {spaces.length} spaces below are active in the live calculator. Select the works you need for your {selectedBhk}:
                 </p>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex items-center gap-2 shrink-0">
-                <Button
+                <button
                   type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setStep(1)}
-                  className="bg-transparent text-white border-neutral-700 hover:bg-neutral-800 text-xs"
+                  onClick={selectAllWorks}
+                  className="px-3 py-1.5 rounded-lg bg-white border border-[var(--border)] hover:border-neutral-400 font-semibold text-xs text-[var(--foreground)] shadow-2xs transition-colors"
                 >
-                  <ArrowLeft className="h-3.5 w-3.5 mr-1" />
-                  Back
-                </Button>
-
-                <Button
+                  Select All ({spaces.length} Spaces)
+                </button>
+                <button
                   type="button"
-                  variant="gold"
-                  size="md"
-                  onClick={handleProceedToDetails}
-                  disabled={selectedWorkIds.length === 0}
-                  className="text-xs uppercase tracking-wider font-bold shadow-lg"
+                  onClick={clearWorks}
+                  className="px-3 py-1.5 rounded-lg bg-white border border-[var(--border)] hover:border-neutral-400 font-medium text-xs text-[var(--muted-foreground)] transition-colors"
                 >
-                  <span>Connect on WhatsApp</span>
-                  <ArrowRight className="h-4 w-4 ml-1.5" />
-                </Button>
+                  Clear Selection
+                </button>
               </div>
             </div>
 
-            {/* Selected Work Pills */}
-            <div className="pt-3 border-t border-neutral-800 flex flex-wrap items-center gap-1.5 text-[11px]">
-              <span className="text-neutral-400 font-medium">Selected ({selectedWorkIds.length}):</span>
-              {calculation.selectedItems.map((item) => (
-                <span
-                  key={item.name}
-                  className="px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-200 border border-neutral-700 flex items-center gap-1"
-                >
-                  <Check className="h-2.5 w-2.5 text-emerald-400" />
-                  <span>{item.name}</span>
+            {error && (
+              <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                <Info className="h-4 w-4 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Cards for each Work category (All 10 Spaces) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {spaces.map((work) => {
+                const isSelected = selectedWorkIds.includes(work.id);
+                const priceInfo = work.pricing?.[selectedBhk] || { min: 0, max: 0, label: "Price on request" };
+                const IconComp = work.icon || Sparkles;
+
+                return (
+                  <div
+                    key={work.id}
+                    onClick={() => toggleWork(work.id)}
+                    className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
+                      isSelected
+                        ? "border-emerald-600 bg-emerald-50/30 shadow-xs"
+                        : "border-[var(--border)] bg-white hover:border-neutral-300 opacity-90"
+                    }`}
+                  >
+                    <div>
+                      {/* Top Bar: Icon, Name & Checkbox */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-2.5">
+                          <div
+                            className={`h-9 w-9 rounded-lg flex items-center justify-center transition-colors ${
+                              isSelected
+                                ? "bg-emerald-600 text-white shadow-xs"
+                                : "bg-neutral-100 text-neutral-600"
+                            }`}
+                          >
+                            <IconComp className="h-4 w-4" />
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted-foreground)]">
+                              {work.category}
+                            </div>
+                            <h4 className="text-sm font-bold text-[var(--foreground)] font-display">
+                              {work.name}
+                            </h4>
+                          </div>
+                        </div>
+
+                        {/* Checkbox badge */}
+                        <div
+                          className={`h-6 w-6 rounded-md border flex items-center justify-center transition-all ${
+                            isSelected
+                              ? "bg-emerald-600 border-emerald-600 text-white"
+                              : "border-neutral-300 bg-white"
+                          }`}
+                        >
+                          {isSelected && <Check className="h-4 w-4 stroke-[3]" />}
+                        </div>
+                      </div>
+
+                      {/* Tagline */}
+                      <p className="text-xs text-[var(--muted-foreground)] mt-2 leading-relaxed">
+                        {work.tagline}
+                      </p>
+
+                      {/* Bullet Specs */}
+                      <ul className="mt-2.5 space-y-1">
+                        {work.specs.slice(0, 2).map((sp, idx) => (
+                          <li key={idx} className="text-[11px] text-neutral-600 flex items-start gap-1.5">
+                            <span className="text-emerald-600 font-bold">•</span>
+                            <span>{sp}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Price Tag Footer for this BHK */}
+                    <div className="mt-3.5 pt-2.5 border-t border-neutral-100 flex items-center justify-between">
+                      <span className="text-[11px] text-[var(--muted-foreground)] font-medium">
+                        Estimate for {selectedBhk}:
+                      </span>
+                      <span
+                        className={`text-xs font-bold px-2 py-0.5 rounded-md ${
+                          isSelected
+                            ? "bg-emerald-100 text-emerald-900 font-mono"
+                            : "bg-neutral-100 text-neutral-700 font-mono"
+                        }`}
+                      >
+                        {priceInfo.label}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Sticky Live Price Estimate Summary Card */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-neutral-900 to-neutral-950 text-white border border-neutral-800 shadow-xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs uppercase tracking-widest text-amber-400 font-bold">
+                      Estimated Investment ({selectedBhk})
+                    </span>
+                    {calculation.discountPercent > 0 && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
+                        <BadgePercent className="h-3 w-3" />
+                        {calculation.discountPercent}% Bundle Savings Applied!
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-baseline gap-3 mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display text-white">
+                      {calculation.selectedItems.length > 0
+                        ? calculation.formattedRange
+                        : "Select spaces above"}
+                    </div>
+                    {calculation.discountPercent > 0 && (
+                      <div className="text-xs text-neutral-400 line-through">
+                        {calculation.formattedRawRange}
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="text-xs text-neutral-400 mt-1">
+                    Includes 18mm semi-marine ply, branded hardware (Blum/Hettich), architectural drawings, 3D renders, civil labor &amp; GST.
+                  </p>
+                </div>
+
+                {/* Action Button */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <Button
+                    type="button"
+                    variant="gold"
+                    size="md"
+                    onClick={handleProceedToDetails}
+                    disabled={selectedWorkIds.length === 0}
+                    className="text-xs uppercase tracking-wider font-bold shadow-lg bg-gradient-to-r from-amber-400 to-amber-500 text-neutral-950 hover:from-amber-300 hover:to-amber-400"
+                  >
+                    <span>Proceed to WhatsApp Quote ({selectedWorkIds.length} Spaces)</span>
+                    <ArrowRight className="h-4 w-4 ml-1.5" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Selected Work Pills */}
+              <div className="pt-3 border-t border-neutral-800 flex flex-wrap items-center gap-1.5 text-[11px]">
+                <span className="text-neutral-400 font-medium">
+                  Selected ({selectedWorkIds.length} of {spaces.length} Spaces):
                 </span>
-              ))}
+                {calculation.selectedItems.map((item) => (
+                  <span
+                    key={item.name}
+                    className="px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-200 border border-neutral-700 flex items-center gap-1"
+                  >
+                    <Check className="h-2.5 w-2.5 text-emerald-400" />
+                    <span>{item.name}</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>
       )}
 
-      {/* STEP 3: Customer Details & Immediate WhatsApp Forwarding */}
-      {step === 3 && (
+      {/* STEP 2: Customer Details & Immediate WhatsApp Forwarding */}
+      {step === 2 && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -933,16 +915,16 @@ export function ConsultationFlow({
                 {selectedBhk} • {calculation.formattedRange}
               </div>
               <div className="text-xs text-[var(--muted-foreground)] mt-0.5">
-                {calculation.selectedItems.length} works selected • 45-day move-in guarantee
+                {calculation.selectedItems.length} works selected • 60-day dream home guarantee
               </div>
             </div>
 
             <button
               type="button"
-              onClick={() => setStep(2)}
+              onClick={() => setStep(1)}
               className="text-xs text-[#8a6218] hover:text-[#c59b4c] font-semibold hover:underline self-start sm:self-auto"
             >
-              Modify Works &amp; Budget
+              Modify Spaces &amp; Floor Plan
             </button>
           </div>
 
@@ -1077,7 +1059,7 @@ export function ConsultationFlow({
             {/* Trust highlights */}
             <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200 grid grid-cols-3 gap-2 text-center text-[10px] text-[var(--muted-foreground)]">
               <div>
-                <span className="font-bold text-[var(--foreground)] block">₹0 Consultation</span>
+                <span className="font-bold text-[var(--foreground)] block">100% Free Consultation</span>
                 <span>Zero obligation</span>
               </div>
               <div>
@@ -1096,12 +1078,12 @@ export function ConsultationFlow({
                 type="button"
                 variant="outline"
                 size="md"
-                onClick={() => setStep(2)}
+                onClick={() => setStep(1)}
                 disabled={loading}
                 className="text-xs"
               >
                 <ArrowLeft className="h-3.5 w-3.5 mr-1" />
-                Back to Pricing
+                Back to Spaces &amp; Pricing
               </Button>
 
               <Button
@@ -1129,8 +1111,8 @@ export function ConsultationFlow({
         </motion.div>
       )}
 
-      {/* STEP 4: Success & Direct WhatsApp Action Screen */}
-      {step === 4 && finalResult && (
+      {/* STEP 3: Success & Direct WhatsApp Action Screen */}
+      {step === 3 && finalResult && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

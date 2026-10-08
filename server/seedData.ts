@@ -663,5 +663,26 @@ export const initialEstimatorSpaces: EstimatorSpace[] = [
       "4 BHK / Villa": { min: 120000, max: 155000, label: "₹1.20L – ₹1.55L" },
     },
   },
+  {
+    id: "molding",
+    name: "French Wall Moldings & Panelling",
+    category: "Surface & Wall Art",
+    iconName: "Paintbrush",
+    tagline: "Custom French Neo-Classical Trims, Non-Yellowing Polyurethane Finish & Seamless Edge Guarantee",
+    specs: [
+      "French-inspired neo-classical precision wall trim moldings",
+      "Dual coat premium enamel on architectural trims",
+      "Molding pre-treatment, anti-crack joint concealment & primer",
+    ],
+    popular: false,
+    enabled: true,
+    order: 10,
+    pricing: {
+      "1 BHK": { min: 30000, max: 35000, label: "₹30k – ₹35k" },
+      "2 BHK": { min: 50000, max: 60000, label: "₹50k – ₹60k" },
+      "3 BHK": { min: 70000, max: 80000, label: "₹70k – ₹80k" },
+      "4 BHK / Villa": { min: 105000, max: 115000, label: "₹1.05L – ₹1.15L" },
+    },
+  },
 ];
 

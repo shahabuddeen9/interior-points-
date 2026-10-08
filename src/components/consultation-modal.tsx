@@ -17,7 +17,7 @@ export function ConsultationModal({
     <Dialog
       open={open}
       onOpenChange={onOpenChange}
-      className="max-w-3xl max-h-[92vh] overflow-y-auto p-4 sm:p-7"
+      className="max-w-4xl max-h-[92vh] overflow-y-auto p-4 sm:p-7"
     >
       <ConsultationFlow
         initialBhk={initialBhk}

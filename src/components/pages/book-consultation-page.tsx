@@ -51,7 +51,7 @@ export function BookConsultationPage() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-[#8a6218] text-xs uppercase tracking-wider font-bold mb-3">
               <Sparkles className="h-3.5 w-3.5 text-[#c59b4c]" />
-              <span>Instant Cost Estimator &amp; 3D Design Session</span>
+              <span>Instant Cost Estimator (All 10 Turnkey Spaces Available)</span>
             </div>
 
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--foreground)]">
@@ -59,7 +59,7 @@ export function BookConsultationPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed">
-              Select your Mumbai apartment floor plan, pick the rooms you want to design, see instant itemized pricing, and receive a verified 3D layout consultation directly on WhatsApp.
+              Select your Mumbai apartment floor plan, pick from all 10 verified turnkey spaces (Modular Kitchen, Wardrobes, Living TV Console, False Ceiling, Luxury Painting, Civil &amp; Bath, Loose Furniture, Electrical, Flooring, Neo-Classical Molding), see instant itemized pricing, and receive a verified 3D layout consultation directly on WhatsApp.
             </p>
           </div>
 

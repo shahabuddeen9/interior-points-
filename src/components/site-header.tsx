@@ -116,7 +116,7 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
                   )}
                   {link.name === "Cost Estimator" && (
                     <span className="px-1.5 py-0.5 rounded-md bg-amber-500/15 text-[#8a6218] border border-amber-400/30 font-bold text-[9px] uppercase tracking-wider">
-                      Estimator
+                      10 Spaces
                     </span>
                   )}
                   <span>{link.name}</span>
@@ -202,7 +202,7 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
                     )}
                     {link.name === "Cost Estimator" && (
                       <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-500/15 text-[#8a6218] border border-amber-400/30 font-bold uppercase">
-                        60-Day Quote
+                        10 Spaces
                       </span>
                     )}
                   </Link>
