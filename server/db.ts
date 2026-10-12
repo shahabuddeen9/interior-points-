@@ -32,8 +32,13 @@ function getInitialData(): DatabaseSchema {
 
 function ensureDbExists(): DatabaseSchema {
   if (memoryDb) {
-    if (!memoryDb.reels) memoryDb.reels = [...initialReels];
-    if (!memoryDb.estimatorSpaces) memoryDb.estimatorSpaces = [...initialEstimatorSpaces];
+    if (!memoryDb.reels || !Array.isArray(memoryDb.reels) || memoryDb.reels.length === 0) {
+      memoryDb.reels = [...initialReels];
+    }
+    if (!memoryDb.estimatorSpaces || !Array.isArray(memoryDb.estimatorSpaces) || memoryDb.estimatorSpaces.length === 0) {
+      memoryDb.estimatorSpaces = JSON.parse(JSON.stringify(initialEstimatorSpaces));
+      writeDb(memoryDb);
+    }
     return memoryDb;
   }
 
@@ -42,14 +47,23 @@ function ensureDbExists(): DatabaseSchema {
     if (fs.existsSync(DB_FILE)) {
       const raw = fs.readFileSync(DB_FILE, "utf-8");
       const parsed = JSON.parse(raw);
+      const loadedSpaces = (parsed.estimatorSpaces && Array.isArray(parsed.estimatorSpaces) && parsed.estimatorSpaces.length > 0)
+        ? parsed.estimatorSpaces
+        : JSON.parse(JSON.stringify(initialEstimatorSpaces));
+
       memoryDb = {
-        projects: parsed.projects || [...initialProjects],
-        testimonials: parsed.testimonials || [...initialTestimonials],
-        stats: parsed.stats || [...initialStats],
+        projects: (parsed.projects && Array.isArray(parsed.projects) && parsed.projects.length > 0) ? parsed.projects : [...initialProjects],
+        testimonials: (parsed.testimonials && Array.isArray(parsed.testimonials) && parsed.testimonials.length > 0) ? parsed.testimonials : [...initialTestimonials],
+        stats: (parsed.stats && Array.isArray(parsed.stats) && parsed.stats.length > 0) ? parsed.stats : [...initialStats],
         leads: parsed.leads || [...initialLeads],
-        reels: parsed.reels || [...initialReels],
-        estimatorSpaces: parsed.estimatorSpaces || [...initialEstimatorSpaces],
+        reels: (parsed.reels && Array.isArray(parsed.reels) && parsed.reels.length > 0) ? parsed.reels : [...initialReels],
+        estimatorSpaces: loadedSpaces,
       };
+
+      // If estimator spaces wasn't in db.json or was empty, persist the 10 spaces immediately!
+      if (!parsed.estimatorSpaces || !Array.isArray(parsed.estimatorSpaces) || parsed.estimatorSpaces.length === 0) {
+        writeDb(memoryDb);
+      }
       return memoryDb;
     }
   } catch (err) {
@@ -61,14 +75,22 @@ function ensureDbExists(): DatabaseSchema {
     if (fs.existsSync(TMP_DB_FILE)) {
       const raw = fs.readFileSync(TMP_DB_FILE, "utf-8");
       const parsed = JSON.parse(raw);
+      const loadedSpaces = (parsed.estimatorSpaces && Array.isArray(parsed.estimatorSpaces) && parsed.estimatorSpaces.length > 0)
+        ? parsed.estimatorSpaces
+        : JSON.parse(JSON.stringify(initialEstimatorSpaces));
+
       memoryDb = {
-        projects: parsed.projects || [...initialProjects],
-        testimonials: parsed.testimonials || [...initialTestimonials],
-        stats: parsed.stats || [...initialStats],
+        projects: (parsed.projects && Array.isArray(parsed.projects) && parsed.projects.length > 0) ? parsed.projects : [...initialProjects],
+        testimonials: (parsed.testimonials && Array.isArray(parsed.testimonials) && parsed.testimonials.length > 0) ? parsed.testimonials : [...initialTestimonials],
+        stats: (parsed.stats && Array.isArray(parsed.stats) && parsed.stats.length > 0) ? parsed.stats : [...initialStats],
         leads: parsed.leads || [...initialLeads],
-        reels: parsed.reels || [...initialReels],
-        estimatorSpaces: parsed.estimatorSpaces || [...initialEstimatorSpaces],
+        reels: (parsed.reels && Array.isArray(parsed.reels) && parsed.reels.length > 0) ? parsed.reels : [...initialReels],
+        estimatorSpaces: loadedSpaces,
       };
+
+      if (!parsed.estimatorSpaces || !Array.isArray(parsed.estimatorSpaces) || parsed.estimatorSpaces.length === 0) {
+        writeDb(memoryDb);
+      }
       return memoryDb;
     }
   } catch (err) {
@@ -284,7 +306,11 @@ export const db = {
 
   getEstimatorSpaces: (includeDisabled = false): EstimatorSpace[] => {
     const data = ensureDbExists();
-    const list = data.estimatorSpaces || [...initialEstimatorSpaces];
+    if (!data.estimatorSpaces || !Array.isArray(data.estimatorSpaces) || data.estimatorSpaces.length === 0) {
+      data.estimatorSpaces = JSON.parse(JSON.stringify(initialEstimatorSpaces));
+      writeDb(data);
+    }
+    const list = data.estimatorSpaces;
     const filtered = includeDisabled ? list : list.filter((s) => s.enabled !== false);
     return filtered.sort((a, b) => (a.order || 0) - (b.order || 0));
   },

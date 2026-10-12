@@ -60,6 +60,7 @@ import {
 } from "../../lib/reels-service";
 import {
   fetchEstimatorSpaces,
+  getStoredEstimatorSpaces,
   saveEstimatorSpace,
   deleteEstimatorSpace,
   resetEstimatorSpaces,
@@ -98,8 +99,8 @@ export function AdminPage() {
 
   const [activeTab, setActiveTab] = useState<"leads" | "projects" | "stats" | "testimonials" | "reels" | "estimator">("leads");
 
-  // Estimator Spaces state
-  const [estimatorSpaces, setEstimatorSpaces] = useState<EstimatorSpace[]>([]);
+  // Estimator Spaces state - initialized with guaranteed 10 turnkey spaces
+  const [estimatorSpaces, setEstimatorSpaces] = useState<EstimatorSpace[]>(() => getStoredEstimatorSpaces(true));
   const [estimatorLoading, setEstimatorLoading] = useState(false);
   const [estimatorNotice, setEstimatorNotice] = useState<string | null>(null);
   const [estimatorSearchQuery, setEstimatorSearchQuery] = useState("");
@@ -221,9 +222,18 @@ export function AdminPage() {
     const unsubReels = subscribeToReels((updatedReels) => {
       setReels(updatedReels);
     });
+    const handleEstimatorUpdate = (e: any) => {
+      const updated = (e?.detail && Array.isArray(e.detail) && e.detail.length > 0)
+        ? e.detail
+        : getStoredEstimatorSpaces(true);
+      setEstimatorSpaces(updated);
+    };
+    window.addEventListener("estimator-spaces-updated", handleEstimatorUpdate);
+
     return () => {
       unsubProjects();
       unsubReels();
+      window.removeEventListener("estimator-spaces-updated", handleEstimatorUpdate);
     };
   }, [isAuthenticated]);
 
@@ -231,11 +241,14 @@ export function AdminPage() {
     setEstimatorLoading(true);
     try {
       const data = await fetchEstimatorSpaces(true);
-      if (Array.isArray(data)) {
+      if (Array.isArray(data) && data.length > 0) {
         setEstimatorSpaces(data);
+      } else {
+        setEstimatorSpaces(getStoredEstimatorSpaces(true));
       }
     } catch (err) {
       console.error("Failed to load estimator spaces:", err);
+      setEstimatorSpaces(getStoredEstimatorSpaces(true));
     } finally {
       setEstimatorLoading(false);
     }
