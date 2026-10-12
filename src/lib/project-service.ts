@@ -79,7 +79,7 @@ export async function fetchProjects(): Promise<Project[]> {
       const contentType = res.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
         const data = await res.json();
-        if (data.success && Array.isArray(data.data)) {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
           const serverProjects: Project[] = data.data;
 
           // The server database is the canonical master.

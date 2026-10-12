@@ -32,11 +32,28 @@ function getInitialData(): DatabaseSchema {
 
 function ensureDbExists(): DatabaseSchema {
   if (memoryDb) {
+    let changed = false;
+    if (!memoryDb.projects || !Array.isArray(memoryDb.projects) || memoryDb.projects.length === 0) {
+      memoryDb.projects = [...initialProjects];
+      changed = true;
+    }
+    if (!memoryDb.testimonials || !Array.isArray(memoryDb.testimonials) || memoryDb.testimonials.length === 0) {
+      memoryDb.testimonials = [...initialTestimonials];
+      changed = true;
+    }
+    if (!memoryDb.stats || !Array.isArray(memoryDb.stats) || memoryDb.stats.length === 0) {
+      memoryDb.stats = [...initialStats];
+      changed = true;
+    }
     if (!memoryDb.reels || !Array.isArray(memoryDb.reels) || memoryDb.reels.length === 0) {
       memoryDb.reels = [...initialReels];
+      changed = true;
     }
-    if (!memoryDb.estimatorSpaces || !Array.isArray(memoryDb.estimatorSpaces) || memoryDb.estimatorSpaces.length === 0) {
+    if (!memoryDb.estimatorSpaces || !Array.isArray(memoryDb.estimatorSpaces) || memoryDb.estimatorSpaces.length < 10) {
       memoryDb.estimatorSpaces = JSON.parse(JSON.stringify(initialEstimatorSpaces));
+      changed = true;
+    }
+    if (changed) {
       writeDb(memoryDb);
     }
     return memoryDb;
@@ -47,7 +64,7 @@ function ensureDbExists(): DatabaseSchema {
     if (fs.existsSync(DB_FILE)) {
       const raw = fs.readFileSync(DB_FILE, "utf-8");
       const parsed = JSON.parse(raw);
-      const loadedSpaces = (parsed.estimatorSpaces && Array.isArray(parsed.estimatorSpaces) && parsed.estimatorSpaces.length > 0)
+      const loadedSpaces = (parsed.estimatorSpaces && Array.isArray(parsed.estimatorSpaces) && parsed.estimatorSpaces.length >= 10)
         ? parsed.estimatorSpaces
         : JSON.parse(JSON.stringify(initialEstimatorSpaces));
 
@@ -60,8 +77,10 @@ function ensureDbExists(): DatabaseSchema {
         estimatorSpaces: loadedSpaces,
       };
 
-      // If estimator spaces wasn't in db.json or was empty, persist the 10 spaces immediately!
-      if (!parsed.estimatorSpaces || !Array.isArray(parsed.estimatorSpaces) || parsed.estimatorSpaces.length === 0) {
+      // Persist if any collection was empty or missing in db.json
+      if (!parsed.estimatorSpaces || !Array.isArray(parsed.estimatorSpaces) || parsed.estimatorSpaces.length < 10 ||
+          !parsed.projects || parsed.projects.length === 0 ||
+          !parsed.testimonials || parsed.testimonials.length === 0) {
         writeDb(memoryDb);
       }
       return memoryDb;
@@ -75,7 +94,7 @@ function ensureDbExists(): DatabaseSchema {
     if (fs.existsSync(TMP_DB_FILE)) {
       const raw = fs.readFileSync(TMP_DB_FILE, "utf-8");
       const parsed = JSON.parse(raw);
-      const loadedSpaces = (parsed.estimatorSpaces && Array.isArray(parsed.estimatorSpaces) && parsed.estimatorSpaces.length > 0)
+      const loadedSpaces = (parsed.estimatorSpaces && Array.isArray(parsed.estimatorSpaces) && parsed.estimatorSpaces.length >= 10)
         ? parsed.estimatorSpaces
         : JSON.parse(JSON.stringify(initialEstimatorSpaces));
 
@@ -88,16 +107,14 @@ function ensureDbExists(): DatabaseSchema {
         estimatorSpaces: loadedSpaces,
       };
 
-      if (!parsed.estimatorSpaces || !Array.isArray(parsed.estimatorSpaces) || parsed.estimatorSpaces.length === 0) {
-        writeDb(memoryDb);
-      }
+      writeDb(memoryDb);
       return memoryDb;
     }
   } catch (err) {
     // Ignore fallback read error
   }
 
-  // 3. Initialize fresh memory copy
+  // 3. Initialize fresh memory copy with all guaranteed initial data
   memoryDb = getInitialData();
   writeDb(memoryDb);
   return memoryDb;
@@ -133,6 +150,10 @@ function writeDb(data: DatabaseSchema) {
 export const db = {
   getProjects: (): Project[] => {
     const data = ensureDbExists();
+    if (!data.projects || !Array.isArray(data.projects) || data.projects.length === 0) {
+      data.projects = [...initialProjects];
+      writeDb(data);
+    }
     return data.projects;
   },
   getProjectBySlug: (slug: string): Project | undefined => {
@@ -196,6 +217,10 @@ export const db = {
 
   getTestimonials: (): Testimonial[] => {
     const data = ensureDbExists();
+    if (!data.testimonials || !Array.isArray(data.testimonials) || data.testimonials.length === 0) {
+      data.testimonials = [...initialTestimonials];
+      writeDb(data);
+    }
     return data.testimonials;
   },
   saveTestimonial: (test: Testimonial): Testimonial => {
@@ -222,6 +247,10 @@ export const db = {
 
   getStats: (): CredibilityStat[] => {
     const data = ensureDbExists();
+    if (!data.stats || !Array.isArray(data.stats) || data.stats.length === 0) {
+      data.stats = [...initialStats];
+      writeDb(data);
+    }
     return data.stats;
   },
   saveStats: (stats: CredibilityStat[]): CredibilityStat[] => {
@@ -306,12 +335,17 @@ export const db = {
 
   getEstimatorSpaces: (includeDisabled = false): EstimatorSpace[] => {
     const data = ensureDbExists();
-    if (!data.estimatorSpaces || !Array.isArray(data.estimatorSpaces) || data.estimatorSpaces.length === 0) {
+    if (!data.estimatorSpaces || !Array.isArray(data.estimatorSpaces) || data.estimatorSpaces.length < 10) {
       data.estimatorSpaces = JSON.parse(JSON.stringify(initialEstimatorSpaces));
       writeDb(data);
     }
     const list = data.estimatorSpaces;
     const filtered = includeDisabled ? list : list.filter((s) => s.enabled !== false);
+    if (filtered.length === 0) {
+      data.estimatorSpaces.forEach((s) => (s.enabled = true));
+      writeDb(data);
+      return data.estimatorSpaces.sort((a, b) => (a.order || 0) - (b.order || 0));
+    }
     return filtered.sort((a, b) => (a.order || 0) - (b.order || 0));
   },
 

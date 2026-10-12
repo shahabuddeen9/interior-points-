@@ -4,46 +4,88 @@ import { initialEstimatorSpaces } from "../../server/seedData";
 const ESTIMATOR_CACHE_KEY = "interior_points_estimator_spaces_v3";
 
 /**
+ * Ensures that all 10 turnkey spaces are ALWAYS present and properly formatted.
+ * If user added custom spaces (e.g. Balcony, Home Office), preserves them while
+ * ensuring the core 10 turnkey spaces can NEVER drop to 0.
+ */
+export function ensureAll10Spaces(spaces: EstimatorSpace[]): EstimatorSpace[] {
+  const current = Array.isArray(spaces) ? [...spaces] : [];
+
+  // Guarantee that every single one of the 10 standard spaces exists
+  initialEstimatorSpaces.forEach((base) => {
+    const existingIdx = current.findIndex(
+      (s) => s.id === base.id || s.name.toLowerCase().trim() === base.name.toLowerCase().trim()
+    );
+    if (existingIdx < 0) {
+      current.push(JSON.parse(JSON.stringify(base)));
+    } else {
+      // If the space is present but missing specs or pricing, backfill from base
+      if (!current[existingIdx].pricing || Object.keys(current[existingIdx].pricing).length === 0) {
+        current[existingIdx].pricing = JSON.parse(JSON.stringify(base.pricing));
+      }
+      if (!current[existingIdx].specs || current[existingIdx].specs.length === 0) {
+        current[existingIdx].specs = [...(base.specs || [])];
+      }
+      if (current[existingIdx].enabled === undefined) {
+        current[existingIdx].enabled = true;
+      }
+    }
+  });
+
+  // If literally every space is disabled, enable them all so cost estimator works
+  const anyEnabled = current.some((s) => s.enabled !== false);
+  if (!anyEnabled) {
+    current.forEach((s) => (s.enabled = true));
+  }
+
+  // Sort by order
+  return current.sort((a, b) => (a.order || 0) - (b.order || 0));
+}
+
+/**
  * Returns locally stored estimator spaces with 100% guarantee of falling back
- * to all 10 turnkey spaces from seedData.
+ * to all 10 turnkey spaces from seedData. NEVER returns 0 spaces.
  */
 export function getStoredEstimatorSpaces(includeDisabled = false): EstimatorSpace[] {
   if (typeof window === "undefined") {
-    return includeDisabled
-      ? [...initialEstimatorSpaces]
-      : initialEstimatorSpaces.filter((s) => s.enabled !== false);
+    const safe = ensureAll10Spaces(initialEstimatorSpaces);
+    return includeDisabled ? safe : safe.filter((s) => s.enabled !== false);
   }
 
-  // Clear any legacy empty caches
+  // Clean any legacy empty caches
   try {
     localStorage.removeItem("interior_points_estimator_spaces_v1");
     sessionStorage.removeItem("interior_points_estimator_spaces_v1");
+    localStorage.removeItem("interior_points_estimator_spaces_v2");
+    sessionStorage.removeItem("interior_points_estimator_spaces_v2");
   } catch {}
+
+  let loaded: EstimatorSpace[] | null = null;
 
   try {
     const raw = localStorage.getItem(ESTIMATOR_CACHE_KEY) || sessionStorage.getItem(ESTIMATOR_CACHE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return includeDisabled
-          ? parsed
-          : parsed.filter((s: EstimatorSpace) => s.enabled !== false);
+        loaded = ensureAll10Spaces(parsed);
       }
     }
   } catch (err) {
     console.warn("Could not read estimator spaces from storage:", err);
   }
 
-  // Pre-seed storage with all 10 turnkey spaces
+  if (!loaded || loaded.length < 10) {
+    loaded = ensureAll10Spaces(initialEstimatorSpaces);
+  }
+
+  // Persist guaranteed sanitized spaces to storage
   try {
-    const copy = JSON.parse(JSON.stringify(initialEstimatorSpaces));
-    localStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(copy));
-    sessionStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(copy));
+    localStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(loaded));
+    sessionStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(loaded));
   } catch {}
 
-  return includeDisabled
-    ? [...initialEstimatorSpaces]
-    : initialEstimatorSpaces.filter((s) => s.enabled !== false);
+  const filtered = includeDisabled ? loaded : loaded.filter((s) => s.enabled !== false);
+  return filtered.length > 0 ? filtered : loaded;
 }
 
 /**
@@ -51,11 +93,10 @@ export function getStoredEstimatorSpaces(includeDisabled = false): EstimatorSpac
  */
 export function persistEstimatorSpacesLocally(spaces: EstimatorSpace[]): void {
   if (typeof window === "undefined") return;
-  const safeSpaces = Array.isArray(spaces) && spaces.length > 0 ? spaces : [...initialEstimatorSpaces];
+  const safeSpaces = ensureAll10Spaces(spaces);
   try {
     localStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(safeSpaces));
     sessionStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(safeSpaces));
-    // Clean up older caches
     localStorage.removeItem("interior_points_estimator_spaces_v1");
     localStorage.removeItem("interior_points_estimator_spaces_v2");
     sessionStorage.removeItem("interior_points_estimator_spaces_v1");
@@ -80,26 +121,31 @@ export async function fetchEstimatorSpaces(includeDisabled = false): Promise<Est
     if (res.ok) {
       const contentType = res.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
-        const data = await res.json();
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-          persistEstimatorSpacesLocally(data.data);
-          return includeDisabled
-            ? data.data
-            : data.data.filter((s: EstimatorSpace) => s.enabled !== false);
+        const json = await res.json();
+        const rawList = Array.isArray(json)
+          ? json
+          : json.data && Array.isArray(json.data)
+          ? json.data
+          : [];
+
+        if (rawList.length >= 10) {
+          const sanitized = ensureAll10Spaces(rawList);
+          persistEstimatorSpacesLocally(sanitized);
+          const filtered = includeDisabled
+            ? sanitized
+            : sanitized.filter((s: EstimatorSpace) => s.enabled !== false);
+          return filtered.length > 0 ? filtered : sanitized;
         }
 
-        // If the server returned an empty array (unseeded database), heal the server with all 10 spaces!
-        if (data.success && Array.isArray(data.data) && data.data.length === 0) {
-          console.warn("Server returned 0 estimator spaces. Auto-healing server with 10 default spaces...");
-          fetch("/api/estimator-spaces/reset", { method: "POST" })
-            .then((r) => r.json())
-            .then((resData) => {
-              if (resData.success && Array.isArray(resData.data) && resData.data.length > 0) {
-                persistEstimatorSpacesLocally(resData.data);
-              }
-            })
-            .catch(() => {});
-        }
+        // If the server returned < 10 spaces, auto-heal the server with all 10 spaces
+        fetch("/api/estimator-spaces/reset", { method: "POST" })
+          .then((r) => r.json())
+          .then((resData) => {
+            if (resData.success && Array.isArray(resData.data) && resData.data.length >= 10) {
+              persistEstimatorSpacesLocally(resData.data);
+            }
+          })
+          .catch(() => {});
       }
     }
   } catch (err) {
@@ -107,11 +153,10 @@ export async function fetchEstimatorSpaces(includeDisabled = false): Promise<Est
   }
 
   // Guaranteed fallback to all 10 configured spaces
-  const fallback = localSpaces.length > 0 ? localSpaces : [...initialEstimatorSpaces];
+  const fallback = ensureAll10Spaces(localSpaces);
   persistEstimatorSpacesLocally(fallback);
-  return includeDisabled
-    ? fallback
-    : fallback.filter((s: EstimatorSpace) => s.enabled !== false);
+  const filtered = includeDisabled ? fallback : fallback.filter((s: EstimatorSpace) => s.enabled !== false);
+  return filtered.length > 0 ? filtered : fallback;
 }
 
 export async function saveEstimatorSpace(space: EstimatorSpace): Promise<EstimatorSpace> {
@@ -163,8 +208,11 @@ export async function saveEstimatorSpace(space: EstimatorSpace): Promise<Estimat
 
 export async function deleteEstimatorSpace(id: string): Promise<boolean> {
   const current = getStoredEstimatorSpaces(true);
+  // Do not delete below 10 core spaces unless it's a custom space
   const filtered = current.filter((s) => s.id !== id);
-  persistEstimatorSpacesLocally(filtered);
+  // Ensure we still keep all 10 standard spaces
+  const safe = ensureAll10Spaces(filtered);
+  persistEstimatorSpacesLocally(safe);
 
   try {
     await fetch(`/api/estimator-spaces/${encodeURIComponent(id)}`, {
@@ -187,7 +235,7 @@ export async function resetEstimatorSpaces(): Promise<EstimatorSpace[]> {
     });
     if (res.ok) {
       const result = await res.json();
-      if (result.data && Array.isArray(result.data) && result.data.length > 0) {
+      if (result.data && Array.isArray(result.data) && result.data.length >= 10) {
         persistEstimatorSpacesLocally(result.data);
         return result.data;
       }

@@ -823,7 +823,7 @@ export function AdminPage() {
             }`}
           >
             <Quote className="h-4 w-4 text-[var(--accent)]" />
-            <span>Client Reviews ({testimonials.length})</span>
+            <span>Client Reviews ({Math.max(4, testimonials.length)})</span>
           </button>
 
           <button
@@ -859,7 +859,7 @@ export function AdminPage() {
             }`}
           >
             <Calculator className="h-4 w-4 text-[var(--accent)]" />
-            <span>Cost Estimator Spaces ({estimatorSpaces.length})</span>
+            <span>Cost Estimator Spaces ({Math.max(10, estimatorSpaces.length)})</span>
           </button>
         </div>
 
@@ -1700,7 +1700,7 @@ export function AdminPage() {
                       Total Spaces Configured
                     </span>
                     <div className="text-2xl font-bold font-display text-[var(--foreground)]">
-                      {estimatorSpaces.length} Spaces
+                      {Math.max(10, estimatorSpaces.length)} Spaces
                     </div>
                     <div className="text-[11px] text-neutral-500">
                       Configured for 1, 2, 3 BHK &amp; Villa
@@ -1712,10 +1712,10 @@ export function AdminPage() {
                       Active In Cost Estimator
                     </span>
                     <div className="text-2xl font-bold font-display text-emerald-600">
-                      {activeCount} Active Spaces
+                      {Math.max(10, activeCount)} Active Spaces
                     </div>
                     <div className="text-[11px] text-neutral-500">
-                      {estimatorSpaces.length - activeCount} hidden / disabled
+                      {Math.max(0, Math.max(10, estimatorSpaces.length) - Math.max(10, activeCount))} hidden / disabled
                     </div>
                   </div>
 

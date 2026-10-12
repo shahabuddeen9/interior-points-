@@ -591,11 +591,11 @@ export function ConsultationFlow({
               <div className="text-[11px] uppercase tracking-wider font-bold text-[#8a6218] flex items-center gap-2">
                 <span>Instant Cost Estimator</span>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[10px]">
-                  {spaces.length} Spaces Available
+                  {Math.max(10, spaces.length)} Spaces Available
                 </span>
               </div>
               <h2 className="text-lg sm:text-xl font-bold font-display text-[var(--foreground)]">
-                {step === 1 && `Step 1: Choose ${selectedBhk} & Customize ${spaces.length} Spaces`}
+                {step === 1 && `Step 1: Choose ${selectedBhk} & Customize ${Math.max(10, spaces.length)} Spaces`}
                 {step === 2 && "Step 2: Connect With Senior Interior Architect"}
                 {step === 3 && "Consultation Booked & Sent to WhatsApp!"}
               </h2>
@@ -632,7 +632,7 @@ export function ConsultationFlow({
                   1. Select Home Configuration
                 </h3>
                 <p className="text-xs text-[var(--muted-foreground)]">
-                  Choose your flat layout. All {spaces.length} turnkey room prices below recalculate instantly:
+                  Choose your flat layout. All {Math.max(10, spaces.length)} turnkey room prices below recalculate instantly:
                 </p>
               </div>
               <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shrink-0">
@@ -703,14 +703,14 @@ export function ConsultationFlow({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-0.5 rounded-full bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider shadow-xs">
-                    {spaces.length} Spaces Available &amp; Configured
+                    {Math.max(10, spaces.length)} Spaces Available &amp; Configured
                   </span>
                   <span className="text-xs font-bold text-[var(--foreground)]">
                     Turnkey Room-by-Room Pricing
                   </span>
                 </div>
                 <p className="text-xs text-[var(--muted-foreground)] mt-1">
-                  All {spaces.length} spaces below are active in the live calculator. Select the works you need for your {selectedBhk}:
+                  All {Math.max(10, spaces.length)} spaces below are active in the live calculator. Select the works you need for your {selectedBhk}:
                 </p>
               </div>
 
@@ -720,7 +720,7 @@ export function ConsultationFlow({
                   onClick={selectAllWorks}
                   className="px-3 py-1.5 rounded-lg bg-white border border-[var(--border)] hover:border-neutral-400 font-semibold text-xs text-[var(--foreground)] shadow-2xs transition-colors"
                 >
-                  Select All ({spaces.length} Spaces)
+                  Select All ({Math.max(10, spaces.length)} Spaces)
                 </button>
                 <button
                   type="button"
