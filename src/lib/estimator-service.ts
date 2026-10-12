@@ -1,8 +1,7 @@
 import { EstimatorSpace, FloorPlanType } from "../types";
 import { initialEstimatorSpaces } from "../../server/seedData";
 
-const ESTIMATOR_CACHE_KEY = "interior_points_estimator_spaces_v2";
-const ESTIMATOR_LEGACY_KEY = "interior_points_estimator_spaces_v1";
+const ESTIMATOR_CACHE_KEY = "interior_points_estimator_spaces_v3";
 
 /**
  * Returns locally stored estimator spaces with 100% guarantee of falling back
@@ -14,6 +13,12 @@ export function getStoredEstimatorSpaces(includeDisabled = false): EstimatorSpac
       ? [...initialEstimatorSpaces]
       : initialEstimatorSpaces.filter((s) => s.enabled !== false);
   }
+
+  // Clear any legacy empty caches
+  try {
+    localStorage.removeItem("interior_points_estimator_spaces_v1");
+    sessionStorage.removeItem("interior_points_estimator_spaces_v1");
+  } catch {}
 
   try {
     const raw = localStorage.getItem(ESTIMATOR_CACHE_KEY) || sessionStorage.getItem(ESTIMATOR_CACHE_KEY);
@@ -50,8 +55,11 @@ export function persistEstimatorSpacesLocally(spaces: EstimatorSpace[]): void {
   try {
     localStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(safeSpaces));
     sessionStorage.setItem(ESTIMATOR_CACHE_KEY, JSON.stringify(safeSpaces));
-    // Also clean up legacy cache
-    sessionStorage.removeItem(ESTIMATOR_LEGACY_KEY);
+    // Clean up older caches
+    localStorage.removeItem("interior_points_estimator_spaces_v1");
+    localStorage.removeItem("interior_points_estimator_spaces_v2");
+    sessionStorage.removeItem("interior_points_estimator_spaces_v1");
+    sessionStorage.removeItem("interior_points_estimator_spaces_v2");
   } catch {}
 
   try {
