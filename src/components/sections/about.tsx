@@ -19,9 +19,9 @@ export function About() {
     },
     {
       id: "stat-3",
-      value: "60-Day",
-      label: "Dream Home Guarantee",
-      description: "Strict 60-day turnkey handover backed by written delay compensation",
+      value: "45-Day",
+      label: "Move-In Guarantee",
+      description: "Strict 45-day turnkey handover backed by written delay compensation",
     },
     {
       id: "stat-4",
@@ -51,19 +51,17 @@ export function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-3xl mb-16"
+          className="max-w-3xl mb-14"
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--secondary)] border border-[var(--border)] text-xs uppercase tracking-[0.2em] text-[var(--accent-foreground)] font-semibold font-body mb-3">
             <Sparkles className="h-3 w-3 text-amber-500" />
-            <span>Studio Philosophy</span>
+            <span>Factory Precision • Transparent Pricing</span>
           </div>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--foreground)]">
-            The Boutique Alternative to Mass Contractors
+            Factory-Crafted Quality, Handed Over on Time
           </h2>
-          <p className="text-base sm:text-lg text-[var(--muted-foreground)] leading-relaxed mt-4 font-body">
-            At Interior Points, we believe Indian homes deserve architectural nuance, not cookie-cutter
-            catalogs. We founded Interior Points in Mumbai to eliminate the two biggest frustrations homeowners face:
-            unpredictable cost escalations and delayed handovers.
+          <p className="text-base sm:text-lg text-[var(--muted-foreground)] leading-relaxed mt-3 font-body">
+            Direct workshop fabrication with zero on-site carpenter chaos, 146 quality checks, and 100% written price protection.
           </p>
         </motion.div>
 
@@ -77,27 +75,20 @@ export function About() {
             className="lg:col-span-6 space-y-6"
           >
             <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--foreground)] leading-snug">
-              Engineered for Indian BHK floorplans and everyday domestic rituals.
+              Engineered specifically for Indian homes and modern lifestyles.
             </h3>
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] leading-relaxed font-body">
-              Every home we craft begins with a millimeter-accurate site survey. We evaluate wet and dry
-              kitchen zones, heavy Indian cookware storage, airflow, natural daylight, and sacred spaces
-              like bespoke pooja niches.
-            </p>
-            <p className="text-sm sm:text-base text-[var(--muted-foreground)] leading-relaxed font-body">
-              Unlike traditional on-site carpenters who generate dust, noise, and uneven hand-pressed
-              edges for months, our modular cabinetry is precision machine-cut and edge-banded in our
-              Mumbai facility near Asalpha, then assembled quietly on-site in days.
+              All modular joinery is machine-cut and PUR edge-banded in our Mumbai facility, then assembled on-site in days with zero dust or delays.
             </p>
 
             <div className="pt-2 space-y-3">
               {[
-                "Good quality sturdy 18mm semi-marine ply for longevity and moisture resistance",
-                "Premium 1mm laminate selection (₹1000 – ₹1300 range) across living and bedrooms",
-                "2 coats of authentic Asian Paints Royale washable luxury finish",
-                "Hettich or Hafele precision soft-close hinges backed by a 10-year warranty",
-                "Free 1-on-1 consultation, complete 2D architectural drawings, and 3D view site visits",
-              ].map((point, index) => (
+                { title: "18mm Marine Ply", desc: "Moisture and termite-proof calibrated core" },
+                { title: "1mm Designer Laminates", desc: "Scratch-resistant textured catalogue (₹1000–₹1300/sheet)" },
+                { title: "Asian Paints Royale", desc: "2 coats of washable luxury silk emulsion" },
+                { title: "Hettich & Hafele Fittings", desc: "German soft-close hinges with 10-year warranty" },
+                { title: "Free 3D Walkthrough", desc: "Architectural 2D plans, 3D views & site measurement included" },
+              ].map((item, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -10 }}
@@ -106,10 +97,13 @@ export function About() {
                   transition={{ duration: 0.4, delay: index * 0.08 }}
                   className="flex items-start space-x-3 text-sm text-[var(--foreground)]"
                 >
-                  <span className="h-4 w-4 rounded-full bg-[var(--secondary)] flex items-center justify-center text-[var(--accent)] shrink-0 mt-0.5">
+                  <span className="h-4 w-4 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="h-3 w-3" />
                   </span>
-                  <span>{point}</span>
+                  <span>
+                    <strong className="font-semibold text-[var(--foreground)]">{item.title}:</strong>{" "}
+                    <span className="text-[var(--muted-foreground)]">{item.desc}</span>
+                  </span>
                 </motion.div>
               ))}
             </div>

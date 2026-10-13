@@ -34,10 +34,12 @@ export function Hero({
             >
               <Sparkles className="h-3.5 w-3.5 text-amber-600" />
               <span className="font-bold uppercase tracking-wider text-amber-900">
-                Get Your Dream Home Interior Done in 60 Days!
+                45-Day Move-In Guarantee
               </span>
               <span className="text-amber-500">•</span>
-              <span className="font-semibold text-neutral-700">Turnkey Packages from ₹8.45L</span>
+              <span className="font-semibold text-neutral-700">Flat 10-Year Warranty</span>
+              <span className="text-amber-500">•</span>
+              <span className="font-semibold text-neutral-700">Turnkey from ₹8.45L</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -47,22 +49,21 @@ export function Hero({
               transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-bold tracking-tight text-[var(--foreground)] leading-[1.08]"
             >
-              Designing Spaces. <br />
+              Designer Home Interiors, <br />
               <span className="italic font-normal text-[var(--accent-foreground)]/90">
-                Creating Experiences.
+                Handed Over in 45 Days.
               </span>
             </motion.h1>
 
-            {/* Value Proposition */}
+            {/* Value Proposition - Concise & Attractive */}
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
               className="text-base sm:text-lg text-[var(--muted-foreground)] leading-relaxed max-w-2xl font-body"
             >
-              Bespoke 1, 2, and 3 BHK home interiors designed for modern Indian living.
-              From German-engineered modular kitchens and floor-to-ceiling wardrobes to architectural
-              cove lighting — executed with transparent pricing, in-house craftspeople, and zero surprise costs.
+              Bespoke modular kitchens, wardrobes &amp; complete turnkey interiors engineered for Indian homes.
+              Guaranteed factory finish, transparent itemized pricing, and zero hidden costs.
             </motion.p>
 
             {/* Actions */}
@@ -104,7 +105,7 @@ export function Hero({
                   Instant Interior Cost Estimator (10 Spaces Available)
                 </span>
                 <span className="text-[11px] text-[#5e594f]">
-                  Pick your flat size to customize all 10 turnkey spaces &amp; forward quote to WhatsApp:
+                  Choose your flat size to customize 10 spaces &amp; receive an itemized estimate on WhatsApp:
                 </span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -146,11 +147,11 @@ export function Hero({
             >
               <div className="group cursor-default">
                 <div className="font-display text-2xl sm:text-3xl font-bold text-[var(--foreground)] group-hover:text-[var(--accent-foreground)] transition-colors">
-                  60 Days
+                  45 Days
                 </div>
                 <div className="text-xs text-[var(--muted-foreground)] mt-1 flex items-center gap-1.5">
                   <Clock className="h-3.5 w-3.5 text-[var(--accent)] shrink-0" />
-                  <span>Dream Home Guarantee</span>
+                  <span>Handover Guarantee</span>
                 </div>
               </div>
               <div className="group cursor-default">
@@ -203,7 +204,7 @@ export function Hero({
                 <span className="font-medium text-[var(--foreground)]">
                   The Marina Crest, Bandra West, Mumbai • 3 BHK
                 </span>
-                <span className="italic">60-day dream home delivery</span>
+                <span className="italic">45-day handover delivery</span>
               </div>
             </div>
           </motion.div>

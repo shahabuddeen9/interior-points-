@@ -261,9 +261,9 @@
     },
     {
       "id": "stat-3",
-      "value": "60-Day",
-      "label": "Dream Home Guarantee",
-      "description": "Strict 60-day project delivery with weekly visual progress audits"
+      "value": "45-Day",
+      "label": "Move-In Guarantee",
+      "description": "Strict 45-day project handover with written delay protection"
     },
     {
       "id": "stat-4",
@@ -343,7 +343,7 @@
       "tag": "Mumbai Turnkey Project",
       "title": "Turnkey Interior Showcase",
       "caption": "Trust the process. 🛠️✨ Turnkey residential makeover executed with architectural precision in Mumbai.",
-      "likes": "4,298",
+      "likes": "4,302",
       "comments": "32",
       "views": "25k+",
       "previewImage": "/uploads/reels/DbU1nauIMph.jpg",
@@ -376,6 +376,20 @@
       "views": "25k+",
       "previewImage": "/uploads/reels/DYgtHNXKK1d.jpg",
       "timestamp": "2026-10-04T03:56:47.990Z",
+      "isCustom": false
+    },
+    {
+      "id": "reel-1791819879378-DXYd4yrjD4y",
+      "shortcode": "DXYd4yrjD4y",
+      "url": "https://www.instagram.com/reel/DXYd4yrjD4y/",
+      "tag": "Mumbai Turnkey Project",
+      "title": "Turnkey Interior Showcase",
+      "caption": "Trust the process. 🛠️✨ Turnkey residential makeover executed with architectural precision in Mumbai.",
+      "likes": "22",
+      "comments": "0",
+      "views": "25k+",
+      "previewImage": "/uploads/reels/DXYd4yrjD4y.jpg",
+      "timestamp": "2026-10-12T15:44:39.378Z",
       "isCustom": false
     }
   ],
@@ -723,8 +737,8 @@
       }
     },
     {
-      "id": "space-1791096152751",
-      "name": "Molding",
+      "id": "molding",
+      "name": "Molding & Neo-Classical Trims",
       "category": "Surface",
       "iconName": "Paintbrush",
       "tagline": "Custom French Neo-Classical Trims, Non-Yellowing Polyurethane Finish & Seamless Edge Material Guarantee",

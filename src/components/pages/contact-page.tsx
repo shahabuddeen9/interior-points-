@@ -6,23 +6,23 @@ import { Link } from "../../lib/router";
 const faqs = [
   {
     q: "Is the initial 3D design consultation truly free?",
-    a: "Yes, completely free with zero obligation. You can visit our Mumbai studio at Asalpha (near Asalpha Metro Station) or schedule an on-site visit anywhere across Mumbai with your floorplan, or meet virtually. We review your layout, show physical finish swatches, and provide an itemized ballpark BOQ at no charge.",
+    a: "Yes, 100% free with zero obligation. We review your floorplan, show material swatches, and provide an itemized ballpark BOQ at no charge.",
   },
   {
-    q: "How does the 60-Day Dream Home Guarantee work?",
-    a: "Once you approve the finalized 3D renders and complete the initial site laser survey, our clock starts. We fabricate in our automated factory and assemble on site. If we do not hand over keys by day 60, we compensate you ₹1,000 per day delayed directly deducted from your final milestone.",
+    q: "How does the 45-Day Handover Guarantee work?",
+    a: "Our 45-day clock begins once 3D renders are approved. If we delay, we compensate you ₹1,000 per day directly deducted from your final milestone.",
   },
   {
     q: "Can I choose my own laminate or acrylic brands?",
-    a: "Absolutely. We provide ₹1000–₹1300 range 1mm laminates as standard and also offer acrylic, PU, and veneer finishes. All wet zones in kitchens are strictly built using sturdy 18mm semi-marine ply.",
+    a: "Yes. We offer premium 1mm laminates, anti-scratch acrylics, PU, and veneers on sturdy 18mm marine-grade ply.",
   },
   {
     q: "Do you handle civil work, painting, and deep cleaning?",
-    a: "Yes, Interior Points provides complete turnkey execution in Mumbai. That includes civil modifications, electrical rewiring, plumbing, gypsum false ceilings with cove lights, 2 coats of Asian Paints Royale washable luxury emulsion, wall moldings, and safety door installation.",
+    a: "Yes. We manage end-to-end civil modifications, concealed electricals, plumbing, Gyproc false ceilings, and Asian Paints Royale painting.",
   },
   {
     q: "What warranty coverage do you provide post-handover?",
-    a: "We provide a 10-year warranty on all Hettich & Hafele hardware and our 18mm semi-marine ply woodwork. Plus, our care team provides complimentary maintenance checks in the first 24 months.",
+    a: "Flat 10-year warranty on all modular joinery and Hettich & Hafele hardware, plus complimentary alignment checks in the first 24 months.",
   },
 ];
 

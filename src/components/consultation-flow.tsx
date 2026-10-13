@@ -284,8 +284,8 @@ export const DEFAULT_SCOPE_WORKS: ScopeWorkItem[] = [
     },
   },
   {
-    id: "space-1791096152751",
-    name: "Molding & Neo-Classical Trims",
+    id: "molding",
+    name: "French Wall Moldings & Panelling",
     category: "Surface & Wall Art",
     icon: Paintbrush,
     tagline: "Custom French Neo-Classical Trims, Non-Yellowing Polyurethane Finish & Seamless Edge Guarantee",
@@ -521,7 +521,7 @@ export function ConsultationFlow({
       selectedWorksSummary.map((s, idx) => `  ${idx + 1}. ✅ ${s}`).join("\n") +
       (notes.trim() ? `\n\n💬 *Customer Notes:* ${notes.trim()}` : "") +
       `\n══════════════════════════════\n` +
-      `_60-Day Dream Home Guarantee • 18mm Semi-Marin Ply • 10-Year Warranty_\n` +
+      `_45-Day Handover Guarantee • 18mm Marine-Grade Ply • Flat 10-Year Warranty_\n` +
       `_Studio: +91 7903038750 / +91 8788516537 • interiorpoints97@gmail.com_\n` +
       `_Shop no 3, Haji Fatima Manzil, Near Asalpha Metro Station, Mumbai 400084_`
     )}`;
@@ -915,7 +915,7 @@ export function ConsultationFlow({
                 {selectedBhk} • {calculation.formattedRange}
               </div>
               <div className="text-xs text-[var(--muted-foreground)] mt-0.5">
-                {calculation.selectedItems.length} works selected • 60-day dream home guarantee
+                {calculation.selectedItems.length} works selected • 45-day handover guarantee
               </div>
             </div>
 
@@ -1063,8 +1063,8 @@ export function ConsultationFlow({
                 <span>Zero obligation</span>
               </div>
               <div>
-                <span className="font-bold text-[var(--foreground)] block">60-Day Handover</span>
-                <span>Dream Home Guarantee</span>
+                <span className="font-bold text-[var(--foreground)] block">45-Day Handover</span>
+                <span>Written Guarantee</span>
               </div>
               <div>
                 <span className="font-bold text-[var(--foreground)] block">10-Yr Warranty</span>

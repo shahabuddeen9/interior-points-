@@ -9,12 +9,17 @@ const ESTIMATOR_CACHE_KEY = "interior_points_estimator_spaces_v3";
  * ensuring the core 10 turnkey spaces can NEVER drop to 0.
  */
 export function ensureAll10Spaces(spaces: EstimatorSpace[]): EstimatorSpace[] {
-  const current = Array.isArray(spaces) ? [...spaces] : [];
+  const current = Array.isArray(spaces)
+    ? spaces.map((s) => (s.id === "space-1791096152751" ? { ...s, id: "molding" } : { ...s }))
+    : [];
 
   // Guarantee that every single one of the 10 standard spaces exists
   initialEstimatorSpaces.forEach((base) => {
     const existingIdx = current.findIndex(
-      (s) => s.id === base.id || s.name.toLowerCase().trim() === base.name.toLowerCase().trim()
+      (s) =>
+        s.id === base.id ||
+        (base.id === "molding" && (s.id === "space-1791096152751" || s.name.toLowerCase().includes("molding"))) ||
+        s.name.toLowerCase().trim() === base.name.toLowerCase().trim()
     );
     if (existingIdx < 0) {
       current.push(JSON.parse(JSON.stringify(base)));

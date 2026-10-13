@@ -122,8 +122,7 @@ export function ContactSection({ standalone = false }: { standalone?: boolean })
             Schedule a Free Design Consultation
           </h2>
           <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed font-body">
-            Meet with an interior architect at our studio or schedule a virtual walkthrough.
-            Your query and requirements are forwarded immediately to WhatsApp (+91 7903038750) for rapid review.
+            Get a customized 3D design concept and itemized quote forwarded directly to your WhatsApp (+91 7903038750).
           </p>
         </div>
 

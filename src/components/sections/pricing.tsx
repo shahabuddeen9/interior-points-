@@ -31,8 +31,7 @@ export function Pricing({
               Transparent Estimates by Home Size
             </h2>
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed">
-              Every home receives an itemized, line-by-line Bill of Quantities before work begins.
-              Our turnkey 60-day dream home package guarantees zero hidden costs.
+              Itemized line-by-line Bill of Quantities before work begins, with guaranteed 45-day handover and zero hidden costs.
             </p>
           </motion.div>
 
@@ -68,7 +67,7 @@ export function Pricing({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           {pricingPlans.map((plan, index) => {
             const price = plan.startingRange[selectedBhk];
-            const isFeatured = plan.name.includes("60-Day");
+            const isFeatured = plan.name.includes("45-Day") || plan.name.includes("60-Day") || plan.name.includes("Turnkey");
 
             return (
               <motion.div

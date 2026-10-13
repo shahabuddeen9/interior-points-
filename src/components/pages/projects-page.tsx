@@ -57,9 +57,7 @@ export function ProjectsPage() {
             Completed Residences
           </h1>
           <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed font-body">
-            A curated archive of 1, 2, and 3 BHK residences delivered by our studio exclusively across
-            Mumbai with our strict 60-day dream home delivery guarantee. Filter by configuration or room
-            discipline to inspect cabinetry, finishes, and spatial layouts.
+            Curated 1, 2 &amp; 3 BHK residences delivered across Mumbai within our strict 45-day handover guarantee.
           </p>
         </div>
 

@@ -103,7 +103,7 @@ export function ProjectEditorModal({
   const [location, setLocation] = useState("Asalpha, Ghatkopar West");
   const [city, setCity] = useState("Mumbai");
   const [budgetRange, setBudgetRange] = useState("₹10.75L");
-  const [timeline, setTimeline] = useState("60 Days");
+  const [timeline, setTimeline] = useState("45 Days");
   const [description, setDescription] = useState("");
   const [scopeText, setScopeText] = useState("");
   const [featured, setFeatured] = useState(true);
@@ -165,9 +165,9 @@ export function ProjectEditorModal({
       setLocation("Asalpha, Ghatkopar West");
       setCity("Mumbai");
       setBudgetRange("₹10.75L Package");
-      setTimeline("60 Days");
+      setTimeline("45 Days");
       setDescription(
-        "Bespoke turnkey home renovation executed with 18mm semi-marine ply, acrylic finishes, and full architectural coordination."
+        "Bespoke turnkey home renovation executed with 18mm marine ply, acrylic finishes, and full architectural coordination."
       );
       setScopeText(
         "Modular kitchen with 3 tandem drawers, Master wardrobe with loft, Gypsum false ceiling, Wall molding & PU paint"
@@ -535,7 +535,7 @@ export function ProjectEditorModal({
               <div className="space-y-1.5">
                 <label className="font-semibold text-[var(--foreground)]">Execution Timeline</label>
                 <Input
-                  placeholder="e.g. 58 Days (60-Day Guarantee)"
+                  placeholder="e.g. 42 Days (45-Day Guarantee)"
                   value={timeline}
                   onChange={(e) => setTimeline(e.target.value)}
                   className="text-xs"

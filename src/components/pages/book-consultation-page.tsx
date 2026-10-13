@@ -59,7 +59,7 @@ export function BookConsultationPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed">
-              Select your Mumbai apartment floor plan, pick from all 10 verified turnkey spaces (Modular Kitchen, Wardrobes, Living TV Console, False Ceiling, Luxury Painting, Civil &amp; Bath, Loose Furniture, Electrical, Flooring, Neo-Classical Molding), see instant itemized pricing, and receive a verified 3D layout consultation directly on WhatsApp.
+              Select your flat configuration and turnkey spaces for an instant itemized estimate and 3D design consultation on WhatsApp.
             </p>
           </div>
 
@@ -67,11 +67,11 @@ export function BookConsultationPage() {
           <div className="mt-6 pt-6 border-t border-[var(--border)]/70 flex flex-wrap items-center gap-4 sm:gap-8 text-xs font-semibold text-[var(--foreground)]">
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-emerald-600" />
-              10-Year Hardware Warranty
+              Flat 10-Year Warranty
             </span>
             <span className="flex items-center gap-1.5">
               <Clock className="h-4 w-4 text-amber-600" />
-              60-Day Dream Home Guarantee
+              45-Day Handover Guarantee
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-4 w-4 text-[var(--accent)]" />
@@ -112,7 +112,7 @@ export function BookConsultationPage() {
               How accurate is the price calculated here?
             </h4>
             <p className="text-xs text-[var(--muted-foreground)] leading-relaxed pl-6">
-              Our instant calculator is calibrated using real Mumbai turnkey project data. Over 95% of our final executed project bills stay strictly within the estimated price range shown here. Any variations only occur if you choose exotic natural stones or luxury smart motorized fittings.
+              Our calculator uses live Mumbai turnkey data. 95% of final bills stay strictly within the estimated range with zero escalation.
             </p>
           </div>
 
@@ -122,7 +122,7 @@ export function BookConsultationPage() {
               Is the 3D design consultation really 100% free?
             </h4>
             <p className="text-xs text-[var(--muted-foreground)] leading-relaxed pl-6">
-              Yes, absolutely. You receive a dedicated 1-on-1 consultation session with our Senior Principal Architect, preliminary 2D space layouts, material swatches (18mm semi-marine ply, acrylic, quartz samples), and an itemized BOQ with zero upfront fee or commitment.
+              Yes, 100% free with zero obligation. You receive dedicated architect advice, 2D layouts, material swatches, and an itemized BOQ.
             </p>
           </div>
 
@@ -132,7 +132,7 @@ export function BookConsultationPage() {
               How does the WhatsApp consultation work?
             </h4>
             <p className="text-xs text-[var(--muted-foreground)] leading-relaxed pl-6">
-              As soon as you submit your requirements, the formatted quote with your chosen floor plan and selected works opens automatically in WhatsApp with our design desk (+91 7903038750 / +91 8788516537). Our architect will review your floor plan, share matching project photos, and schedule an on-site visit.
+              Your itemized estimate opens automatically in WhatsApp (+91 7903038750). Our design architect reviews your floor plan and books a site visit.
             </p>
           </div>
         </div>

@@ -16,14 +16,13 @@ export function WhyChooseUs() {
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--secondary)] border border-[var(--border)] text-xs uppercase tracking-[0.2em] text-[var(--accent-foreground)] font-semibold font-body mb-3">
             <Sparkles className="h-3 w-3 text-amber-500" />
-            <span>Why Homeowners Choose Us</span>
+            <span>Guaranteed Move-In • Flat 10-Yr Warranty</span>
           </div>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[var(--foreground)]">
-            The Peace of Mind You Deserve
+            Honest Pricing. Guaranteed Timelines.
           </h2>
           <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed">
-            Building a home should be an exciting milestone, not months of managing uncooperative
-            contractors and unexpected bill escalations.
+            Zero carpenter absenteeism. Zero surprise bill inflation. Written contractual commitments.
           </p>
         </motion.div>
 
@@ -38,10 +37,10 @@ export function WhyChooseUs() {
             className="lg:col-span-5 space-y-6"
           >
             <h3 className="font-display text-2xl font-bold text-[var(--foreground)]">
-              The Reality of Home Interiors in Mumbai
+              Traditional Contractor Pain Points
             </h3>
             <p className="text-sm text-[var(--muted-foreground)] leading-relaxed font-body">
-              Homeowners typically find themselves caught between two extremes:
+              Why 85% of homeowners face regret with conventional options:
             </p>
 
             <div className="space-y-4 text-xs sm:text-sm text-[var(--muted-foreground)]">
@@ -53,8 +52,7 @@ export function WhyChooseUs() {
                   Local Unorganized Contractors
                 </span>
                 <p className="leading-relaxed">
-                  No written contracts, manual hand-pressed laminates prone to peeling, carpenter
-                  absenteeism for weeks, and bills that inflate 30–50% by the end.
+                  3–6 month unpredictable delays, hand-pressed edges prone to peeling, and 30–50% bill escalations.
                 </p>
               </motion.div>
 
@@ -63,11 +61,10 @@ export function WhyChooseUs() {
                 className="p-5 rounded-[var(--radius)] bg-[var(--secondary)]/40 border-l-2 border-amber-400 space-y-1.5 transition-transform"
               >
                 <span className="font-semibold text-[var(--foreground)] block">
-                  Big-Box Aggregators &amp; Startups
+                  Aggregator Middlemen
                 </span>
                 <p className="leading-relaxed">
-                  Heavy 35–40% marketing surcharges, impersonal customer care tickets, and outsourced
-                  third-party installers who have never met the designer who drew your home.
+                  35–40% marketing markups, call-center support tickets, and outsourced third-party laborers.
                 </p>
               </motion.div>
             </div>
@@ -82,7 +79,7 @@ export function WhyChooseUs() {
             className="lg:col-span-7 space-y-8"
           >
             <h3 className="font-display text-2xl font-bold text-[var(--foreground)]">
-              Our 4 Pillars of Studio Integrity
+              4 Studio Commitments
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -100,8 +97,7 @@ export function WhyChooseUs() {
                   </h4>
                 </div>
                 <p className="text-xs sm:text-sm text-[var(--muted-foreground)] leading-relaxed font-body">
-                  Every square foot of 18mm semi-marine ply, Hettich/Hafele hardware, and paint is
-                  itemized with brand names and unit rates before you pay a single rupee.
+                  Line-by-line BOQ with brand names, thicknesses, and fixed rates before work begins.
                 </p>
               </motion.div>
 
@@ -115,12 +111,11 @@ export function WhyChooseUs() {
                 <div className="flex items-center space-x-2 text-[var(--accent-foreground)]">
                   <Clock className="h-4 w-4" />
                   <h4 className="font-display text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent-foreground)] transition-colors">
-                    60-Day Dream Home Clause
+                    45-Day Handover Clause
                   </h4>
                 </div>
                 <p className="text-xs sm:text-sm text-[var(--muted-foreground)] leading-relaxed font-body">
-                  We commit to a handover date in writing. If we delay, we compensate you ₹1,000 per
-                  day. In 2025, 96.4% of our Mumbai homes were handed over on or ahead of time.
+                  Guaranteed written move-in date backed by ₹1,000/day compensation for delay.
                 </p>
               </motion.div>
 
@@ -134,12 +129,11 @@ export function WhyChooseUs() {
                 <div className="flex items-center space-x-2 text-[var(--accent-foreground)]">
                   <Compass className="h-4 w-4" />
                   <h4 className="font-display text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent-foreground)] transition-colors">
-                    Mumbai Workshop Precision
+                    Factory Precision
                   </h4>
                 </div>
                 <p className="text-xs sm:text-sm text-[var(--muted-foreground)] leading-relaxed font-body">
-                  All cabinetry is cut, routed, and edge-banded with German PUR hot-melt adhesives in our
-                  own production facility near Asalpha. No dusty on-site saw machines.
+                  Machine-cut and German PUR edge-banded in our Mumbai facility. No dusty on-site saw machines.
                 </p>
               </motion.div>
 
@@ -153,12 +147,11 @@ export function WhyChooseUs() {
                 <div className="flex items-center space-x-2 text-[var(--accent-foreground)]">
                   <Shield className="h-4 w-4" />
                   <h4 className="font-display text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--accent-foreground)] transition-colors">
-                    10-Year Hardware Warranty
+                    Flat 10-Year Warranty
                   </h4>
                 </div>
                 <p className="text-xs sm:text-sm text-[var(--muted-foreground)] leading-relaxed font-body">
-                  Backed by direct OEM hardware from Hafele, Blum, and Hettich. Includes complimentary
-                  deep-alignment visits in the first 24 months.
+                  Direct OEM hardware warranty on Hafele, Blum &amp; Hettich moving joinery parts.
                 </p>
               </motion.div>
             </div>
@@ -195,7 +188,7 @@ export function WhyChooseUs() {
                 <td className="py-3.5 pr-4 font-medium text-[var(--foreground)]">Move-In Timeline Commitment</td>
                 <td className="py-3.5 px-4 text-neutral-400">Unpredictable (3–6 mo)</td>
                 <td className="py-3.5 px-4 text-neutral-400">60–90 days average</td>
-                <td className="py-3.5 pl-4 font-semibold text-emerald-800 bg-[var(--secondary)]/30">Strict 60 Days with Penalty</td>
+                <td className="py-3.5 pl-4 font-semibold text-emerald-800 bg-[var(--secondary)]/30">Strict 45 Days with Penalty</td>
               </tr>
               <tr className="hover:bg-neutral-50/50 transition-colors">
                 <td className="py-3.5 pr-4 font-medium text-[var(--foreground)]">Hardware Authenticity</td>

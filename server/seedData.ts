@@ -242,9 +242,9 @@ export const initialStats: CredibilityStat[] = [
   },
   {
     id: "stat-3",
-    value: "60-Day",
-    label: "Dream Home Guarantee",
-    description: "Strict 60-day project delivery with weekly visual progress audits"
+    value: "45-Day",
+    label: "Move-In Guarantee",
+    description: "Strict 45-day project handover with written delay protection"
   },
   {
     id: "stat-4",
@@ -273,7 +273,7 @@ export const initialLeads: LeadSubmission[] = [
     email: "amitav.roy@example.com",
     city: "Mumbai",
     bhkType: "2 BHK",
-    message: "Interested in the 10.75L 60-day package for 2 BHK in Ghatkopar. Need quote and sample material finishes.",
+    message: "Interested in the 10.75L 45-day package for 2 BHK in Ghatkopar. Need quote and sample material finishes.",
     status: "new",
     createdAt: new Date(Date.now() - 86400000).toISOString()
   }
@@ -304,8 +304,8 @@ export const pricingPlans: PricingPlan[] = [
   },
   {
     id: "plan-signature-60day",
-    name: "Premium Styling (60-Day)",
-    tagline: "Get your dream home interior done in 60 days! Complete 15-service turnkey package with premium materials.",
+    name: "Turnkey Package (45-Day)",
+    tagline: "Get your dream home interior done in 45 days! Complete 15-service turnkey package with premium materials.",
     startingRange: {
       "1 BHK": "₹8.45 Lacs",
       "2 BHK": "₹10.75 Lacs",
@@ -329,7 +329,7 @@ export const pricingPlans: PricingPlan[] = [
       "15. Free Consultation (all 2D drawings, 3D view, site visit)"
     ],
     materials: "Sturdy 18mm Semi Marin Ply, 1mm Laminate (₹1000-1300 range), 2 Coat Asian Royal Paint, Hettich or Hafele Hinges",
-    warranty: "10 Year Warranty • 60-Day Dream Home Guarantee",
+    warranty: "Flat 10-Year Warranty • 45-Day Move-In Guarantee",
     popular: true
   },
   {

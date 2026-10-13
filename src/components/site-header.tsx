@@ -48,7 +48,7 @@ export function SiteHeader({ onOpenConsultation }: { onOpenConsultation?: () => 
             </span>
             <span className="hidden xl:inline-flex items-center gap-1.5 font-semibold text-[#8a6218]">
               <ShieldCheck className="h-3.5 w-3.5 text-[#c59b4c]" />
-              60-Day Dream Home Guarantee • 10-Year Studio Warranty
+              45-Day Move-In Guarantee • Flat 10-Year Warranty
             </span>
           </div>
           <div className="flex items-center space-x-4">

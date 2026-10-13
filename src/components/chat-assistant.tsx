@@ -11,10 +11,10 @@ const initialAssistantMessage: ChatMessage = {
 };
 
 const quickSuggestions = [
-  "Cost for 2 BHK 60-day package in Mumbai?",
+  "Cost for 2 BHK 45-day package in Mumbai?",
   "What is included in the ₹10.75L 2 BHK package?",
-  "How does the 60-day dream home guarantee work?",
-  "Materials: 18mm semi-marine ply & Hettich hinges?",
+  "How does the 45-day handover guarantee work?",
+  "Materials: 18mm marine ply & Hettich hinges?",
 ];
 
 export function ChatAssistant({ onOpenConsultation }: { onOpenConsultation?: () => void }) {

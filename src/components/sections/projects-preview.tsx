@@ -52,8 +52,7 @@ export function ProjectsPreview() {
               Recent Residential Handings
             </h2>
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed">
-              Every home showcased here is an actual residence designed, factory-fabricated, and handed
-              over to homeowners across Mumbai within our strict 60-day delivery commitment.
+              Real Mumbai residences factory-crafted and handed over within our strict 45-day delivery commitment.
             </p>
           </motion.div>
 

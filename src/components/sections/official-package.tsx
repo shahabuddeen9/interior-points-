@@ -220,10 +220,10 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
             </h2>
             <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-amber-400 to-transparent my-3" />
             <p className="text-base sm:text-xl md:text-2xl font-display font-bold uppercase tracking-wider text-amber-300 leading-snug">
-              GET YOUR DREAM HOME INTERIOR DONE IN 60 DAYS!
+              GET YOUR DREAM HOME INTERIOR DONE IN 45 DAYS!
             </p>
             <p className="text-xs sm:text-sm text-neutral-300 mt-2 max-w-xl leading-relaxed">
-              Transparent, non-escalating turnkey packages crafted with sturdy 18mm semi-marine ply, German hardware, and end-to-end design execution.
+              Itemized turnkey packages crafted with 18mm marine ply, German hardware, and flat 10-year warranty.
             </p>
           </div>
         </div>
@@ -379,14 +379,14 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-400/30 text-center space-y-1">
                 <Clock className="h-6 w-6 text-amber-400 mx-auto" />
-                <div className="font-display text-xl font-bold text-white">60 Days</div>
+                <div className="font-display text-xl font-bold text-white">45 Days</div>
                 <div className="text-[11px] text-amber-200/80 font-medium">Guaranteed On-Time Handover</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-400/30 text-center space-y-1">
                 <ShieldCheck className="h-6 w-6 text-emerald-400 mx-auto" />
                 <div className="font-display text-xl font-bold text-white">10 Years</div>
-                <div className="text-[11px] text-emerald-200/80 font-medium">Written Hardware Warranty</div>
+                <div className="text-[11px] text-emerald-200/80 font-medium">Flat Hardware Warranty</div>
               </div>
             </div>
           </div>
@@ -400,7 +400,7 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
                 Direct Studio Concierge Desk
               </div>
               <h4 className="font-display text-xl sm:text-2xl font-extrabold text-neutral-950 mt-0.5">
-                Ready to plan your 60-Day Dream Home Interior?
+                Ready to plan your 45-Day Dream Home Interior?
               </h4>
               <p className="text-xs text-neutral-800 mt-1 max-w-xl font-medium">
                 Book a free site consultation. Includes complete 2D architectural drawings, 3D walkthrough views &amp; exact itemized BOQ.
@@ -409,7 +409,7 @@ export function OfficialPackageShowcase({ onOpenConsultation }: OfficialPackageP
 
             <div className="flex flex-wrap items-center gap-3">
               <a
-                href="https://wa.me/917903038750?text=Hi%20Interior%20Points%2C%20I%20am%20interested%20in%20your%2060-Day%20Dream%20Home%20Package."
+                href="https://wa.me/917903038750?text=Hi%20Interior%20Points%2C%20I%20am%20interested%20in%20your%2045-Day%20Dream%20Home%20Package."
                 target="_blank"
                 rel="noreferrer"
                 className="px-5 py-2.5 rounded-xl bg-neutral-950 hover:bg-neutral-900 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-transform hover:scale-105 active:scale-95"

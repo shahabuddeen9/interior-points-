@@ -15,10 +15,7 @@ export function SiteFooter() {
               "Designing Spaces. Creating Experiences."
             </p>
             <p className="text-sm text-[#5e594f] leading-relaxed max-w-sm font-body">
-              A premier interior design studio crafting luxury 1, 2, and 3 BHK residences,
-              commercial interiors, and turnkey renovations exclusively across Mumbai. We bridge
-              refined architectural aesthetics with factory-engineered precision, 18mm semi-marine ply,
-              and transparent 60-day delivery packages.
+              Premier interior design studio crafting turnkey residences across Mumbai. Factory-precision modular cabinetry, flat 10-year warranty, and guaranteed 45-day handovers.
             </p>
             <div className="pt-2 flex items-center space-x-3 text-[#5e594f]">
               <a
@@ -208,7 +205,7 @@ export function SiteFooter() {
             <span>•</span>
             <span className="inline-flex items-center gap-1 text-[#151413]">
               <ShieldCheck className="h-3.5 w-3.5 text-[#c59b4c]" />
-              100% In-House Factory Execution • 60-Day Guarantee
+              100% Factory Execution • 45-Day Handover Guarantee
             </span>
           </div>
         </div>

@@ -8,31 +8,31 @@ const disciplines = [
     title: "Modular Kitchen Architecture",
     subtitle: "Dry & Wet Zones • Boiling Water Proof Ply",
     description:
-      "Designed specifically for rigorous Indian cooking habits. Built with 100% IS 710 marine-grade BWP plywood, German anti-fingerprint acrylic or matte PU finishes, Blum soft-close tandem pull-outs, and heavy spice racks.",
-    specifications: ["IS 710 Marine Ply", "German PUR Edge-Banding", "Blum Soft-Close", "Quartz Countertops"],
+      "100% IS 710 marine-grade BWP ply, anti-fingerprint acrylic finishes, Blum soft-close tandem drawers, and quartz countertops.",
+    specifications: ["IS 710 Marine Ply", "PUR Edge-Banding", "Blum Soft-Close", "Quartz Countertops"],
   },
   {
     num: "02",
     title: "Bespoke Floor-to-Ceiling Wardrobes",
     subtitle: "Walk-ins • Sliding & Hinged Systems",
     description:
-      "Custom storage planned around saree folds, suit lengths, concealed vanity stations, and sensor-activated internal strip lighting. Finished in lacquered glass, fluted oak veneers, or synchronized textured laminates.",
-    specifications: ["Floor-to-Ceiling Height", "Hafele Sliding Systems", "Sensor LED Profiles", "Concealed Lockers"],
+      "Floor-to-ceiling wardrobes with sensor LED profiles, concealed lofts, digital lockers, and smooth German sliding hardware.",
+    specifications: ["Floor-to-Ceiling", "Hafele Sliding Systems", "Sensor LED Profiles", "Concealed Lockers"],
   },
   {
     num: "03",
     title: "Architectural Ceilings & Warm Lighting",
     subtitle: "Shadow-line Details • Zero Cracking Guarantee",
     description:
-      "Cove lighting schemes engineered with moisture-resistant Saint-Gobain Gyproc plasterboards. We design multi-layered ambient, task, and accent lighting with warm 3000K CRI>90 LED profiles to elevate room volume.",
-    specifications: ["Saint-Gobain Gyproc", "3000K Architectural Coves", "Magnetic Track Rails", "Acoustic Insulation"],
+      "Saint-Gobain Gyproc ceilings with indirect 3000K warm cove glow, magnetic track rails, and zero cracking guarantee.",
+    specifications: ["Saint-Gobain Gyproc", "3000K Warm Coves", "Magnetic Track Rails", "Acoustic Insulation"],
   },
   {
     num: "04",
     title: "Living, Dining & Sacred Pooja Spaces",
     subtitle: "Floating Media Consoles • CNC Lattice Partitions",
     description:
-      "Sculptural entertainment consoles with concealed cable raceways, fluted wood wall panelling, bespoke marble dining tables, and traditional yet contemporary brass-inlaid pooja mandirs.",
+      "Floating TV consoles with hidden wire raceways, fluted wood panelling, and handcrafted brass-inlaid pooja mandirs.",
     specifications: ["Concealed Wire Trays", "CNC Jaali Partitions", "Brass Inlay Work", "Italian Marble Tops"],
   },
   {
@@ -40,15 +40,15 @@ const disciplines = [
     title: "Complete 1, 2 & 3 BHK Turnkey Fit-Outs",
     subtitle: "End-to-End Civil, Electrical, Painting & Woodwork",
     description:
-      "The complete studio experience. We oversee plumbing adjustments, electrical re-routing, Asian Paints Royale luxury emulsion, deep cleaning, and full furniture handover within 60 days.",
-    specifications: ["Turnkey Project Management", "60-Day Delivery", "Dedicated Site Architect", "Zero Hidden Costs"],
+      "Full turnkey execution covering civil revamp, concealed electricals, Asian Paints Royale, and full handover in 45 days.",
+    specifications: ["Turnkey Management", "45-Day Handover", "Dedicated Site Lead", "Zero Hidden Costs"],
   },
   {
     num: "06",
     title: "Bespoke Loose Furniture & Styling",
     subtitle: "Custom Sofas • Ergonomic Home Workstations",
     description:
-      "Custom upholstered seating in stain-resistant fabrics, ergonomic dual-monitor study desks, and architectural accent pieces handcrafted by our Mumbai master craftsmen.",
+      "Custom upholstered seating in stain-resistant fabrics, quartz dining tables, and ergonomic work-from-home study desks.",
     specifications: ["High-Density Foam", "Stain-Resistant Fabrics", "Teak & Oak Solids", "Ergonomic Wire Ports"],
   },
 ];
@@ -67,8 +67,7 @@ export function Services() {
               Bespoke Interior Architecture
             </h2>
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-3 leading-relaxed">
-              We design and execute complete residential spaces with architectural discipline.
-              Every component is factory-calibrated and fitted by our in-house craftsmen.
+              Factory-calibrated modular joinery, custom woodwork, and end-to-end turnkey project management.
             </p>
           </div>
 
